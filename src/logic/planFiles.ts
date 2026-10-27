@@ -1,4 +1,4 @@
-// File side of plan export/import: the only module that touches Expo file/share/picker APIs.
+// File side of plan and exercise-library export/import: the only module that touches Expo file/share/picker APIs.
 import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 // The picked file is read straight from its content:// URI. Copying it to the cache first breaks
@@ -6,27 +6,38 @@ import { File, Paths } from 'expo-file-system';
 import { readAsStringAsync } from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 
-import type { WorkoutPlan } from '@/types';
+import type { Exercise, WorkoutPlan } from '@/types';
 
+import { libraryFileName, serializeLibrary } from './library';
 import { serializePlans, suggestedFileName } from './planExport';
 
-/** Writes the plans to a JSON file in the cache directory and opens the share sheet. */
-export async function exportPlansToFile(plans: readonly WorkoutPlan[]): Promise<void> {
+/** Writes the JSON to a file in the cache directory and opens the share sheet. */
+export async function shareJsonFile(fileName: string, json: string, dialogTitle: string): Promise<void> {
   if (!(await Sharing.isAvailableAsync())) {
     throw new Error('Sharing is not available on this device');
   }
-  const file = new File(Paths.cache, suggestedFileName(plans));
+  const file = new File(Paths.cache, fileName);
   file.create({ overwrite: true });
-  await file.write(serializePlans(plans));
+  await file.write(json);
   await Sharing.shareAsync(file.uri, {
     mimeType: 'application/json',
-    dialogTitle: 'Export plans',
+    dialogTitle,
     UTI: 'public.json',
   });
 }
 
+/** Writes the plans to a JSON file in the cache directory and opens the share sheet. */
+export function exportPlansToFile(plans: readonly WorkoutPlan[]): Promise<void> {
+  return shareJsonFile(suggestedFileName(plans), serializePlans(plans), 'Export plans');
+}
+
+/** Writes the whole exercise library to a JSON file and opens the share sheet. */
+export function exportLibraryToFile(exercises: readonly Exercise[]): Promise<void> {
+  return shareJsonFile(libraryFileName(), serializeLibrary(exercises), 'Export exercise library');
+}
+
 /** Lets the user pick a file and returns its text, or undefined when cancelled. */
-export async function pickAndReadPlanFile(): Promise<string | undefined> {
+export async function pickAndReadJsonFile(): Promise<string | undefined> {
   const result = await DocumentPicker.getDocumentAsync({
     type: ['application/json', 'text/plain', '*/*'],
     copyToCacheDirectory: false,
@@ -45,4 +56,9 @@ export async function pickAndReadPlanFile(): Promise<string | undefined> {
       throw primary;
     }
   }
+}
+
+/** Lets the user pick a plans file and returns its text, or undefined when cancelled. */
+export function pickAndReadPlanFile(): Promise<string | undefined> {
+  return pickAndReadJsonFile();
 }

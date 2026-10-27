@@ -6,10 +6,9 @@ import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { MuscleCoverageBars } from '@/components/MuscleCoverageBars';
-import { getExercise } from '@/data/exercises';
 import { computeCoverage } from '@/logic/coverage';
 import { formatWeight, sessionDurationMin } from '@/logic/sessionFormat';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
 
 export default function SessionDetailScreen() {
@@ -17,6 +16,7 @@ export default function SessionDetailScreen() {
   const session = useGymStore((s) => s.sessions.find((x) => x.id === id));
   const unit = useGymStore((s) => s.settings.weightUnit);
   const deleteSession = useGymStore((s) => s.deleteSession);
+  const db = useExerciseMap();
 
   const coverage = useMemo(
     () =>
@@ -25,8 +25,9 @@ export default function SessionDetailScreen() {
           exerciseId: e.exerciseId,
           sets: e.sets.filter((s) => s.completed).length,
         })),
+        db,
       ),
-    [session],
+    [session, db],
   );
 
   if (!session) {
@@ -73,9 +74,9 @@ export default function SessionDetailScreen() {
         </View>
 
         {session.exercises.map((ex) => {
-          const name = getExercise(ex.exerciseId)?.name ?? 'Unknown exercise';
+          const name = db[ex.exerciseId]?.name ?? 'Unknown exercise';
           const original = ex.substitutedFor
-            ? (getExercise(ex.substitutedFor)?.name ?? 'Unknown exercise')
+            ? (db[ex.substitutedFor]?.name ?? 'Unknown exercise')
             : undefined;
           return (
             <View key={ex.id} style={styles.card}>

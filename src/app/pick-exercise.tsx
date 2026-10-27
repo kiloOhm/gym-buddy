@@ -2,8 +2,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo } from 'react';
 
 import { ExerciseList } from '@/components/ExerciseList';
-import { EXERCISES } from '@/data/exercises';
-import { useGymStore } from '@/store';
+import { useExerciseLibrary, useGymStore } from '@/store';
 import type { Exercise } from '@/types';
 
 /**
@@ -20,6 +19,7 @@ export default function PickExerciseScreen() {
     sessionSwap?: string;
     exclude?: string;
   }>();
+  const library = useExerciseLibrary();
   const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
   const addExerciseToPlan = useGymStore((s) => s.addExerciseToPlan);
   const addSessionExercise = useGymStore((s) => s.addSessionExercise);
@@ -28,8 +28,8 @@ export default function PickExerciseScreen() {
   const exclude = typeof params.exclude === 'string' ? params.exclude : '';
   const exercises = useMemo(() => {
     const hidden = new Set(exclude.split(',').map((s) => s.trim()).filter(Boolean));
-    return hidden.size ? EXERCISES.filter((e) => !hidden.has(e.id)) : EXERCISES;
-  }, [exclude]);
+    return hidden.size ? library.filter((e) => !hidden.has(e.id)) : library;
+  }, [exclude, library]);
 
   const onPress = (exercise: Exercise) => {
     if (params.planId) addExerciseToPlan(params.planId, exercise.id);

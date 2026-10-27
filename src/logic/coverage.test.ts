@@ -1,4 +1,4 @@
-import { EXERCISES } from '@/data/exercises';
+import { BUILT_IN_EXERCISES as EXERCISES } from '@/data/exercises';
 import type { Exercise } from '@/types';
 import { MUSCLE_GROUPS } from '@/types';
 

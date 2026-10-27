@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import { SEED_PLANS } from '@/data/seedPlans';
 
 describe('SEED_PLANS', () => {
@@ -9,7 +9,7 @@ describe('SEED_PLANS', () => {
   it('only references exercises that exist', () => {
     for (const plan of SEED_PLANS) {
       for (const e of plan.exercises) {
-        expect(EXERCISE_BY_ID[e.exerciseId]).toBeDefined();
+        expect(getExerciseMap()[e.exerciseId]).toBeDefined();
       }
     }
   });

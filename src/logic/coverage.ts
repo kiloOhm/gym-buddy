@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, MuscleGroup } from '@/types';
 import { MUSCLE_GROUPS } from '@/types';
 
@@ -24,7 +24,7 @@ function round(value: number, decimals: number): number {
 /** Sum of sets × activation for every muscle. Unknown exercise IDs are ignored. */
 export function computeCoverage(
   items: readonly CoverageItem[],
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): Coverage {
   const coverage = emptyCoverage();
   for (const item of items) {
@@ -59,7 +59,7 @@ export interface PlanSummary {
 
 export function summarizePlan(
   items: readonly CoverageItem[],
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): PlanSummary {
   let totalSets = 0;
   let formSum = 0;

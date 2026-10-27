@@ -18,7 +18,7 @@
 // Within each group, entries are ordered roughly by how common they are.
 import type { Exercise } from '@/types';
 
-export const EXERCISES: Exercise[] = [
+export const BUILT_IN_EXERCISES: readonly Exercise[] = [
   // ───────────────────────────── Chest ─────────────────────────────
   {
     id: 'barbell_bench_press',
@@ -331,6 +331,17 @@ export const EXERCISES: Exercise[] = [
     formDifficulty: 2,
     injuryRisk: 2,
     cues: ['Knee and hand on the bench, back flat', 'Pull the dumbbell toward your hip', 'Do not rotate your torso to lift it'],
+  },
+  {
+    id: 'chest_supported_row',
+    name: 'Chest-supported dumbbell row',
+    equipment: ['dumbbell', 'bench'],
+    pattern: 'horizontal_pull',
+    compound: true,
+    muscles: { upper_back: 1, lats: 0.7, rear_delts: 0.5, biceps: 0.5, forearms: 0.3 },
+    formDifficulty: 2,
+    injuryRisk: 1,
+    cues: ['Chest glued to the incline bench', 'Row to the hips, elbows back', 'Pause and squeeze the shoulder blades'],
   },
   {
     id: 'seated_cable_row',
@@ -1354,10 +1365,34 @@ export const EXERCISES: Exercise[] = [
   },
 ];
 
-export const EXERCISE_BY_ID: Record<string, Exercise> = Object.fromEntries(
-  EXERCISES.map((e) => [e.id, e]),
-);
+// ───────────────────────────── Runtime registry ─────────────────────────────
+// The library actually in use: the built-ins merged with the user's imported custom entries
+// (see mergeLibrary in src/logic/library.ts). The store keeps it in sync via setExerciseLibrary;
+// until it hydrates, the registry holds the built-ins.
+
+let currentExercises: readonly Exercise[] = BUILT_IN_EXERCISES;
+let currentMap: Readonly<Record<string, Exercise>> = indexById(BUILT_IN_EXERCISES);
+
+function indexById(exercises: readonly Exercise[]): Record<string, Exercise> {
+  return Object.fromEntries(exercises.map((e) => [e.id, e]));
+}
+
+/** The current library (built-in merged with custom). */
+export function getExercises(): readonly Exercise[] {
+  return currentExercises;
+}
+
+/** The current library indexed by id. */
+export function getExerciseMap(): Readonly<Record<string, Exercise>> {
+  return currentMap;
+}
 
 export function getExercise(id: string): Exercise | undefined {
-  return EXERCISE_BY_ID[id];
+  return Object.prototype.hasOwnProperty.call(currentMap, id) ? currentMap[id] : undefined;
+}
+
+/** Replaces the registry contents. Called by the store whenever the custom entries change. */
+export function setExerciseLibrary(exercises: readonly Exercise[]): void {
+  currentExercises = exercises;
+  currentMap = indexById(exercises);
 }

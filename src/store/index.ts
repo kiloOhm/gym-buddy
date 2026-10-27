@@ -2,11 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { BUILT_IN_EXERCISES, setExerciseLibrary } from '@/data/exercises';
 import { lastPerformance } from '@/logic/history';
 import { newId, nowIso } from '@/logic/ids';
+import { diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
 import { SEED_PLANS } from '@/data/seedPlans';
 import { EQUIPMENT } from '@/types';
 import type {
+  Exercise,
   PlannedExercise,
   SessionExercise,
   SetLog,
@@ -29,6 +32,8 @@ export interface GymState {
   sessions: WorkoutSession[];
   activeSession: WorkoutSession | null;
   settings: Settings;
+  /** Imported exercises: overrides of built-ins (same id) and additions. See mergeLibrary. */
+  customExercises: Exercise[];
 
   // Plans
   createPlan: (name: string) => WorkoutPlan;
@@ -70,6 +75,39 @@ export interface GymState {
       exercises: readonly { exerciseId: string; sets: number; reps: number; restSec: number }[];
     }[],
   ) => WorkoutPlan[];
+
+  // Exercise library
+  /**
+   * Upserts the exercises into customExercises by id. An entry identical to the built-in with
+   * that id removes the custom override instead. Counts are relative to the library before.
+   */
+  importExercises: (exercises: readonly Exercise[]) => { added: number; updated: number; unchanged: number };
+  /** Drops every custom or edited exercise. */
+  resetExerciseLibrary: () => void;
+}
+
+const BUILT_IN_BY_ID = new Map(BUILT_IN_EXERCISES.map((e) => [e.id, e]));
+
+/** The merged library for a customExercises array; cached by reference so it stays stable. */
+const libraryCache: {
+  custom: readonly Exercise[] | undefined;
+  merged: Exercise[];
+  byId: Record<string, Exercise>;
+} = { custom: undefined, merged: [], byId: {} };
+function cacheFor(custom: readonly Exercise[]) {
+  if (libraryCache.custom !== custom) {
+    libraryCache.custom = custom;
+    libraryCache.merged = mergeLibrary(BUILT_IN_EXERCISES, custom);
+    libraryCache.byId = Object.fromEntries(libraryCache.merged.map((e) => [e.id, e]));
+  }
+  return libraryCache;
+}
+export function libraryFor(custom: readonly Exercise[]): Exercise[] {
+  return cacheFor(custom).merged;
+}
+
+function syncExerciseRegistry(custom: readonly Exercise[]): void {
+  setExerciseLibrary(libraryFor(custom));
 }
 
 /** The push/pull/legs/arms example plans, with fresh IDs. */
@@ -134,6 +172,7 @@ export const useGymStore = create<GymState>()(
         sessions: [],
         activeSession: null,
         settings: DEFAULT_SETTINGS,
+        customExercises: [],
 
         createPlan: (name) => {
           const now = nowIso();
@@ -267,6 +306,28 @@ export const useGymStore = create<GymState>()(
           set((s) => ({ plans: [...s.plans, ...created] }));
           return created;
         },
+
+        importExercises: (incoming) => {
+          const { customExercises } = get();
+          const diff = diffLibrary(incoming, libraryFor(customExercises));
+          const next = [...customExercises];
+          for (const e of incoming) {
+            const index = next.findIndex((c) => c.id === e.id);
+            const builtIn = BUILT_IN_BY_ID.get(e.id);
+            if (builtIn && exercisesEqual(e, builtIn)) {
+              if (index >= 0) next.splice(index, 1);
+            } else if (index >= 0) {
+              next[index] = e;
+            } else {
+              next.push(e);
+            }
+          }
+          if (diff.added.length + diff.updated.length > 0 || next.length !== customExercises.length) {
+            set({ customExercises: next });
+          }
+          return { added: diff.added.length, updated: diff.updated.length, unchanged: diff.unchanged.length };
+        },
+        resetExerciseLibrary: () => set({ customExercises: [] }),
       };
     },
     {
@@ -278,14 +339,36 @@ export const useGymStore = create<GymState>()(
         sessions: s.sessions,
         activeSession: s.activeSession,
         settings: s.settings,
+        customExercises: s.customExercises,
       }),
       onRehydrateStorage: () => () => {
         const state = useGymStore.getState();
         if (!state.seeded) {
           useGymStore.setState({ plans: [...state.plans, ...buildSeedPlans()], seeded: true });
         }
+        syncExerciseRegistry(useGymStore.getState().customExercises ?? []);
         useGymStore.setState({ hydrated: true });
       },
     },
   ),
 );
+
+// Keep the exercise registry (getExercises/getExercise) in step with the custom entries.
+useGymStore.subscribe((state, prev) => {
+  if (state.customExercises !== prev.customExercises) syncExerciseRegistry(state.customExercises);
+});
+
+/** The current exercise library (built-ins merged with custom entries); re-renders after an import. */
+export function useExerciseLibrary(): Exercise[] {
+  const custom = useGymStore((s) => s.customExercises);
+  return libraryFor(custom);
+}
+
+/**
+ * The current library indexed by id. Screens that look exercises up or pass a `db` to the logic
+ * functions use this (instead of getExercise/defaults) so they re-render after an import.
+ */
+export function useExerciseMap(): Record<string, Exercise> {
+  const custom = useGymStore((s) => s.customExercises);
+  return cacheFor(custom).byId;
+}

@@ -7,7 +7,7 @@ import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
 import { LOAD_THRESHOLDS, LOAD_WINDOW_DAYS, loadHints, recentMuscleLoad, type LoadHint } from '@/logic/load';
 import { formatSessionDate, formatWeight, sessionDurationMin, sessionVolume } from '@/logic/sessionFormat';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
 import { MUSCLE_LABELS, type WeightUnit, type WorkoutSession } from '@/types';
 
@@ -18,8 +18,9 @@ export default function HomeScreen() {
   const unit = useGymStore((s) => s.settings.weightUnit);
   const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
 
-  const load = recentMuscleLoad(sessions);
-  const hints = loadHints(load, availableEquipment);
+  const db = useExerciseMap();
+  const load = recentMuscleLoad(sessions, undefined, db);
+  const hints = loadHints(load, availableEquipment, db);
   const last = sessions[0];
 
   return (

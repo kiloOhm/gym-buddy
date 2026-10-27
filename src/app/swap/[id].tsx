@@ -5,11 +5,10 @@ import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-nat
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { RatingDots } from '@/components/RatingDots';
-import { getExercise } from '@/data/exercises';
 import { suggestAlternatives } from '@/logic/alternatives';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
-import { EQUIPMENT, EQUIPMENT_LABELS } from '@/types';
+import { EQUIPMENT, EQUIPMENT_LABELS, type Exercise } from '@/types';
 
 export default function SwapScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -17,6 +16,7 @@ export default function SwapScreen() {
   const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
   const swapExercise = useGymStore((s) => s.swapExercise);
   const [ignoreEquipment, setIgnoreEquipment] = useState(false);
+  const db = useExerciseMap();
 
   const sessionExercise = activeSession?.exercises.find((e) => e.id === id);
   // The React Compiler memoizes these; no manual useMemo needed.
@@ -26,7 +26,7 @@ export default function SwapScreen() {
         availableEquipment: ignoreEquipment ? EQUIPMENT : availableEquipment,
         excludeIds: sessionIds,
         limit: 8,
-      })
+      }, db)
     : [];
 
   if (!sessionExercise) {
@@ -40,7 +40,7 @@ export default function SwapScreen() {
     );
   }
 
-  const original = getExercise(sessionExercise.exerciseId);
+  const original = db[sessionExercise.exerciseId] as Exercise | undefined;
   const browse = () =>
     router.push({
       pathname: '/pick-exercise',

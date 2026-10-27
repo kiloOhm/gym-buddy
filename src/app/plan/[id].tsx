@@ -9,10 +9,9 @@ import { EmptyState } from '@/components/EmptyState';
 import { equipmentSummary } from '@/components/ExerciseList';
 import { MuscleCoverageBars } from '@/components/MuscleCoverageBars';
 import { ValueStepper } from '@/components/ValueStepper';
-import { getExercise } from '@/data/exercises';
 import { computeCoverage, summarizePlan } from '@/logic/coverage';
 import { exportPlansToFile } from '@/logic/planFiles';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
 import { MUSCLE_LABELS, type MuscleGroup, type PlannedExercise } from '@/types';
 
@@ -28,14 +27,15 @@ export default function PlanEditorScreen() {
 
   const [name, setName] = useState(plan?.name ?? '');
 
+  const db = useExerciseMap();
   const exercises = plan?.exercises;
   const items = useMemo(
     () => (exercises ?? []).map((e) => ({ exerciseId: e.exerciseId, sets: e.sets })),
     [exercises],
   );
-  const coverage = useMemo(() => computeCoverage(items), [items]);
+  const coverage = useMemo(() => computeCoverage(items, db), [items, db]);
   const [tapped, setTapped] = useState<MuscleGroup | undefined>();
-  const summary = useMemo(() => summarizePlan(items), [items]);
+  const summary = useMemo(() => summarizePlan(items, db), [items, db]);
 
   if (!plan) {
     return (
@@ -58,7 +58,7 @@ export default function PlanEditorScreen() {
   };
 
   const confirmRemove = (pe: PlannedExercise) => {
-    const exName = getExercise(pe.exerciseId)?.name ?? 'this exercise';
+    const exName = db[pe.exerciseId]?.name ?? 'this exercise';
     Alert.alert('Remove exercise?', `Remove ${exName} from the plan?`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Remove', style: 'destructive', onPress: () => removePlannedExercise(plan.id, pe.id) },
@@ -112,7 +112,7 @@ export default function PlanEditorScreen() {
           </View>
         ) : (
           plan.exercises.map((pe, index) => {
-            const ex = getExercise(pe.exerciseId);
+            const ex = db[pe.exerciseId];
             return (
               <View key={pe.id} style={styles.card}>
                 <View style={styles.exHeader}>

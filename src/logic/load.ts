@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Equipment, Exercise, MuscleGroup, WorkoutSession } from '@/types';
 import { MUSCLE_GROUPS } from '@/types';
 
@@ -28,7 +28,7 @@ export function loadLevel(effectiveSets: number): LoadLevel {
 export function recentMuscleLoad(
   sessions: readonly WorkoutSession[],
   now: number = Date.now(),
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): Coverage {
   const since = now - LOAD_WINDOW_DAYS * DAY_MS;
   const items = sessions
@@ -71,7 +71,7 @@ const LEVEL_ORDER: Record<LoadLevel, number> = { high: 0, none: 1, low: 2, good:
 export function loadHints(
   load: Coverage,
   availableEquipment: readonly Equipment[],
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): LoadHint[] {
   const available = new Set(availableEquipment);
   const hints: LoadHint[] = [];

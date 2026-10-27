@@ -8,12 +8,12 @@ import { EmptyState } from '@/components/EmptyState';
 import { equipmentSummary, formatPattern } from '@/components/ExerciseList';
 import { MuscleCoverageBars } from '@/components/MuscleCoverageBars';
 import { RatingDots } from '@/components/RatingDots';
-import { getExercise } from '@/data/exercises';
 import { suggestAlternatives } from '@/logic/alternatives';
 import { computeCoverage } from '@/logic/coverage';
 import { lastPerformance } from '@/logic/history';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
+import type { Exercise } from '@/types';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -24,14 +24,15 @@ function shortDate(iso: string): string {
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const exercise = getExercise(id);
+  const db = useExerciseMap();
+  const exercise = db[id] as Exercise | undefined;
   const sessions = useGymStore((s) => s.sessions);
   const settings = useGymStore((s) => s.settings);
 
-  const coverage = useMemo(() => computeCoverage([{ exerciseId: id, sets: 1 }]), [id]);
+  const coverage = useMemo(() => computeCoverage([{ exerciseId: id, sets: 1 }], db), [id, db]);
   const alternatives = useMemo(
-    () => suggestAlternatives(id, { availableEquipment: settings.availableEquipment, limit: 5 }),
-    [id, settings.availableEquipment],
+    () => suggestAlternatives(id, { availableEquipment: settings.availableEquipment, limit: 5 }, db),
+    [id, settings.availableEquipment, db],
   );
   const last = useMemo(() => lastPerformance(sessions, id), [sessions, id]);
 

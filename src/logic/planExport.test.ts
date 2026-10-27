@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, WorkoutPlan } from '@/types';
 
 import {
@@ -148,7 +148,7 @@ describe('parsePlanExport errors', () => {
 });
 
 describe('parsePlanExport fix-ups', () => {
-  const bench = EXERCISE_BY_ID.barbell_bench_press.name;
+  const bench = getExerciseMap().barbell_bench_press.name;
 
   it('skips unknown exercises with a warning', () => {
     const result = parsePlanExport(

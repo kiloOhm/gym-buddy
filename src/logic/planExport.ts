@@ -1,6 +1,6 @@
 // Plan export/import file format. Pure functions, no Expo imports
 // (the file/share/picker side lives in planFiles.ts).
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, WorkoutPlan } from '@/types';
 
 export const PLAN_EXPORT_FORMAT = 'gym-buddy-plans';
@@ -114,7 +114,7 @@ function readNumber(
  */
 export function parsePlanExport(
   json: string,
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): ParsedImport {
   let data: unknown;
   try {

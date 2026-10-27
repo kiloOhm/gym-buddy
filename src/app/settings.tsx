@@ -4,14 +4,17 @@ import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
+import { BUILT_IN_EXERCISES } from '@/data/exercises';
+import { diffLibrary, type ParsedLibrary, parseLibraryExport } from '@/logic/library';
 import { dedupePlans, type ParsedImport, parsePlanExport } from '@/logic/planExport';
-import { exportPlansToFile, pickAndReadPlanFile } from '@/logic/planFiles';
-import { useGymStore } from '@/store';
+import { exportLibraryToFile, exportPlansToFile, pickAndReadJsonFile, pickAndReadPlanFile } from '@/logic/planFiles';
+import { useExerciseLibrary, useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
 import { EQUIPMENT, EQUIPMENT_LABELS, type Equipment, type WeightUnit } from '@/types';
 
 const UNITS: WeightUnit[] = ['kg', 'lb'];
 const MAX_LISTED_PLANS = 5;
+const MAX_LISTED_WARNINGS = 8;
 
 const errorMessage = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
@@ -20,6 +23,10 @@ export default function SettingsScreen() {
   const updateSettings = useGymStore((s) => s.updateSettings);
   const plans = useGymStore((s) => s.plans);
   const importPlans = useGymStore((s) => s.importPlans);
+  const library = useExerciseLibrary();
+  const customCount = useGymStore((s) => s.customExercises.length);
+  const importExercises = useGymStore((s) => s.importExercises);
+  const resetExerciseLibrary = useGymStore((s) => s.resetExerciseLibrary);
   const available = new Set<Equipment>(settings.availableEquipment);
   /** Plan ids ticked in the export chooser; undefined while the chooser is closed. */
   const [exportSelection, setExportSelection] = useState<Set<string> | undefined>(undefined);
@@ -91,6 +98,51 @@ export default function SettingsScreen() {
     ]);
   };
 
+  const exportLibrary = async () => {
+    try {
+      await exportLibraryToFile(library);
+    } catch (e) {
+      Alert.alert('Export failed', errorMessage(e));
+    }
+  };
+
+  const startLibraryImport = async () => {
+    let parsed: ParsedLibrary;
+    try {
+      const text = await pickAndReadJsonFile();
+      if (text === undefined) return;
+      parsed = parseLibraryExport(text);
+    } catch (e) {
+      Alert.alert('Import failed', errorMessage(e));
+      return;
+    }
+    const { warnings } = parsed;
+    const { added, updated, unchanged } = diffLibrary(parsed.exercises, library);
+    const listed = warnings.slice(0, MAX_LISTED_WARNINGS).join('\n');
+    const moreWarnings =
+      warnings.length > MAX_LISTED_WARNINGS ? `\n…and ${warnings.length - MAX_LISTED_WARNINGS} more` : '';
+    const details = warnings.length ? `\n\n${listed}${moreWarnings}` : '';
+    if (added.length + updated.length === 0) {
+      Alert.alert('Nothing to import', `${unchanged.length} unchanged${details}`);
+      return;
+    }
+    const summary = `${added.length} new, ${updated.length} changed, ${unchanged.length} unchanged`;
+    Alert.alert('Import exercise library?', summary + details, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Import', onPress: () => importExercises(parsed.exercises) },
+    ]);
+  };
+
+  const confirmResetLibrary = () =>
+    Alert.alert(
+      'Reset exercise library?',
+      `Removes ${customCount} custom or edited exercise${customCount === 1 ? '' : 's'} and restores the built-in versions.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Reset', style: 'destructive', onPress: resetExerciseLibrary },
+      ],
+    );
+
   return (
     <>
       <Stack.Screen options={{ title: 'Settings' }} />
@@ -132,6 +184,22 @@ export default function SettingsScreen() {
             })}
           </View>
           <Text style={styles.muted}>Weights are stored as entered; changing the unit does not convert past logs.</Text>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Exercise library</Text>
+          <Text style={styles.muted}>
+            {BUILT_IN_EXERCISES.length} built-in · {customCount} custom or edited
+          </Text>
+          <Button title="Export library" variant="secondary" onPress={exportLibrary} />
+          <Button title="Import library" variant="secondary" onPress={startLibraryImport} />
+          {customCount > 0 && (
+            <Button title="Reset to built-in library" variant="danger" onPress={confirmResetLibrary} />
+          )}
+          <Text style={styles.muted}>
+            Edit the exported JSON to add exercises or change ratings, then import it back. Existing plans
+            and history keep working because exercises are matched by id.
+          </Text>
         </View>
 
         <View style={styles.card}>

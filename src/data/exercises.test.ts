@@ -1,4 +1,10 @@
-import { EXERCISE_BY_ID, EXERCISES, getExercise } from '@/data/exercises';
+import {
+  BUILT_IN_EXERCISES as EXERCISES,
+  getExercise,
+  getExerciseMap,
+  getExercises,
+  setExerciseLibrary,
+} from '@/data/exercises';
 import { EQUIPMENT, MOVEMENT_PATTERNS, MUSCLE_GROUPS, type Exercise } from '@/types';
 
 const HOME_EQUIPMENT = new Set<string>(['bodyweight', 'pull_up_bar', 'dip_station']);
@@ -95,15 +101,30 @@ describe('exercise database: coverage', () => {
 });
 
 describe('exercise database: lookup', () => {
-  it('EXERCISE_BY_ID indexes every exercise', () => {
-    expect(Object.keys(EXERCISE_BY_ID)).toHaveLength(EXERCISES.length);
-    for (const e of EXERCISES) expect(EXERCISE_BY_ID[e.id]).toBe(e);
+  it('the registry starts with every built-in exercise', () => {
+    expect(getExercises()).toBe(EXERCISES);
+    expect(Object.keys(getExerciseMap())).toHaveLength(EXERCISES.length);
+    for (const e of EXERCISES) expect(getExerciseMap()[e.id]).toBe(e);
+  });
+
+  it('setExerciseLibrary replaces the registry contents', () => {
+    const custom: Exercise = { ...byId('pull_up'), id: 'custom_pull', name: 'Custom pull' };
+    try {
+      setExerciseLibrary([...EXERCISES, custom]);
+      expect(getExercises()).toHaveLength(EXERCISES.length + 1);
+      expect(getExercise('custom_pull')).toBe(custom);
+      expect(getExerciseMap().custom_pull).toBe(custom);
+    } finally {
+      setExerciseLibrary(EXERCISES);
+    }
+    expect(getExercise('custom_pull')).toBeUndefined();
   });
 
   it('getExercise returns the exercise or undefined', () => {
     expect(getExercise('barbell_back_squat')?.name).toBe('Barbell back squat');
     expect(getExercise('not_a_real_exercise')).toBeUndefined();
     expect(getExercise('')).toBeUndefined();
+    expect(getExercise('toString')).toBeUndefined();
   });
 });
 

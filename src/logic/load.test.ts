@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, SessionExercise, WorkoutSession } from '@/types';
 import { EQUIPMENT, MUSCLE_GROUPS } from '@/types';
 
@@ -170,7 +170,7 @@ describe('loadHints', () => {
       expect(h.level).toBe('none');
       expect(h.suggestions.length).toBeGreaterThanOrEqual(1);
       expect(h.suggestions.length).toBeLessThanOrEqual(2);
-      for (const s of h.suggestions) expect(EXERCISE_BY_ID[s.id].muscles[h.muscle]).toBe(1);
+      for (const s of h.suggestions) expect(getExerciseMap()[s.id].muscles[h.muscle]).toBe(1);
     }
   });
 

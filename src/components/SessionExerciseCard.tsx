@@ -3,14 +3,13 @@ import { memo, useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/Button';
-import { getExercise } from '@/data/exercises';
 import { lastPerformance } from '@/logic/history';
 import { formatSetList, formatWeight, parseNumberInput } from '@/logic/sessionFormat';
 import { exerciseStats, type ExerciseStats } from '@/logic/stats';
-import { useGymStore } from '@/store';
+import { useExerciseMap, useGymStore } from '@/store';
 import { useRestStore } from '@/store/rest';
 import { colors, radius, spacing } from '@/theme';
-import type { SessionExercise, SetLog, WeightUnit } from '@/types';
+import type { Exercise, SessionExercise, SetLog, WeightUnit } from '@/types';
 
 interface Props {
   sessionExercise: SessionExercise;
@@ -25,9 +24,10 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
   const removeSet = useGymStore((s) => s.removeSet);
   const removeSessionExercise = useGymStore((s) => s.removeSessionExercise);
 
-  const exercise = getExercise(ex.exerciseId);
+  const db = useExerciseMap();
+  const exercise = db[ex.exerciseId] as Exercise | undefined;
   const name = exercise?.name ?? 'Unknown exercise';
-  const original = ex.substitutedFor ? (getExercise(ex.substitutedFor)?.name ?? 'Unknown exercise') : undefined;
+  const original = ex.substitutedFor ? (db[ex.substitutedFor]?.name ?? 'Unknown exercise') : undefined;
   const last = useMemo(() => lastPerformance(sessions, ex.exerciseId), [sessions, ex.exerciseId]);
   const stats = useMemo(
     () => exerciseStats(sessions, ex.exerciseId, ex.targetReps),

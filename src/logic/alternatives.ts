@@ -1,4 +1,4 @@
-import { EXERCISE_BY_ID } from '@/data/exercises';
+import { getExerciseMap } from '@/data/exercises';
 import type { Equipment, Exercise, MuscleGroup } from '@/types';
 import { EQUIPMENT_LABELS, MUSCLE_GROUPS, MUSCLE_LABELS } from '@/types';
 
@@ -71,7 +71,7 @@ function round(value: number, decimals: number): number {
 export function suggestAlternatives(
   exerciseId: string,
   options: AlternativeOptions,
-  db: Record<string, Exercise> = EXERCISE_BY_ID,
+  db: Record<string, Exercise> = getExerciseMap(),
 ): Alternative[] {
   const original = db[exerciseId];
   if (!original) return [];
