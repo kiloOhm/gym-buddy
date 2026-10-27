@@ -11,8 +11,7 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'muscles'>): Exer
     equipment: ['bodyweight'],
     pattern: 'isolation',
     compound: false,
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
     cues: [],
     ...partial,
   };
@@ -20,12 +19,12 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'muscles'>): Exer
 
 const DB: Record<string, Exercise> = Object.fromEntries(
   [
-    ex({ id: 'bench', muscles: { chest: 1, triceps: 0.5 }, equipment: ['barbell', 'bench'], injuryRisk: 4 }),
-    ex({ id: 'pushup', muscles: { chest: 1, triceps: 0.5 }, injuryRisk: 1, formDifficulty: 2 }),
-    ex({ id: 'db_press', muscles: { chest: 1 }, equipment: ['dumbbell', 'bench'], injuryRisk: 1, formDifficulty: 1 }),
-    ex({ id: 'cable_fly', muscles: { chest: 1 }, equipment: ['cable'], injuryRisk: 1, formDifficulty: 3 }),
-    ex({ id: 'pec_deck', muscles: { chest: 0.9 }, equipment: ['machine'], injuryRisk: 1, formDifficulty: 1 }),
-    ex({ id: 'curl', muscles: { biceps: 1, forearms: 0.3 }, injuryRisk: 1, formDifficulty: 1 }),
+    ex({ id: 'bench', muscles: { chest: 1, triceps: 0.5 }, equipment: ['barbell', 'bench'], difficulty: 4 }),
+    ex({ id: 'pushup', muscles: { chest: 1, triceps: 0.5 }, difficulty: 2 }),
+    ex({ id: 'db_press', muscles: { chest: 1 }, equipment: ['dumbbell', 'bench'], difficulty: 1 }),
+    ex({ id: 'cable_fly', muscles: { chest: 1 }, equipment: ['cable'], difficulty: 3 }),
+    ex({ id: 'pec_deck', muscles: { chest: 0.9 }, equipment: ['machine'], difficulty: 1 }),
+    ex({ id: 'curl', muscles: { biceps: 1, forearms: 0.3 }, difficulty: 1 }),
   ].map((e) => [e.id, e]),
 );
 
@@ -146,10 +145,10 @@ describe('loadHints', () => {
     expect(hint).toMatchObject({ muscle: 'chest', level: 'high', suggestions: [] });
   });
 
-  it('suggests up to two 1.0-primary exercises, safest first', () => {
+  it('suggests up to two 1.0-primary exercises, easiest first', () => {
     const chest = loadHints(coverage({ chest: 1 }), ALL, DB).find((h) => h.muscle === 'chest')!;
     expect(chest.level).toBe('low');
-    // Ranked by injuryRisk then formDifficulty; pec_deck (0.9) never qualifies.
+    // Ranked by difficulty then name; pec_deck (0.9) never qualifies.
     expect(chest.suggestions.map((e) => e.id)).toEqual(['db_press', 'pushup']);
   });
 

@@ -22,9 +22,8 @@ function byId(id: string): Exercise {
 }
 
 describe('exercise database: shape', () => {
-  it('has between 100 and 120 exercises', () => {
-    expect(EXERCISES.length).toBeGreaterThanOrEqual(100);
-    expect(EXERCISES.length).toBeLessThanOrEqual(120);
+  it('has 122 exercises', () => {
+    expect(EXERCISES).toHaveLength(122);
   });
 
   it('has unique, slug-shaped IDs', () => {
@@ -63,17 +62,17 @@ describe('exercise database: shape', () => {
     }
     expect(primaries(e).length).toBeGreaterThanOrEqual(1);
 
-    for (const r of [e.formDifficulty, e.injuryRisk]) {
-      expect(Number.isInteger(r)).toBe(true);
-      expect(r).toBeGreaterThanOrEqual(1);
-      expect(r).toBeLessThanOrEqual(5);
-    }
+    expect(Number.isInteger(e.difficulty)).toBe(true);
+    expect(e.difficulty).toBeGreaterThanOrEqual(1);
+    expect(e.difficulty).toBeLessThanOrEqual(5);
+    expect(e).not.toHaveProperty('formDifficulty');
+    expect(e).not.toHaveProperty('injuryRisk');
 
     expect(e.cues.length).toBeGreaterThanOrEqual(2);
     expect(e.cues.length).toBeLessThanOrEqual(4);
     for (const cue of e.cues) {
       expect(cue.trim().length).toBeGreaterThan(0);
-      expect(cue.length).toBeLessThanOrEqual(60);
+      expect(cue.length).toBeLessThanOrEqual(100);
     }
   });
 });
@@ -130,40 +129,46 @@ describe('exercise database: lookup', () => {
 
 describe('exercise database: rating anchors', () => {
   it.each([
-    ['machine_chest_press', 1, 1],
-    ['leg_extension', 1, 1],
-    ['pec_deck', 1, 1],
-    ['cable_lateral_raise', 1, 1],
-    ['dumbbell_bench_press', 2, 2],
-    ['leg_press', 2, 2],
-    ['lat_pulldown', 2, 2],
-    ['seated_cable_row', 2, 2],
-    ['dumbbell_curl', 2, 2],
-    ['barbell_bench_press', 3, 3],
-    ['barbell_row', 3, 3],
-    ['overhead_press', 3, 3],
-    ['kettlebell_swing', 3, 3],
-    ['bulgarian_split_squat', 3, 3],
-    ['hip_thrust', 3, 3],
-    ['barbell_back_squat', 4, 4],
-    ['front_squat', 4, 4],
-    ['romanian_deadlift', 4, 4],
-    ['weighted_pull_up', 4, 4],
-    ['good_morning', 4, 5],
-    ['conventional_deadlift', 5, 5],
-    ['barbell_upright_row', 3, 5],
-    ['behind_the_neck_press', 4, 5],
-  ] as const)('%s is form %i / risk %i', (id, form, risk) => {
-    const e = byId(id);
-    expect(e.formDifficulty).toBe(form);
-    expect(e.injuryRisk).toBe(risk);
+    ['machine_chest_press', 1],
+    ['leg_extension', 1],
+    ['pec_deck', 1],
+    ['cable_lateral_raise', 1],
+    ['push_up', 1],
+    ['dumbbell_bench_press', 2],
+    ['leg_press', 2],
+    ['lat_pulldown', 2],
+    ['seated_cable_row', 2],
+    ['dumbbell_curl', 2],
+    ['barbell_bench_press', 3],
+    ['barbell_row', 3],
+    ['overhead_press', 3],
+    ['kettlebell_swing', 3],
+    ['bulgarian_split_squat', 3],
+    ['hip_thrust', 3],
+    ['pull_up', 3],
+    ['barbell_back_squat', 4],
+    ['front_squat', 4],
+    ['romanian_deadlift', 4],
+    ['weighted_pull_up', 4],
+    ['barbell_upright_row', 4],
+    ['rack_pull', 4],
+    ['conventional_deadlift', 5],
+    ['snatch_grip_deadlift', 5],
+    ['good_morning', 5],
+    ['behind_the_neck_press', 5],
+    ['power_clean', 5],
+  ] as const)('%s has difficulty %i', (id, difficulty) => {
+    expect(byId(id).difficulty).toBe(difficulty);
   });
 
-  it('snatch-grip deadlift and power clean sit at the top of the scale', () => {
-    for (const id of ['snatch_grip_deadlift', 'power_clean']) {
-      const e = byId(id);
-      expect(Math.max(e.formDifficulty, e.injuryRisk)).toBe(5);
-    }
+  it.each([
+    ['reverse_crunch', 1],
+    ['incline_push_up', 1],
+    ['dumbbell_goblet_squat', 2],
+    ['machine_lateral_raise', 1],
+    ['cable_overhead_triceps_extension', 2],
+  ] as const)('new entry %s has difficulty %i', (id, difficulty) => {
+    expect(byId(id).difficulty).toBe(difficulty);
   });
 
   it('matches the documented activation profiles', () => {
@@ -192,6 +197,15 @@ describe('exercise database: rating anchors', () => {
     expect(byId('pull_up').equipment).toEqual(['pull_up_bar']);
     expect(byId('push_up').equipment).toEqual(['bodyweight']);
     expect(byId('chest_dip').equipment).toEqual(['dip_station']);
+    expect(byId('weighted_pull_up').equipment).toEqual(['pull_up_bar']);
+    expect(byId('back_extension').equipment).toEqual(['machine']);
+    expect(byId('preacher_curl').equipment).toEqual(['ez_bar', 'machine']);
+  });
+
+  it('requires a rack for the lifts that start from one', () => {
+    for (const id of ['barbell_back_squat', 'front_squat', 'good_morning', 'rack_pull', 'inverted_row']) {
+      expect(byId(id).equipment).toEqual(['barbell', 'rack']);
+    }
   });
 
   it('marks isolation exercises as non-compound', () => {

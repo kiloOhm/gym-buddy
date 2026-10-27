@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-nat
 
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
+import { ExerciseFigure } from '@/components/ExerciseFigure';
 import { RatingDots } from '@/components/RatingDots';
 import { suggestAlternatives } from '@/logic/alternatives';
 import { useExerciseMap, useGymStore } from '@/store';
@@ -93,6 +94,7 @@ export default function SwapScreen() {
               accessibilityLabel={`Swap to ${exercise.name}`}
             >
               <View style={styles.altHeader}>
+                <ExerciseFigure exercise={exercise} variant="thumb" size={44} />
                 <Text style={[font.heading, styles.flex]}>{exercise.name}</Text>
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>{Math.round(score * 100)}%</Text>
@@ -100,12 +102,7 @@ export default function SwapScreen() {
               </View>
               {reasons.length > 0 ? <Text style={font.small}>{reasons.join(' · ')}</Text> : null}
               <View style={styles.ratings}>
-                <View style={styles.flex}>
-                  <RatingDots label="Form" value={exercise.formDifficulty} kind="skill" />
-                </View>
-                <View style={styles.flex}>
-                  <RatingDots label="Risk" value={exercise.injuryRisk} kind="risk" />
-                </View>
+                <RatingDots label="Difficulty" value={exercise.difficulty} />
               </View>
             </Pressable>
           ))
@@ -139,5 +136,5 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   badgeText: { fontSize: 13, fontWeight: '700', color: colors.primary },
-  ratings: { flexDirection: 'row', gap: spacing.lg },
+  ratings: { alignSelf: 'flex-start', minWidth: '50%' },
 });

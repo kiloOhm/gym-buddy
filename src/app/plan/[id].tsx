@@ -83,8 +83,8 @@ export default function PlanEditorScreen() {
       ? 'No sets planned yet.'
       : [
           `${summary.totalSets} set${summary.totalSets === 1 ? '' : 's'}`,
-          `form difficulty ${summary.avgFormDifficulty.toFixed(1)}/5`,
-          `highest injury risk ${summary.maxInjuryRisk}/5${summary.riskiest ? ` (${summary.riskiest.name})` : ''}`,
+          `avg difficulty ${summary.avgDifficulty.toFixed(1)}/5`,
+          ...(summary.hardest ? [`hardest: ${summary.hardest.name} (${summary.maxDifficulty}/5)`] : []),
         ].join(' · ');
 
   return (

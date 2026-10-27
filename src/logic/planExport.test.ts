@@ -46,8 +46,7 @@ function fixtureExercise(id: string, name: string): Exercise {
     pattern: 'isolation',
     compound: false,
     muscles: { chest: 1 },
-    formDifficulty: 1,
-    injuryRisk: 1,
+    difficulty: 1,
     cues: [],
   };
 }

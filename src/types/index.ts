@@ -55,6 +55,7 @@ export const EQUIPMENT = [
   'ez_bar',
   'band',
   'bench',
+  'rack',
   'pull_up_bar',
   'dip_station',
   'bodyweight',
@@ -71,6 +72,7 @@ export const EQUIPMENT_LABELS: Record<Equipment, string> = {
   ez_bar: 'EZ bar',
   band: 'Resistance band',
   bench: 'Bench',
+  rack: 'Power rack / squat stand',
   pull_up_bar: 'Pull-up bar',
   dip_station: 'Dip station',
   bodyweight: 'Bodyweight',
@@ -90,7 +92,7 @@ export const MOVEMENT_PATTERNS = [
 ] as const;
 export type MovementPattern = (typeof MOVEMENT_PATTERNS)[number];
 
-/** 1 = trivial, 5 = very technical / very easy to get hurt. */
+/** 1 = trivial, 5 = very technical and very unforgiving. */
 export type Rating = 1 | 2 | 3 | 4 | 5;
 
 export interface Exercise {
@@ -107,10 +109,11 @@ export interface Exercise {
    * that are not meaningfully worked.
    */
   muscles: Partial<Record<MuscleGroup, number>>;
-  /** How hard it is to keep good form (technique demand). */
-  formDifficulty: Rating;
-  /** How likely an injury is when form breaks or load climbs. */
-  injuryRisk: Rating;
+  /**
+   * Editorial 1-5 rating of how technically demanding and how unforgiving the exercise is
+   * (anchors in src/data/exercises.ts). Not a measured injury rate.
+   */
+  difficulty: Rating;
   /** 2-4 short coaching cues shown in the exercise detail view. */
   cues: string[];
 }

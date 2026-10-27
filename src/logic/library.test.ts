@@ -16,8 +16,7 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'name'>): Exercis
     pattern: 'isolation',
     compound: false,
     muscles: { biceps: 1 },
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
     cues: ['Stay tight'],
     ...partial,
   };
@@ -28,7 +27,13 @@ const B = ex({ id: 'b', name: 'Bravo' });
 const C = ex({ id: 'c', name: 'Charlie' });
 
 function file(exercises: unknown[], extra: Record<string, unknown> = {}): string {
-  return JSON.stringify({ format: 'gym-buddy-exercises', version: 1, exportedAt: 'x', exercises, ...extra });
+  return JSON.stringify({ format: 'gym-buddy-exercises', version: 2, exportedAt: 'x', exercises, ...extra });
+}
+
+/** A version 1 entry: formDifficulty + injuryRisk instead of difficulty. */
+function legacy(e: Exercise, formDifficulty: unknown, injuryRisk: unknown): Record<string, unknown> {
+  const { difficulty: _difficulty, ...rest } = e;
+  return { ...rest, formDifficulty, injuryRisk };
 }
 
 /** Parses a file with a single entry built from a valid one plus overrides. */
@@ -42,7 +47,7 @@ describe('mergeLibrary', () => {
   });
 
   it('replaces built-ins with custom entries of the same id, in place', () => {
-    const editedB = { ...B, formDifficulty: 5 as const };
+    const editedB = { ...B, difficulty: 5 as const };
     expect(mergeLibrary([A, B, C], [editedB])).toEqual([A, editedB, C]);
   });
 
@@ -63,7 +68,7 @@ describe('serializeLibrary / libraryFileName', () => {
     const data = JSON.parse(json);
     expect(data).toEqual({
       format: 'gym-buddy-exercises',
-      version: 1,
+      version: 2,
       exportedAt: now.toISOString(),
       exercises: [A, B],
     });
@@ -100,7 +105,8 @@ describe('parseLibraryExport: whole-file errors', () => {
   });
 
   it('rejects an unsupported version', () => {
-    expect(() => parseLibraryExport(file([], { version: 2 }))).toThrow('Unsupported file version (2)');
+    expect(() => parseLibraryExport(file([], { version: 3 }))).toThrow('Unsupported file version (3)');
+    expect(() => parseLibraryExport(file([], { version: undefined }))).toThrow('Unsupported file version');
   });
 
   it('rejects a missing exercise list', () => {
@@ -147,8 +153,9 @@ describe('parseLibraryExport: entries', () => {
     ['a zero activation', { muscles: { biceps: 1, forearms: 0 } }, 'activation for forearms'],
     ['an activation above 1', { muscles: { biceps: 1.2 } }, 'activation for biceps'],
     ['a string activation', { muscles: { biceps: '1' } }, 'activation for biceps'],
-    ['a non-numeric formDifficulty', { formDifficulty: 'hard' }, 'formDifficulty must be a number'],
-    ['a missing injuryRisk', { injuryRisk: undefined }, 'injuryRisk must be a number'],
+    ['a non-numeric difficulty', { difficulty: 'hard' }, 'difficulty must be a number from 1 to 5'],
+    ['a missing difficulty', { difficulty: undefined }, 'difficulty must be a number from 1 to 5'],
+    ['a NaN-like difficulty', { difficulty: null }, 'difficulty must be a number from 1 to 5'],
     ['cues that are not a list', { cues: 'Stay tight' }, 'cues must be a list of strings'],
     ['a non-string cue', { cues: ['ok', 3] }, 'cues must be a list of strings'],
   ])('skips an entry with %s', (_label, overrides, problem) => {
@@ -181,20 +188,19 @@ describe('parseLibraryExport: entries', () => {
     expect(warnings).toEqual(['Alpha (a): muscle activations scaled so the primary target is 1']);
   });
 
-  it('clamps out-of-range ratings with a warning', () => {
-    const { exercises, warnings } = parseOne({ formDifficulty: 7, injuryRisk: 0 });
-    expect(exercises[0].formDifficulty).toBe(5);
-    expect(exercises[0].injuryRisk).toBe(1);
-    expect(warnings).toEqual([
-      'Alpha (a): formDifficulty 7 adjusted to 5',
-      'Alpha (a): injuryRisk 0 adjusted to 1',
-    ]);
+  it('clamps an out-of-range difficulty with a warning', () => {
+    const high = parseOne({ difficulty: 7 });
+    expect(high.exercises[0].difficulty).toBe(5);
+    expect(high.warnings).toEqual(['Alpha (a): difficulty 7 adjusted to 5']);
+    const low = parseOne({ difficulty: 0 });
+    expect(low.exercises[0].difficulty).toBe(1);
+    expect(low.warnings).toEqual(['Alpha (a): difficulty 0 adjusted to 1']);
   });
 
-  it('rounds fractional ratings with a warning', () => {
-    const { exercises, warnings } = parseOne({ formDifficulty: 2.6 });
-    expect(exercises[0].formDifficulty).toBe(3);
-    expect(warnings).toEqual(['Alpha (a): formDifficulty 2.6 adjusted to 3']);
+  it('rounds a fractional difficulty with a warning', () => {
+    const { exercises, warnings } = parseOne({ difficulty: 2.6 });
+    expect(exercises[0].difficulty).toBe(3);
+    expect(warnings).toEqual(['Alpha (a): difficulty 2.6 adjusted to 3']);
   });
 
   it('treats missing cues as none', () => {
@@ -223,6 +229,58 @@ describe('parseLibraryExport: entries', () => {
   });
 });
 
+describe('parseLibraryExport: version 1 files', () => {
+  function v1(exercises: unknown[]): string {
+    return file(exercises, { version: 1 });
+  }
+
+  it('derives difficulty as the mean of the old ratings, rounded half up', () => {
+    const { exercises, warnings } = parseLibraryExport(
+      v1([legacy(A, 2, 2), legacy(B, 3, 4), legacy(C, 1, 2)]),
+    );
+    expect(exercises.map((e) => e.difficulty)).toEqual([2, 4, 2]);
+    expect(exercises[0]).toEqual(A);
+    expect(exercises[1]).not.toHaveProperty('formDifficulty');
+    expect(exercises[1]).not.toHaveProperty('injuryRisk');
+    expect(warnings).toEqual(['Converted form/injury ratings to the single difficulty score']);
+  });
+
+  it('clamps converted ratings to 1..5', () => {
+    const { exercises, warnings } = parseLibraryExport(v1([legacy(A, 7, 9), legacy(B, 0, -1)]));
+    expect(exercises.map((e) => e.difficulty)).toEqual([5, 1]);
+    expect(warnings).toEqual(['Converted form/injury ratings to the single difficulty score']);
+  });
+
+  it('round-trips the built-in library through the old format', () => {
+    const old = BUILT_IN_EXERCISES.map((e) => legacy(e, e.difficulty, e.difficulty));
+    const { exercises, warnings } = parseLibraryExport(v1(old));
+    expect(exercises).toEqual(BUILT_IN_EXERCISES);
+    expect(warnings).toEqual(['Converted form/injury ratings to the single difficulty score']);
+  });
+
+  it('skips entries whose old ratings are missing or not numbers', () => {
+    const { exercises, warnings } = parseLibraryExport(v1([legacy(A, 'hard', 2), legacy(B, 2, undefined), legacy(C, 2, 3)]));
+    expect(exercises.map((e) => e.id)).toEqual(['c']);
+    expect(warnings).toEqual([
+      'Converted form/injury ratings to the single difficulty score',
+      'Alpha (a): skipped, difficulty must be a number from 1 to 5',
+      'Bravo (b): skipped, difficulty must be a number from 1 to 5',
+    ]);
+  });
+
+  it('prefers difficulty when an entry has both, without the conversion warning', () => {
+    const { exercises, warnings } = parseLibraryExport(v1([{ ...legacy(A, 5, 5), difficulty: 1 }]));
+    expect(exercises[0].difficulty).toBe(1);
+    expect(warnings).toEqual([]);
+  });
+
+  it('also converts old ratings found in a version 2 file', () => {
+    const { exercises, warnings } = parseLibraryExport(file([legacy(A, 3, 4)]));
+    expect(exercises[0].difficulty).toBe(4);
+    expect(warnings).toEqual(['Converted form/injury ratings to the single difficulty score']);
+  });
+});
+
 describe('diffLibrary', () => {
   it('classifies incoming entries by id against the current library', () => {
     const editedB = { ...B, cues: ['Different'] };
@@ -237,8 +295,7 @@ describe('diffLibrary', () => {
     const reordered = JSON.parse(
       JSON.stringify({
         cues: A.cues,
-        injuryRisk: A.injuryRisk,
-        formDifficulty: A.formDifficulty,
+        difficulty: A.difficulty,
         muscles: A.muscles,
         compound: A.compound,
         pattern: A.pattern,

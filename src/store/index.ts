@@ -5,7 +5,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { BUILT_IN_EXERCISES, setExerciseLibrary } from '@/data/exercises';
 import { lastPerformance } from '@/logic/history';
 import { newId, nowIso } from '@/logic/ids';
-import { diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
+import { difficultyFromLegacy, diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
 import { SEED_PLANS } from '@/data/seedPlans';
 import { EQUIPMENT } from '@/types';
 import type {
@@ -120,6 +120,35 @@ export function buildSeedPlans(): WorkoutPlan[] {
     updatedAt: now,
     exercises: seed.exercises.map((e) => ({ id: newId(), ...e })),
   }));
+}
+
+/** Version of the persisted state; bump together with a step in migratePersistedState. */
+export const PERSIST_VERSION = 1;
+
+/**
+ * Upgrades persisted state from an older version. Version 0 → 1: the 'rack' equipment was added
+ * (squats etc. now require it), so it is switched on for existing users; imported exercises from
+ * before the single difficulty score get it derived from their old formDifficulty/injuryRisk.
+ */
+export function migratePersistedState(persisted: unknown, version: number): unknown {
+  if (typeof persisted !== 'object' || persisted === null) return persisted;
+  const state = { ...(persisted as Record<string, unknown>) };
+  if (version < 1) {
+    const settings = state.settings as Partial<Settings> | undefined;
+    if (settings && Array.isArray(settings.availableEquipment) && !settings.availableEquipment.includes('rack')) {
+      state.settings = { ...settings, availableEquipment: [...settings.availableEquipment, 'rack'] };
+    }
+    if (Array.isArray(state.customExercises)) {
+      state.customExercises = state.customExercises.map((raw: Record<string, unknown>) => {
+        if (typeof raw !== 'object' || raw === null || typeof raw.difficulty === 'number') return raw;
+        const { formDifficulty, injuryRisk, ...rest } = raw;
+        const form = typeof formDifficulty === 'number' ? formDifficulty : 3;
+        const risk = typeof injuryRisk === 'number' ? injuryRisk : form;
+        return { ...rest, difficulty: difficultyFromLegacy(form, risk) };
+      });
+    }
+  }
+  return state;
 }
 
 const DEFAULT_SETS = 3;
@@ -332,6 +361,8 @@ export const useGymStore = create<GymState>()(
     },
     {
       name: 'gym-buddy-v1',
+      version: PERSIST_VERSION,
+      migrate: (persisted, version) => migratePersistedState(persisted, version) as GymState,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (s) => ({
         seeded: s.seeded,

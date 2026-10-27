@@ -5,6 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
+import { ExerciseFigure, hasExercisePhotos } from '@/components/ExerciseFigure';
 import { equipmentSummary, formatPattern } from '@/components/ExerciseList';
 import { MuscleCoverageBars } from '@/components/MuscleCoverageBars';
 import { RatingDots } from '@/components/RatingDots';
@@ -66,9 +67,22 @@ export default function ExerciseDetailScreen() {
           <Text style={styles.meta}>Equipment: {equipmentSummary(exercise)}</Text>
           {lastLine ? <Text style={styles.last}>{lastLine}</Text> : null}
           <View style={styles.ratings}>
-            <RatingDots label="Form difficulty" value={exercise.formDifficulty} kind="skill" />
-            <RatingDots label="Injury risk" value={exercise.injuryRisk} kind="risk" />
+            <RatingDots label="Difficulty" value={exercise.difficulty} />
+            <Text style={styles.caption}>
+              Difficulty is an editorial 1–5 rating of technique demand and how unforgiving the lift is,
+              not a measured injury risk. Muscle weights are editorial involvement estimates (1 = primary
+              target).
+            </Text>
           </View>
+        </View>
+
+        <View style={styles.card}>
+          <ExerciseFigure exercise={exercise} variant="hero" />
+          {hasExercisePhotos(exercise.id) ? (
+            <Text style={styles.credit} numberOfLines={1}>
+              Photos: free-exercise-db (public domain)
+            </Text>
+          ) : null}
         </View>
 
         <View style={styles.card}>
@@ -129,6 +143,8 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: '700', color: colors.text },
   cardTitle: { fontSize: 17, fontWeight: '600', color: colors.text, marginBottom: spacing.xs },
   meta: { fontSize: 13, color: colors.muted },
+  credit: { fontSize: 11, color: colors.muted },
+  caption: { fontSize: 12, lineHeight: 16, color: colors.muted },
   last: { fontSize: 14, color: colors.primary, fontWeight: '600' },
   ratings: { gap: spacing.sm, marginTop: spacing.sm },
   body: { flex: 1, fontSize: 15, color: colors.text },

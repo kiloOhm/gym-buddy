@@ -6,7 +6,7 @@ export interface Alternative {
   exercise: Exercise;
   /** 0..1, higher is a closer substitute. */
   score: number;
-  /** Short human-readable reasons, e.g. "Same movement pattern", "Easier on form". */
+  /** Short human-readable reasons, e.g. "Same movement pattern", "Easier". */
   reasons: string[];
 }
 
@@ -99,29 +99,24 @@ export function suggestAlternatives(
 
     const samePattern = candidate.pattern === original.pattern;
     const sameCompound = candidate.compound === original.compound;
-    const easierOrEqualForm = candidate.formDifficulty <= original.formDifficulty;
-    const lowerOrEqualRisk = candidate.injuryRisk <= original.injuryRisk;
-    const safety = easierOrEqualForm && lowerOrEqualRisk ? 1 : easierOrEqualForm || lowerOrEqualRisk ? 0.5 : 0;
-    const extraRisk = Math.max(0, candidate.injuryRisk - original.injuryRisk);
+    const extraDifficulty = Math.max(0, candidate.difficulty - original.difficulty);
+    const safety = extraDifficulty === 0 ? 1 : extraDifficulty === 1 ? 0.5 : 0;
 
     const raw =
       0.55 * similarity +
       0.2 * (samePattern ? 1 : 0) +
       0.15 * (sameCompound ? 1 : 0) +
       0.1 * safety -
-      0.05 * extraRisk;
+      0.05 * extraDifficulty;
     const score = round(Math.min(1, Math.max(0, raw)), 3);
 
     const reasons: string[] = [
       samePattern ? 'Same movement pattern' : 'Different pattern, same muscles',
       `Hits ${MUSCLE_LABELS[sharedPrimary]} like the original`,
     ];
-    if (candidate.formDifficulty < original.formDifficulty) reasons.push('Easier on form');
-    else if (candidate.formDifficulty === original.formDifficulty) reasons.push('Same technique demand');
-    else reasons.push('More technical');
-    if (candidate.injuryRisk < original.injuryRisk) reasons.push('Lower injury risk');
-    else if (candidate.injuryRisk === original.injuryRisk) reasons.push('Same injury risk');
-    else reasons.push('Higher injury risk');
+    if (candidate.difficulty < original.difficulty) reasons.push('Easier');
+    else if (candidate.difficulty === original.difficulty) reasons.push('Same difficulty');
+    else reasons.push('More demanding');
     reasons.push(equipmentReason(candidate.equipment));
 
     results.push({ exercise: candidate, score, reasons });

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 
 import { colors, radius, spacing } from '@/theme';
@@ -12,6 +12,9 @@ import {
   type MuscleGroup,
   type Rating,
 } from '@/types';
+
+import { ExerciseFigure } from './ExerciseFigure';
+import { difficultyColor } from './RatingDots';
 
 interface Props {
   exercises: Exercise[];
@@ -98,29 +101,41 @@ export function ExerciseList({ exercises, onPress, availableEquipment }: Props) 
       contentContainerStyle={styles.content}
       ItemSeparatorComponent={Separator}
       ListEmptyComponent={<Text style={styles.empty}>No exercises match these filters.</Text>}
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() => onPress(item)}
-          style={({ pressed }) => [styles.row, pressed && { opacity: 0.6 }]}
-          accessibilityRole="button"
-        >
-          <View style={styles.rowText}>
-            <Text style={styles.name} numberOfLines={1}>
-              {item.name}
-            </Text>
-            <Text style={styles.meta} numberOfLines={1}>
-              {formatPattern(item.pattern)} · {equipmentSummary(item)}
-            </Text>
-          </View>
-          <View style={styles.ratings}>
-            <MiniRating label="Form" value={item.formDifficulty} kind="skill" />
-            <MiniRating label="Risk" value={item.injuryRisk} kind="risk" />
-          </View>
-        </Pressable>
-      )}
+      initialNumToRender={12}
+      windowSize={7}
+      renderItem={({ item }) => <ExerciseRow exercise={item} onPress={onPress} />}
     />
   );
 }
+
+const ExerciseRow = memo(function ExerciseRow({
+  exercise,
+  onPress,
+}: {
+  exercise: Exercise;
+  onPress: (exercise: Exercise) => void;
+}) {
+  return (
+    <Pressable
+      onPress={() => onPress(exercise)}
+      style={({ pressed }) => [styles.row, pressed && { opacity: 0.6 }]}
+      accessibilityRole="button"
+    >
+      <ExerciseFigure exercise={exercise} variant="thumb" />
+      <View style={styles.rowText}>
+        <Text style={styles.name} numberOfLines={1}>
+          {exercise.name}
+        </Text>
+        <Text style={styles.meta} numberOfLines={1}>
+          {formatPattern(exercise.pattern)} · {equipmentSummary(exercise)}
+        </Text>
+      </View>
+      <View style={styles.ratings}>
+        <MiniRating label="Difficulty" value={exercise.difficulty} />
+      </View>
+    </Pressable>
+  );
+});
 
 function Separator() {
   return <View style={styles.separator} />;
@@ -140,17 +155,8 @@ function Chip({ label, active, onPress }: { label: string; active: boolean; onPr
 }
 
 /** Compact inline rating: label plus five tiny dots. */
-export function MiniRating({ label, value, kind }: { label: string; value: Rating; kind: 'skill' | 'risk' }) {
-  const fill =
-    kind === 'risk'
-      ? value >= 4
-        ? colors.danger
-        : value === 3
-          ? colors.warning
-          : colors.success
-      : value >= 4
-        ? colors.warning
-        : colors.primary;
+export function MiniRating({ label, value }: { label: string; value: Rating }) {
+  const fill = difficultyColor(value);
   return (
     <View style={styles.mini} accessibilityLabel={`${label} ${value} of 5`}>
       <Text style={styles.miniLabel}>{label}</Text>
@@ -200,8 +206,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.lg,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.lg,
+    paddingVertical: spacing.sm,
     minHeight: 56,
   },
   rowText: { flex: 1, gap: 2 },

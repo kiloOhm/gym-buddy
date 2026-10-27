@@ -6,13 +6,16 @@ import type { Rating } from '@/types';
 interface Props {
   label: string;
   value: Rating;
-  /** 'risk' colours high values red; 'skill' colours them amber. */
-  kind?: 'risk' | 'skill';
 }
 
-/** Five dots, filled up to `value`. Used for form difficulty and injury risk. */
-export function RatingDots({ label, value, kind = 'skill' }: Props) {
-  const fill = kind === 'risk' ? riskColor(value) : skillColor(value);
+/** Colour for a difficulty rating: 1-2 green, 3 amber, 4-5 red. */
+export function difficultyColor(value: Rating): string {
+  return value >= 4 ? colors.danger : value === 3 ? colors.warning : colors.success;
+}
+
+/** Five dots, filled up to `value` and coloured by it. Used for the difficulty rating. */
+export function RatingDots({ label, value }: Props) {
+  const fill = difficultyColor(value);
   return (
     <View style={styles.row} accessibilityLabel={`${label} ${value} of 5`}>
       <Text style={styles.label}>{label}</Text>
@@ -23,13 +26,6 @@ export function RatingDots({ label, value, kind = 'skill' }: Props) {
       </View>
     </View>
   );
-}
-
-function riskColor(v: Rating): string {
-  return v >= 4 ? colors.danger : v === 3 ? colors.warning : colors.success;
-}
-function skillColor(v: Rating): string {
-  return v >= 4 ? colors.warning : colors.primary;
 }
 
 const styles = StyleSheet.create({

@@ -47,7 +47,7 @@ export interface LoadHint {
   muscle: MuscleGroup;
   level: LoadLevel;
   effectiveSets: number;
-  /** For 'none'/'low': up to 2 exercises whose activation of this muscle is 1.0 and whose equipment is all available; best (lowest injuryRisk, then formDifficulty) first. Empty for 'high'. */
+  /** For 'none'/'low': up to 2 exercises whose activation of this muscle is 1.0 and whose equipment is all available; best (lowest difficulty, then name) first. Empty for 'high'. */
   suggestions: Exercise[];
 }
 
@@ -58,10 +58,7 @@ function suggestFor(
 ): Exercise[] {
   return Object.values(db)
     .filter((e) => e.muscles[muscle] === 1 && e.equipment.every((eq) => available.has(eq)))
-    .sort(
-      (a, b) =>
-        a.injuryRisk - b.injuryRisk || a.formDifficulty - b.formDifficulty || a.name.localeCompare(b.name),
-    )
+    .sort((a, b) => a.difficulty - b.difficulty || a.name.localeCompare(b.name))
     .slice(0, MAX_SUGGESTIONS);
 }
 

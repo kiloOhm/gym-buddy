@@ -9,8 +9,7 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'name' | 'muscles
     equipment: ['bodyweight'],
     pattern: 'isolation',
     compound: false,
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
     cues: [],
     ...partial,
   };
@@ -26,8 +25,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'horizontal_push',
     compound: true,
     muscles: PRESS_MUSCLES,
-    formDifficulty: 3,
-    injuryRisk: 3,
+    difficulty: 3,
   }),
   ex({
     id: 'dumbbell_bench',
@@ -36,8 +34,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'horizontal_push',
     compound: true,
     muscles: PRESS_MUSCLES,
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
   }),
   ex({
     id: 'machine_press',
@@ -46,8 +43,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'horizontal_push',
     compound: true,
     muscles: PRESS_MUSCLES,
-    formDifficulty: 1,
-    injuryRisk: 1,
+    difficulty: 1,
   }),
   ex({
     id: 'cable_fly',
@@ -56,8 +52,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'isolation',
     compound: false,
     muscles: { chest: 1, front_delts: 0.3 },
-    formDifficulty: 1,
-    injuryRisk: 1,
+    difficulty: 1,
   }),
   ex({
     id: 'push_up',
@@ -66,8 +61,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'horizontal_push',
     compound: true,
     muscles: { chest: 1, triceps: 0.6, front_delts: 0.4, abs: 0.2 },
-    formDifficulty: 2,
-    injuryRisk: 1,
+    difficulty: 2,
   }),
   ex({
     id: 'guillotine_press',
@@ -76,8 +70,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'horizontal_push',
     compound: true,
     muscles: { chest: 1, front_delts: 0.6, triceps: 0.4 },
-    formDifficulty: 4,
-    injuryRisk: 5,
+    difficulty: 5,
   }),
   ex({
     id: 'close_grip',
@@ -87,8 +80,7 @@ const FIXTURES: Exercise[] = [
     compound: true,
     // Similar vector, but the original's primary (chest) is only 0.4 here.
     muscles: { triceps: 1, chest: 0.4, front_delts: 0.5 },
-    formDifficulty: 3,
-    injuryRisk: 3,
+    difficulty: 3,
   }),
   ex({
     id: 'leg_press',
@@ -97,8 +89,7 @@ const FIXTURES: Exercise[] = [
     pattern: 'squat',
     compound: true,
     muscles: { quads: 1, glutes: 0.5, adductors: 0.3 },
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
   }),
 ];
 const DB: Record<string, Exercise> = Object.fromEntries(FIXTURES.map((e) => [e.id, e]));
@@ -163,12 +154,12 @@ describe('suggestAlternatives', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  it('ranks a riskier variant below a safer one', () => {
+  it('ranks a more demanding variant below an easier one', () => {
     const result = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB);
     const score = (id: string) => result.find((a) => a.exercise.id === id)!.score;
     expect(score('dumbbell_bench')).toBe(1);
     expect(score('guillotine_press')).toBeLessThan(score('dumbbell_bench'));
-    // 0.55 × sim + 0.2 + 0.15 + 0 (harder and riskier) − 0.05 × 2
+    // 0.55 × sim + 0.2 + 0.15 + 0 (two points harder) − 0.05 × 2
     const sim = muscleSimilarity(DB.barbell_bench, DB.guillotine_press);
     expect(score('guillotine_press')).toBeCloseTo(0.55 * sim + 0.25, 3);
   });
@@ -201,27 +192,23 @@ describe('suggestAlternatives', () => {
     expect(reasons('dumbbell_bench')).toEqual([
       'Same movement pattern',
       'Hits Chest like the original',
-      'Easier on form',
-      'Lower injury risk',
+      'Easier',
       'Needs: Dumbbells, Bench',
     ]);
     expect(reasons('cable_fly')).toEqual([
       'Different pattern, same muscles',
       'Hits Chest like the original',
-      'Easier on form',
-      'Lower injury risk',
+      'Easier',
       'Needs: Cable station',
     ]);
-    expect(reasons('guillotine_press')).toContain('More technical');
-    expect(reasons('guillotine_press')).toContain('Higher injury risk');
+    expect(reasons('guillotine_press')).toContain('More demanding');
     expect(reasons('push_up')).toContain('No equipment needed');
   });
 
-  it('reports same technique and same risk', () => {
+  it('reports the same difficulty', () => {
     const db = { ...DB, twin: { ...DB.barbell_bench, id: 'twin', name: 'Twin' } };
     const twin = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, db).find((a) => a.exercise.id === 'twin')!;
-    expect(twin.reasons).toContain('Same technique demand');
-    expect(twin.reasons).toContain('Same injury risk');
+    expect(twin.reasons).toContain('Same difficulty');
   });
 });
 

@@ -1,8 +1,10 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { memo, useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/Button';
+import { ExerciseFigure } from '@/components/ExerciseFigure';
 import { lastPerformance } from '@/logic/history';
 import { formatSetList, formatWeight, parseNumberInput } from '@/logic/sessionFormat';
 import { exerciseStats, type ExerciseStats } from '@/logic/stats';
@@ -42,7 +44,18 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
 
   return (
     <View style={styles.card}>
-      <Text style={styles.name}>{name}</Text>
+      <View style={styles.titleRow}>
+        {exercise ? <ExerciseFigure exercise={exercise} variant="thumb" size={44} /> : null}
+        <Text style={[styles.name, styles.flex]}>{name}</Text>
+        <Pressable
+          onPress={() => router.push({ pathname: '/exercise/[id]', params: { id: ex.exerciseId } })}
+          style={({ pressed }) => [styles.infoButton, pressed && { opacity: 0.6 }]}
+          accessibilityRole="button"
+          accessibilityLabel="Exercise details"
+        >
+          <Ionicons name="information-circle-outline" size={24} color={colors.primary} />
+        </Pressable>
+      </View>
       <Text style={styles.muted}>
         {ex.targetSets} × {ex.targetReps} · rest {ex.restSec} s
       </Text>
@@ -164,7 +177,6 @@ function SetRow({ sessionExerciseId, index, set, restSec }: SetRowProps) {
       <View style={styles.colDone}>
         <Pressable
           onPress={onToggleDone}
-          hitSlop={4}
           accessibilityRole="checkbox"
           accessibilityState={{ checked: set.completed }}
           accessibilityLabel={`Set ${index + 1} done`}
@@ -186,6 +198,9 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.xs,
   },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  infoButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  flex: { flex: 1 },
   name: { fontSize: 17, fontWeight: '600', color: colors.text },
   muted: { fontSize: 13, color: colors.muted },
   hint: { fontSize: 13, color: colors.primary, marginTop: spacing.xs },

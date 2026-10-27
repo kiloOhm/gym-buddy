@@ -10,8 +10,7 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'muscles'>): Exer
     equipment: ['bodyweight'],
     pattern: 'isolation',
     compound: false,
-    formDifficulty: 2,
-    injuryRisk: 2,
+    difficulty: 2,
     cues: [],
     ...partial,
   };
@@ -19,10 +18,10 @@ function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'muscles'>): Exer
 
 const DB: Record<string, Exercise> = Object.fromEntries(
   [
-    ex({ id: 'squat', muscles: { quads: 1, glutes: 0.7, lower_back: 0.3 }, formDifficulty: 4, injuryRisk: 4 }),
-    ex({ id: 'bench', muscles: { chest: 1, front_delts: 0.5, triceps: 0.5 }, formDifficulty: 3, injuryRisk: 4 }),
-    ex({ id: 'curl', muscles: { biceps: 1, forearms: 0.3 }, formDifficulty: 1, injuryRisk: 1 }),
-    ex({ id: 'thirds', muscles: { abs: 0.1 }, formDifficulty: 2, injuryRisk: 3 }),
+    ex({ id: 'squat', muscles: { quads: 1, glutes: 0.7, lower_back: 0.3 }, difficulty: 4 }),
+    ex({ id: 'bench', muscles: { chest: 1, front_delts: 0.5, triceps: 0.5 }, difficulty: 4 }),
+    ex({ id: 'curl', muscles: { biceps: 1, forearms: 0.3 }, difficulty: 2 }),
+    ex({ id: 'thirds', muscles: { abs: 0.1 }, difficulty: 3 }),
   ].map((e) => [e.id, e]),
 );
 
@@ -89,18 +88,18 @@ describe('coverageLevel', () => {
 
 describe('summarizePlan', () => {
   it('returns zeros for an empty plan', () => {
-    expect(summarizePlan([], DB)).toEqual({ totalSets: 0, avgFormDifficulty: 0, maxInjuryRisk: 0, riskiest: undefined });
+    expect(summarizePlan([], DB)).toEqual({ totalSets: 0, avgDifficulty: 0, maxDifficulty: 0, hardest: undefined });
   });
 
   it('returns zeros when every ID is unknown', () => {
     const s = summarizePlan([{ exerciseId: 'nope', sets: 5 }], DB);
     expect(s.totalSets).toBe(0);
-    expect(s.avgFormDifficulty).toBe(0);
-    expect(s.maxInjuryRisk).toBe(0);
-    expect(s.riskiest).toBeUndefined();
+    expect(s.avgDifficulty).toBe(0);
+    expect(s.maxDifficulty).toBe(0);
+    expect(s.hardest).toBeUndefined();
   });
 
-  it('totals sets, averages form difficulty to 1 decimal and finds the riskiest', () => {
+  it('totals sets, averages difficulty to 1 decimal and finds the hardest', () => {
     const s = summarizePlan(
       [
         { exerciseId: 'curl', sets: 3 },
@@ -111,10 +110,10 @@ describe('summarizePlan', () => {
       DB,
     );
     expect(s.totalSets).toBe(12);
-    expect(s.avgFormDifficulty).toBe(2.7); // (1 + 3 + 4) / 3 = 2.666…
-    expect(s.maxInjuryRisk).toBe(4);
-    // bench and squat tie at risk 4; the first one wins.
-    expect(s.riskiest?.id).toBe('bench');
+    expect(s.avgDifficulty).toBe(3.3); // (2 + 4 + 4) / 3 = 3.333…
+    expect(s.maxDifficulty).toBe(4);
+    // bench and squat tie at difficulty 4; the first one wins.
+    expect(s.hardest?.id).toBe('bench');
   });
 });
 
@@ -131,9 +130,9 @@ describe('database invariants', () => {
     const s = summarizePlan(EXERCISES.map((e) => ({ exerciseId: e.id, sets: 2 })));
     expect(s.totalSets).toBe(EXERCISES.length * 2);
     if (EXERCISES.length > 0) {
-      expect(s.avgFormDifficulty).toBeGreaterThanOrEqual(1);
-      expect(s.avgFormDifficulty).toBeLessThanOrEqual(5);
-      expect(s.maxInjuryRisk).toBe(Math.max(...EXERCISES.map((e) => e.injuryRisk)));
+      expect(s.avgDifficulty).toBeGreaterThanOrEqual(1);
+      expect(s.avgDifficulty).toBeLessThanOrEqual(5);
+      expect(s.maxDifficulty).toBe(Math.max(...EXERCISES.map((e) => e.difficulty)));
     }
   });
 });

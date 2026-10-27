@@ -12,11 +12,14 @@ import {
 } from '@/types';
 
 export const LIBRARY_EXPORT_FORMAT = 'gym-buddy-exercises';
-export const LIBRARY_EXPORT_VERSION = 1;
+export const LIBRARY_EXPORT_VERSION = 2;
+/** Version 1 files carried formDifficulty + injuryRisk instead of difficulty; they still import. */
+const LEGACY_LIBRARY_VERSION = 1;
+export const LEGACY_RATINGS_WARNING = 'Converted form/injury ratings to the single difficulty score';
 
 export interface LibraryExportFile {
   format: 'gym-buddy-exercises';
-  version: 1;
+  version: 2;
   exportedAt: string;
   exercises: Exercise[];
 }
@@ -77,16 +80,41 @@ const EQUIPMENT_SET = new Set<string>(EQUIPMENT);
 const PATTERN_SET = new Set<string>(MOVEMENT_PATTERNS);
 const MUSCLE_SET = new Set<string>(MUSCLE_GROUPS);
 
-function readRating(raw: unknown, field: string, label: string, warnings: string[]): Rating {
-  if (typeof raw !== 'number' || !Number.isFinite(raw)) {
-    throw new SkipEntry(`${field} must be a number from 1 to 5`);
-  }
-  const value = Math.min(5, Math.max(1, Math.round(raw)));
-  if (value !== raw) warnings.push(`${label}: ${field} ${raw} adjusted to ${value}`);
-  return value as Rating;
+function isNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
 }
 
-function validateEntry(raw: unknown, position: number, warnings: string[]): Exercise {
+function clampRating(value: number): Rating {
+  return Math.min(5, Math.max(1, Math.round(value))) as Rating;
+}
+
+/**
+ * The single difficulty score for the old pair of ratings (library version 1 and persisted data
+ * from before the change): the mean rounded half up, clamped to 1..5.
+ */
+export function difficultyFromLegacy(formDifficulty: number, injuryRisk: number): Rating {
+  return clampRating(Math.ceil((formDifficulty + injuryRisk) / 2));
+}
+
+/** Context for one parse: whether any entry had its difficulty derived from the old ratings. */
+interface ParseContext {
+  warnings: string[];
+  convertedLegacy: boolean;
+}
+
+function readDifficulty(raw: Record<string, unknown>, label: string, ctx: ParseContext): Rating {
+  if (raw.difficulty === undefined && isNumber(raw.formDifficulty) && isNumber(raw.injuryRisk)) {
+    ctx.convertedLegacy = true;
+    return difficultyFromLegacy(raw.formDifficulty, raw.injuryRisk);
+  }
+  if (!isNumber(raw.difficulty)) throw new SkipEntry('difficulty must be a number from 1 to 5');
+  const value = clampRating(raw.difficulty);
+  if (value !== raw.difficulty) ctx.warnings.push(`${label}: difficulty ${raw.difficulty} adjusted to ${value}`);
+  return value;
+}
+
+function validateEntry(raw: unknown, position: number, ctx: ParseContext): Exercise {
+  const { warnings } = ctx;
   if (!isRecord(raw)) throw new SkipEntry(`entry ${position} is not an object`);
 
   if (typeof raw.id !== 'string' || !ID_PATTERN.test(raw.id)) {
@@ -137,8 +165,7 @@ function validateEntry(raw: unknown, position: number, warnings: string[]): Exer
     for (const [muscle, value] of values) muscles[muscle] = value;
   }
 
-  const formDifficulty = readRating(raw.formDifficulty, 'formDifficulty', label, warnings);
-  const injuryRisk = readRating(raw.injuryRisk, 'injuryRisk', label, warnings);
+  const difficulty = readDifficulty(raw, label, ctx);
 
   let cues: string[] = [];
   if (raw.cues !== undefined) {
@@ -157,7 +184,7 @@ function validateEntry(raw: unknown, position: number, warnings: string[]): Exer
     }
   }
 
-  return { id, name, equipment, pattern, compound, muscles, formDifficulty, injuryRisk, cues };
+  return { id, name, equipment, pattern, compound, muscles, difficulty, cues };
 }
 
 /** How an invalid entry is named in a warning: id, else name, else its position. */
@@ -185,7 +212,7 @@ export function parseLibraryExport(json: string): ParsedLibrary {
   if (!isRecord(data) || data.format !== LIBRARY_EXPORT_FORMAT) {
     throw new Error('This is not a Gym Buddy exercise library file.');
   }
-  if (data.version !== LIBRARY_EXPORT_VERSION) {
+  if (data.version !== LIBRARY_EXPORT_VERSION && data.version !== LEGACY_LIBRARY_VERSION) {
     throw new Error(
       `Unsupported file version (${String(data.version)}). Update Gym Buddy and try again.`,
     );
@@ -194,13 +221,14 @@ export function parseLibraryExport(json: string): ParsedLibrary {
     throw new Error('The file does not contain a list of exercises.');
   }
 
-  const warnings: string[] = [];
+  const ctx: ParseContext = { warnings: [], convertedLegacy: false };
+  const { warnings } = ctx;
   const byId = new Map<string, Exercise>();
   data.exercises.forEach((raw: unknown, index) => {
     const position = index + 1;
     let exercise: Exercise;
     try {
-      exercise = validateEntry(raw, position, warnings);
+      exercise = validateEntry(raw, position, ctx);
     } catch (e) {
       if (!(e instanceof SkipEntry)) throw e;
       warnings.push(`${entryLabel(raw, position)}: skipped, ${e.message}`);
@@ -213,6 +241,7 @@ export function parseLibraryExport(json: string): ParsedLibrary {
     byId.set(exercise.id, exercise);
   });
 
+  if (ctx.convertedLegacy) warnings.unshift(LEGACY_RATINGS_WARNING);
   return { exercises: [...byId.values()], warnings };
 }
 

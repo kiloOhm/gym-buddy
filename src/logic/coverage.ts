@@ -49,12 +49,12 @@ export function coverageLevel(effectiveSets: number): CoverageLevel {
 
 export interface PlanSummary {
   totalSets: number;
-  /** Average over planned exercises, 1..5; 0 when empty. */
-  avgFormDifficulty: number;
+  /** Average difficulty over planned exercises, 1..5 (1 decimal); 0 when empty. */
+  avgDifficulty: number;
   /** 1..5; 0 when empty. */
-  maxInjuryRisk: number;
-  /** The exercise with the highest injury risk, if any. */
-  riskiest?: Exercise;
+  maxDifficulty: number;
+  /** The first exercise with the highest difficulty, if any. */
+  hardest?: Exercise;
 }
 
 export function summarizePlan(
@@ -62,21 +62,21 @@ export function summarizePlan(
   db: Record<string, Exercise> = getExerciseMap(),
 ): PlanSummary {
   let totalSets = 0;
-  let formSum = 0;
+  let difficultySum = 0;
   let count = 0;
-  let riskiest: Exercise | undefined;
+  let hardest: Exercise | undefined;
   for (const item of items) {
     const exercise = db[item.exerciseId];
     if (!exercise) continue;
     totalSets += item.sets;
-    formSum += exercise.formDifficulty;
+    difficultySum += exercise.difficulty;
     count += 1;
-    if (!riskiest || exercise.injuryRisk > riskiest.injuryRisk) riskiest = exercise;
+    if (!hardest || exercise.difficulty > hardest.difficulty) hardest = exercise;
   }
   return {
     totalSets,
-    avgFormDifficulty: count === 0 ? 0 : round(formSum / count, 1),
-    maxInjuryRisk: riskiest?.injuryRisk ?? 0,
-    riskiest,
+    avgDifficulty: count === 0 ? 0 : round(difficultySum / count, 1),
+    maxDifficulty: hardest?.difficulty ?? 0,
+    hardest,
   };
 }

@@ -1,7 +1,7 @@
 {
   "format": "gym-buddy-exercises",
-  "version": 1,
-  "exportedAt": "2026-10-27T00:00:00.000Z",
+  "version": 2,
+  "exportedAt": "2026-10-28T00:00:00.000Z",
   "exercises": [
     {
       "id": "barbell_bench_press",
@@ -17,8 +17,7 @@
         "front_delts": 0.5,
         "triceps": 0.6
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Pull shoulder blades back and down",
         "Touch the bar to your lower chest",
@@ -39,8 +38,7 @@
         "front_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Shoulder blades pinned back",
         "Elbows about 45 degrees from the torso"
@@ -60,12 +58,32 @@
         "triceps": 0.6,
         "abs": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Body in one straight line, glutes squeezed",
         "Hands just outside shoulder width",
         "Chest to an inch off the floor"
+      ]
+    },
+    {
+      "id": "incline_push_up",
+      "name": "Incline push-up",
+      "equipment": [
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "triceps": 0.5,
+        "front_delts": 0.4,
+        "abs": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Hands on the bench edge, just outside shoulder width",
+        "Body in one straight line from heels to head",
+        "Lower your chest to the bench edge"
       ]
     },
     {
@@ -82,8 +100,7 @@
         "front_delts": 0.7,
         "triceps": 0.5
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Set the bench to 30 degrees",
         "Lower the bar to just below the collarbone",
@@ -104,8 +121,7 @@
         "front_delts": 0.6,
         "triceps": 0.4
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Set the bench to 30 degrees",
         "Lower until dumbbells reach chest level",
@@ -125,8 +141,7 @@
         "front_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Set handles at mid-chest height",
         "Keep shoulder blades on the pad",
@@ -146,8 +161,7 @@
         "triceps": 0.7,
         "front_delts": 0.6
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Lean the torso forward about 30 degrees",
         "Descend until upper arms are parallel",
@@ -166,8 +180,7 @@
         "chest": 1,
         "front_delts": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Keep a soft, fixed bend in the elbows",
         "Hug a big tree, hands meet at mid-chest",
@@ -186,8 +199,7 @@
         "chest": 1,
         "front_delts": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Set handles level with your chest",
         "Squeeze for a second when pads meet",
@@ -207,8 +219,7 @@
         "chest": 1,
         "front_delts": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Slight elbow bend, locked throughout",
         "Lower until you feel a chest stretch",
@@ -229,11 +240,10 @@
         "front_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Position the bench so the bar hits lower chest",
-        "Set the safety stops just above your chest",
+        "Test the safety stops with an empty bar before loading",
         "Keep shoulder blades retracted"
       ]
     },
@@ -250,8 +260,7 @@
         "front_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Anchor the band at chest height behind you",
         "Stagger your stance for balance",
@@ -273,8 +282,7 @@
         "upper_back": 0.2,
         "abs": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Squeeze glutes so your lower back stays neutral",
         "Move your head back, then through at the top",
@@ -295,8 +303,7 @@
         "side_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Set the bench upright, back against it",
         "Lower dumbbells to ear height",
@@ -316,8 +323,7 @@
         "traps": 0.3,
         "front_delts": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Lead with the elbows, not the hands",
         "Raise to shoulder height, no higher",
@@ -336,12 +342,30 @@
         "side_delts": 1,
         "traps": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Set the pulley at its lowest position",
         "Pull the handle out and up in a wide arc",
         "Stop at shoulder height"
+      ]
+    },
+    {
+      "id": "machine_lateral_raise",
+      "name": "Machine lateral raise",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "side_delts": 1,
+        "traps": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Line your shoulders up with the machine pivots",
+        "Lead with the elbows, arms out to the sides",
+        "Stop at shoulder height, lower under control"
       ]
     },
     {
@@ -358,8 +382,7 @@
         "traps": 0.4,
         "biceps": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Use a rope at upper-chest to face height",
         "Pull toward your eyes, elbows high",
@@ -379,12 +402,11 @@
         "side_delts": 0.5,
         "triceps": 0.5
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Set the seat so handles start at shoulder level",
         "Keep your back against the pad",
-        "Press up without shrugging"
+        "Press smoothly; let your shoulder blades move with your arms"
       ]
     },
     {
@@ -400,8 +422,7 @@
         "upper_back": 0.5,
         "traps": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Face the pad, handles at shoulder height",
         "Sweep arms back with a soft elbow bend",
@@ -421,11 +442,10 @@
         "upper_back": 0.5,
         "lower_back": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Hinge until your torso is near parallel",
-        "Raise arms out wide with pinkies leading",
+        "Sweep the upper arms out with a soft elbow bend, torso still",
         "Keep your neck in line with your spine"
       ]
     },
@@ -442,8 +462,7 @@
         "upper_back": 0.6,
         "traps": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Hold the band at shoulder height, arms straight",
         "Pull it apart until it touches your chest",
@@ -464,11 +483,10 @@
         "side_delts": 0.4,
         "chest": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Hips high, body in an upside-down V",
-        "Lower the top of your head between your hands",
+        "Lower until your head nearly touches the floor between your hands; keep the load on your arms",
         "Elbows track back, not flared out"
       ]
     },
@@ -486,8 +504,7 @@
         "front_delts": 0.4,
         "biceps": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 5,
+      "difficulty": 4,
       "cues": [
         "Use a grip wider than shoulder width",
         "Pull elbows up only to shoulder height",
@@ -508,8 +525,7 @@
         "triceps": 0.6,
         "upper_back": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 5,
+      "difficulty": 5,
       "cues": [
         "Only with full, pain-free shoulder mobility",
         "Lower the bar to ear level, not further",
@@ -532,10 +548,9 @@
         "forearms": 0.3,
         "abs": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
-        "Start from a dead hang, shoulders engaged",
+        "Start from a hang with shoulders lightly engaged",
         "Drive elbows down toward your hips",
         "Chin over the bar without craning your neck"
       ]
@@ -554,8 +569,7 @@
         "biceps": 0.5,
         "rear_delts": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Lock your thighs under the pad",
         "Pull the bar to your upper chest",
@@ -579,8 +593,7 @@
         "hamstrings": 0.3,
         "forearms": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Hinge to about 45 degrees, back flat",
         "Pull the bar to your lower ribs",
@@ -603,8 +616,7 @@
         "rear_delts": 0.4,
         "forearms": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Knee and hand on the bench, back flat",
         "Pull the dumbbell toward your hip",
@@ -627,8 +639,7 @@
         "biceps": 0.5,
         "forearms": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Chest glued to the incline bench",
         "Row to the hips, elbows back",
@@ -650,8 +661,7 @@
         "biceps": 0.5,
         "lower_back": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Sit tall with a slight knee bend",
         "Pull the handle to your belly button",
@@ -673,8 +683,7 @@
         "forearms": 0.3,
         "abs": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
         "Palms facing you, shoulder-width grip",
         "Pull your chest toward the bar",
@@ -695,8 +704,7 @@
         "rear_delts": 0.4,
         "biceps": 0.4
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Set the chest pad so you can just reach",
         "Pull elbows back past your torso",
@@ -707,8 +715,7 @@
       "id": "weighted_pull_up",
       "name": "Weighted pull-up",
       "equipment": [
-        "pull_up_bar",
-        "dumbbell"
+        "pull_up_bar"
       ],
       "pattern": "vertical_pull",
       "compound": true,
@@ -720,10 +727,9 @@
         "forearms": 0.4,
         "abs": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
-        "Pin the dumbbell between your feet",
+        "Add load with a dip belt, a weight vest or a dumbbell between your feet",
         "Full range: dead hang to chin over bar",
         "No kipping with added load"
       ]
@@ -742,8 +748,7 @@
         "biceps": 0.5,
         "rear_delts": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "More counterweight makes it easier",
         "Pull until your chin clears the handles",
@@ -754,7 +759,8 @@
       "id": "inverted_row",
       "name": "Inverted row",
       "equipment": [
-        "barbell"
+        "barbell",
+        "rack"
       ],
       "pattern": "horizontal_pull",
       "compound": true,
@@ -765,8 +771,7 @@
         "biceps": 0.5,
         "abs": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Set a bar in a rack at hip height",
         "Body straight from heels to head",
@@ -786,8 +791,7 @@
         "rear_delts": 0.3,
         "triceps": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Hinge slightly with arms nearly straight",
         "Sweep the bar down to your thighs",
@@ -808,8 +812,7 @@
         "biceps": 0.4,
         "rear_delts": 0.4
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Anchor the band at chest height",
         "Pull handles to your ribs, elbows close",
@@ -829,8 +832,7 @@
         "forearms": 0.4,
         "upper_back": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Lift shoulders straight up toward your ears",
         "Pause at the top, no rolling",
@@ -849,8 +851,7 @@
         "traps": 1,
         "forearms": 0.4
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Dumbbells at your sides, palms in",
         "Shrug straight up and hold one second",
@@ -861,7 +862,8 @@
       "id": "rack_pull",
       "name": "Rack pull",
       "equipment": [
-        "barbell"
+        "barbell",
+        "rack"
       ],
       "pattern": "hinge",
       "compound": true,
@@ -873,8 +875,7 @@
         "hamstrings": 0.5,
         "forearms": 0.6
       },
-      "formDifficulty": 3,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
         "Set the bar just below the knees",
         "Brace hard and keep the back flat",
@@ -885,7 +886,7 @@
       "id": "back_extension",
       "name": "45-degree back extension",
       "equipment": [
-        "bench"
+        "machine"
       ],
       "pattern": "hinge",
       "compound": false,
@@ -894,8 +895,7 @@
         "glutes": 0.6,
         "hamstrings": 0.6
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Pad just below your hip bones",
         "Lower under control, rise to a straight line",
@@ -915,8 +915,7 @@
         "glutes": 0.4,
         "upper_back": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Lie face down, arms overhead",
         "Lift arms, chest and legs a few inches",
@@ -937,8 +936,7 @@
         "abs": 0.4,
         "obliques": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Hands under shoulders, knees under hips",
         "Reach opposite arm and leg out long",
@@ -962,8 +960,7 @@
         "quads": 0.5,
         "forearms": 0.5
       },
-      "formDifficulty": 5,
-      "injuryRisk": 5,
+      "difficulty": 5,
       "cues": [
         "Grip wide enough that the bar sits at your hips",
         "Hips lower than a normal deadlift",
@@ -982,8 +979,7 @@
         "biceps": 1,
         "forearms": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Elbows pinned to your sides",
         "Turn palms up as you curl",
@@ -1002,8 +998,7 @@
         "biceps": 1,
         "forearms": 0.4
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Shoulder-width grip, elbows at your sides",
         "Curl without swinging your hips",
@@ -1022,8 +1017,7 @@
         "biceps": 1,
         "forearms": 0.7
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Palms face each other the whole time",
         "Curl the thumb toward your shoulder",
@@ -1042,8 +1036,7 @@
         "biceps": 1,
         "forearms": 0.4
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Grip the angled part of the bar",
         "Keep elbows slightly in front of your body",
@@ -1062,8 +1055,7 @@
         "biceps": 1,
         "forearms": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Stand close to the low pulley",
         "Squeeze hard at the top",
@@ -1075,7 +1067,7 @@
       "name": "EZ-bar preacher curl",
       "equipment": [
         "ez_bar",
-        "bench"
+        "machine"
       ],
       "pattern": "isolation",
       "compound": false,
@@ -1083,8 +1075,7 @@
         "biceps": 1,
         "forearms": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Armpits snug against the top of the pad",
         "Stop just short of full lockout",
@@ -1102,8 +1093,7 @@
       "muscles": {
         "triceps": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Elbows tucked against your sides",
         "Push down until arms are fully straight",
@@ -1124,8 +1114,7 @@
         "chest": 0.7,
         "front_delts": 0.4
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Hands about shoulder-width apart",
         "Elbows tucked close to your ribs",
@@ -1144,8 +1133,7 @@
       "muscles": {
         "triceps": 1
       },
-      "formDifficulty": 2,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Upper arms angled slightly back toward your head",
         "Lower the bar just behind your forehead",
@@ -1163,12 +1151,29 @@
       "muscles": {
         "triceps": 1
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Hold one dumbbell overhead with both hands",
         "Lower behind your head, elbows pointing up",
         "Keep ribs down, do not arch"
+      ]
+    },
+    {
+      "id": "cable_overhead_triceps_extension",
+      "name": "Cable overhead triceps extension",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "triceps": 1
+      },
+      "difficulty": 2,
+      "cues": [
+        "Face away from a low pulley, rope behind your head",
+        "Keep elbows pointing forward, upper arms still",
+        "Extend fully overhead, ribs down"
       ]
     },
     {
@@ -1184,8 +1189,7 @@
         "chest": 0.5,
         "front_delts": 0.5
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Keep your torso upright",
         "Lower until elbows reach 90 degrees",
@@ -1206,8 +1210,7 @@
         "front_delts": 0.5,
         "abs": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Thumbs and index fingers form a diamond",
         "Hands under your lower chest",
@@ -1226,8 +1229,7 @@
       "muscles": {
         "forearms": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Forearms on the bench, palms up",
         "Let the bar roll to your fingertips",
@@ -1246,8 +1248,7 @@
       "muscles": {
         "forearms": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Forearm on the bench, palm facing down",
         "Raise the back of the hand toward you",
@@ -1266,8 +1267,7 @@
         "forearms": 1,
         "biceps": 0.7
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Overhand grip, shoulder-width apart",
         "Keep wrists straight, not bent back",
@@ -1286,11 +1286,10 @@
         "forearms": 1,
         "lats": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Full grip around the bar, thumbs wrapped",
-        "Relax into the hang, shoulders slightly engaged",
+        "Hang with shoulders lightly engaged, not fully slack",
         "Hold for time, step down before grip fails"
       ]
     },
@@ -1308,8 +1307,7 @@
         "glutes": 0.2,
         "front_delts": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Elbows under shoulders",
         "Squeeze glutes and tuck the pelvis slightly",
@@ -1330,8 +1328,7 @@
         "obliques": 0.3,
         "forearms": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
         "Start from a still hang, no swinging",
         "Raise straight legs to hip height or higher",
@@ -1350,8 +1347,7 @@
         "abs": 1,
         "obliques": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Kneel and hold the rope beside your head",
         "Curl your ribs toward your hips",
@@ -1370,12 +1366,31 @@
         "abs": 1,
         "obliques": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Feet flat, knees bent",
         "Lift shoulder blades off the floor",
         "Do not pull on your neck"
+      ]
+    },
+    {
+      "id": "reverse_crunch",
+      "name": "Reverse crunch",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "hip_flexors": 0.4,
+        "obliques": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Lie flat, knees bent at 90 degrees",
+        "Curl your hips off the floor toward your ribs",
+        "Lower slowly without swinging the legs"
       ]
     },
     {
@@ -1391,8 +1406,7 @@
         "abs": 0.4,
         "glutes": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Elbow directly under the shoulder",
         "Stack feet and push hips up high",
@@ -1412,8 +1426,7 @@
         "abs": 0.6,
         "glutes": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Stand side-on to the pulley at chest height",
         "Press the handle straight out from your chest",
@@ -1433,8 +1446,7 @@
         "abs": 0.7,
         "forearms": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Hang still with shoulders engaged",
         "Bring knees up to your chest",
@@ -1454,8 +1466,7 @@
         "obliques": 0.3,
         "hip_flexors": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Press your lower back into the floor",
         "Extend opposite arm and leg slowly",
@@ -1476,8 +1487,7 @@
         "front_delts": 0.2,
         "glutes": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Set the pulley high, pull diagonally down",
         "Rotate through hips and torso together",
@@ -1496,8 +1506,7 @@
         "hip_flexors": 1,
         "abs": 0.6
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Hands under your hips for support",
         "Keep lower back pressed to the floor",
@@ -1516,8 +1525,7 @@
         "hip_flexors": 1,
         "abs": 0.7
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Back against the pad, forearms on the rests",
         "Lift knees toward your chest",
@@ -1538,8 +1546,7 @@
         "obliques": 0.4,
         "hip_flexors": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Use round plates so the bar rolls",
         "Kneel and roll out only as far as you can hold",
@@ -1558,8 +1565,7 @@
         "obliques": 1,
         "abs": 0.6
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Anchor the band at chest height beside you",
         "Press out and hold for two seconds",
@@ -1570,7 +1576,8 @@
       "id": "barbell_back_squat",
       "name": "Barbell back squat",
       "equipment": [
-        "barbell"
+        "barbell",
+        "rack"
       ],
       "pattern": "squat",
       "compound": true,
@@ -1581,8 +1588,7 @@
         "lower_back": 0.3,
         "abs": 0.2
       },
-      "formDifficulty": 4,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
         "Brace before you descend",
         "Knees track over toes",
@@ -1602,8 +1608,7 @@
         "glutes": 0.5,
         "adductors": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Do not let your lower back round off the pad",
         "Full control on the way down"
@@ -1620,8 +1625,7 @@
       "muscles": {
         "quads": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Line your knee up with the machine pivot",
         "Extend fully and squeeze the quads",
@@ -1632,7 +1636,8 @@
       "id": "front_squat",
       "name": "Front squat",
       "equipment": [
-        "barbell"
+        "barbell",
+        "rack"
       ],
       "pattern": "squat",
       "compound": true,
@@ -1643,8 +1648,7 @@
         "abs": 0.4,
         "adductors": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
         "Bar on your front delts, elbows high",
         "Stay upright, sit straight down",
@@ -1666,12 +1670,32 @@
         "abs": 0.3,
         "upper_back": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Hold the bell by the horns against your chest",
         "Sit between your knees, chest tall",
         "Elbows brush the inside of your knees"
+      ]
+    },
+    {
+      "id": "dumbbell_goblet_squat",
+      "name": "Dumbbell goblet squat",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "adductors": 0.3,
+        "abs": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hold one dumbbell upright by the top head",
+        "Sit between your knees, chest tall",
+        "Keep the dumbbell close to your chest"
       ]
     },
     {
@@ -1687,8 +1711,7 @@
         "glutes": 0.5,
         "adductors": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Feet shoulder-width, mid-platform",
         "Keep your back flat against the pad",
@@ -1708,8 +1731,7 @@
         "glutes": 0.6,
         "adductors": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Feet slightly in front of the bar",
         "Set safety stops just below your depth",
@@ -1729,8 +1751,7 @@
         "glutes": 0.6,
         "adductors": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Arms forward for balance",
         "Sit down between your heels",
@@ -1752,8 +1773,7 @@
         "abs": 0.3,
         "calves": 0.2
       },
-      "formDifficulty": 4,
-      "injuryRisk": 3,
+      "difficulty": 4,
       "cues": [
         "Hold the free leg straight out in front",
         "Sit back slowly, knee over toes",
@@ -1774,8 +1794,7 @@
         "adductors": 0.4,
         "hamstrings": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Take a long stride, torso upright",
         "Back knee lowers to just above the floor",
@@ -1797,8 +1816,7 @@
         "adductors": 0.4,
         "hamstrings": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Rear foot laces-down on the bench",
         "Front foot far enough that the heel stays down",
@@ -1819,8 +1837,7 @@
         "adductors": 0.3,
         "hamstrings": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Step straight back, hips square",
         "Lower until both knees hit 90 degrees",
@@ -1841,8 +1858,7 @@
         "glutes": 0.7,
         "hamstrings": 0.2
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Whole foot on the bench",
         "Drive through the top leg, not the bottom",
@@ -1862,8 +1878,7 @@
         "quads": 0.7,
         "glutes": 0.6
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Step wide to the side, toes forward",
         "Sit back into the working hip",
@@ -1884,8 +1899,7 @@
         "glutes": 0.5,
         "hamstrings": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
         "Very wide stance, shift to one side",
         "Straight leg toes point up",
@@ -1910,8 +1924,7 @@
         "forearms": 0.5,
         "lats": 0.3
       },
-      "formDifficulty": 5,
-      "injuryRisk": 5,
+      "difficulty": 5,
       "cues": [
         "Bar over mid-foot, shins touch the bar",
         "Pull the slack out and brace before lifting",
@@ -1932,12 +1945,11 @@
         "lower_back": 0.5,
         "forearms": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
         "Push your hips back, knees softly bent",
         "Keep the bar against your thighs",
-        "Stop when your hamstrings are fully stretched"
+        "Stop before your lower back rounds; don't force the bar to the floor"
       ]
     },
     {
@@ -1955,8 +1967,7 @@
         "quads": 0.3,
         "adductors": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Upper back on the bench edge, bar in the hip crease",
         "Tuck your chin and ribs down",
@@ -1975,8 +1986,7 @@
         "hamstrings": 1,
         "calves": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Pad just above your heels",
         "Keep hips pressed into the bench",
@@ -1995,10 +2005,10 @@
         "hamstrings": 1,
         "calves": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Lock the thigh pad down snugly",
+        "Line your knee up with the machine's pivot",
         "Lean forward slightly for more stretch",
         "Pull heels under the seat"
       ]
@@ -2017,8 +2027,7 @@
         "lower_back": 0.4,
         "forearms": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Dumbbells slide down the front of your legs",
         "Hips back, spine long and neutral",
@@ -2037,8 +2046,7 @@
         "glutes": 1,
         "hamstrings": 0.4
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Feet flat, heels close to your glutes",
         "Drive through heels and lift the hips",
@@ -2062,8 +2070,7 @@
         "forearms": 0.5,
         "traps": 0.4
       },
-      "formDifficulty": 4,
-      "injuryRisk": 4,
+      "difficulty": 4,
       "cues": [
         "Wide stance, toes out, shins vertical",
         "Push your knees out over your toes",
@@ -2074,7 +2081,8 @@
       "id": "good_morning",
       "name": "Good morning",
       "equipment": [
-        "barbell"
+        "barbell",
+        "rack"
       ],
       "pattern": "hinge",
       "compound": true,
@@ -2084,8 +2092,7 @@
         "glutes": 0.7,
         "upper_back": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 5,
+      "difficulty": 5,
       "cues": [
         "Bar on the upper back as for a squat",
         "Hinge at the hips with a soft knee bend",
@@ -2106,8 +2113,7 @@
         "lower_back": 0.3,
         "adductors": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
         "Hold the dumbbell in the opposite hand",
         "Hips stay square to the floor",
@@ -2127,12 +2133,11 @@
         "hamstrings": 0.6,
         "lower_back": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 1,
+      "difficulty": 2,
       "cues": [
         "Face away from a low pulley, rope between legs",
         "Push hips back until hamstrings stretch",
-        "Snap hips forward and squeeze"
+        "Extend the hips smoothly and finish tall without leaning back"
       ]
     },
     {
@@ -2148,10 +2153,9 @@
         "glutes": 0.3,
         "calves": 0.2
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
-        "Anchor your heels under something solid",
+        "Anchor your heels under a loaded bar or sturdy pad",
         "Lower as slowly as you can, hips extended",
         "Catch yourself with your hands, push back up"
       ]
@@ -2168,8 +2172,7 @@
         "glutes": 1,
         "hamstrings": 0.3
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Ankle strap on, hinge slightly forward",
         "Kick back and up without arching",
@@ -2187,8 +2190,7 @@
       "muscles": {
         "glutes": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Sit tall with pads on the outer knees",
         "Push knees out as far as possible",
@@ -2206,8 +2208,7 @@
       "muscles": {
         "adductors": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Start at a comfortable stretch, not maximum",
         "Squeeze knees together and pause",
@@ -2226,8 +2227,7 @@
         "glutes": 1,
         "quads": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Band around the knees or ankles",
         "Half squat, toes forward",
@@ -2247,8 +2247,7 @@
         "obliques": 0.6,
         "abs": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 2,
+      "difficulty": 3,
       "cues": [
         "Top leg on the bench, bottom leg free",
         "Lift hips into a straight line",
@@ -2266,11 +2265,10 @@
       "muscles": {
         "calves": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Balls of the feet on the edge",
-        "Drop to a full stretch, pause",
+        "Lower slowly into the stretch, pause",
         "Rise as high as possible onto your toes"
       ]
     },
@@ -2285,8 +2283,7 @@
       "muscles": {
         "calves": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Pad snug on your lower thighs",
         "Pause in the stretched position",
@@ -2304,8 +2301,7 @@
       "muscles": {
         "calves": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Stand on a step edge, hold a wall",
         "Lower the heel below the step",
@@ -2323,8 +2319,7 @@
       "muscles": {
         "calves": 1
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Stand on a plate or step under the bar",
         "Full stretch at the bottom, pause",
@@ -2346,8 +2341,7 @@
         "abs": 0.3,
         "forearms": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Hike the bell back high between your thighs",
         "Snap hips forward; arms just guide it",
@@ -2370,8 +2364,7 @@
         "glutes": 0.2,
         "quads": 0.2
       },
-      "formDifficulty": 1,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Pick up heavy dumbbells with a flat back",
         "Walk tall, shoulders back and down",
@@ -2393,8 +2386,7 @@
         "triceps": 0.5,
         "abs": 0.3
       },
-      "formDifficulty": 3,
-      "injuryRisk": 3,
+      "difficulty": 3,
       "cues": [
         "Dumbbells on your shoulders, elbows forward",
         "Squat, then use the drive to press overhead",
@@ -2419,8 +2411,7 @@
         "hip_flexors": 0.3,
         "calves": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Hands down, jump feet back to a plank",
         "Chest to floor, then snap feet in",
@@ -2441,8 +2432,7 @@
         "traps": 0.5,
         "abs": 0.4
       },
-      "formDifficulty": 1,
-      "injuryRisk": 1,
+      "difficulty": 1,
       "cues": [
         "Bell in one hand only",
         "Do not lean toward or away from it",
@@ -2465,8 +2455,7 @@
         "triceps": 0.3,
         "side_delts": 0.3
       },
-      "formDifficulty": 2,
-      "injuryRisk": 2,
+      "difficulty": 2,
       "cues": [
         "Lock the arm out, biceps by your ear",
         "Wrist straight, knuckles to the ceiling",
@@ -2489,8 +2478,7 @@
         "triceps": 0.3,
         "quads": 0.3
       },
-      "formDifficulty": 4,
-      "injuryRisk": 3,
+      "difficulty": 4,
       "cues": [
         "Eyes on the bell the whole time",
         "Arm vertical and locked out",
@@ -2515,8 +2503,7 @@
         "calves": 0.3,
         "forearms": 0.3
       },
-      "formDifficulty": 5,
-      "injuryRisk": 4,
+      "difficulty": 5,
       "cues": [
         "Start like a deadlift, bar over mid-foot",
         "Explode hips through once the bar passes knees",
