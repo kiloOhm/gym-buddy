@@ -1,0 +1,64 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test -- --ci
+
+      - name: Generate the native Android project
+        run: npx expo prebuild --platform android --no-install
+        env:
+          CI: 1
+
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Collect APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk gym-buddy.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gym-buddy-apk
+          path: gym-buddy.apk
+
+      # Keep a rolling "latest" pre-release so the APK can be downloaded from a phone browser
+      # without being logged in to GitHub.
+      - name: Publish to the "latest" release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest gym-buddy.apk \
+            --prerelease \
+            --title "Latest APK build" \
+            --notes "Built from ${{ github.sha }}. Download gym-buddy.apk on your phone and open it; allow installs from your browser when Android asks."

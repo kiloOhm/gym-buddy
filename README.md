@@ -22,7 +22,14 @@ npx expo start
 
 Press `a` to open it on a running emulator (Expo Go is installed automatically), or scan the QR code with the Expo Go app on your phone.
 
-## Build an installable APK
+## Install on your phone
+
+Every push to the main branch builds a release APK on GitHub Actions and attaches it to the rolling **latest** pre-release:
+https://github.com/kiloOhm/gym-buddy/releases/tag/latest
+
+Open that page on your phone, download `gym-buddy.apk`, and allow installs from your browser when Android asks. The APK is signed with the standard debug keystore, which is fine for personal sideloading but not for the Play Store. The same file is also available as a workflow artifact on the Actions tab.
+
+## Build an installable APK locally
 
 Expo generates the native project on demand; you don't edit `android/` by hand.
 
