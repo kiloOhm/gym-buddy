@@ -1,0 +1,143 @@
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+
+import { Button } from '@/components/Button';
+import { EmptyState } from '@/components/EmptyState';
+import { RatingDots } from '@/components/RatingDots';
+import { getExercise } from '@/data/exercises';
+import { suggestAlternatives } from '@/logic/alternatives';
+import { useGymStore } from '@/store';
+import { colors, font, radius, spacing } from '@/theme';
+import { EQUIPMENT, EQUIPMENT_LABELS } from '@/types';
+
+export default function SwapScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const activeSession = useGymStore((s) => s.activeSession);
+  const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
+  const swapExercise = useGymStore((s) => s.swapExercise);
+  const [ignoreEquipment, setIgnoreEquipment] = useState(false);
+
+  const sessionExercise = activeSession?.exercises.find((e) => e.id === id);
+  // The React Compiler memoizes these; no manual useMemo needed.
+  const sessionIds = (activeSession?.exercises ?? []).map((e) => e.exerciseId);
+  const alternatives = sessionExercise
+    ? suggestAlternatives(sessionExercise.exerciseId, {
+        availableEquipment: ignoreEquipment ? EQUIPMENT : availableEquipment,
+        excludeIds: sessionIds,
+        limit: 8,
+      })
+    : [];
+
+  if (!sessionExercise) {
+    return (
+      <>
+        <Stack.Screen options={{ title: 'Swap exercise' }} />
+        <EmptyState title="Exercise not found" hint="It is no longer part of the active workout.">
+          <Button variant="secondary" title="Go back" onPress={() => router.back()} />
+        </EmptyState>
+      </>
+    );
+  }
+
+  const original = getExercise(sessionExercise.exerciseId);
+  const browse = () =>
+    router.push({
+      pathname: '/pick-exercise',
+      params: { sessionSwap: sessionExercise.id, exclude: sessionIds.join(',') },
+    });
+
+  return (
+    <>
+      <Stack.Screen options={{ title: 'Swap exercise' }} />
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={font.title}>Not available? Swap it</Text>
+        <View style={styles.card}>
+          <Text style={font.small}>Replacing</Text>
+          <Text style={font.heading}>{original?.name ?? 'Unknown exercise'}</Text>
+          {original ? (
+            <Text style={font.small}>{original.equipment.map((e) => EQUIPMENT_LABELS[e]).join(', ')}</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.toggleRow}>
+          <Text style={[font.body, styles.flex]}>Ignore my equipment list</Text>
+          <Switch
+            value={ignoreEquipment}
+            onValueChange={setIgnoreEquipment}
+            trackColor={{ true: colors.primary, false: colors.border }}
+            accessibilityLabel="Ignore my equipment list"
+          />
+        </View>
+
+        <Text style={font.heading}>Suggestions</Text>
+        {alternatives.length === 0 ? (
+          <View style={styles.card}>
+            <Text style={font.body}>No close substitutes found.</Text>
+            <Text style={font.small}>
+              {ignoreEquipment
+                ? 'Try browsing the full exercise list instead.'
+                : 'Try ignoring your equipment list, or browse all exercises.'}
+            </Text>
+          </View>
+        ) : (
+          alternatives.map(({ exercise, score, reasons }) => (
+            <Pressable
+              key={exercise.id}
+              onPress={() => {
+                swapExercise(sessionExercise.id, exercise.id);
+                router.back();
+              }}
+              style={({ pressed }) => [styles.card, styles.altRow, pressed && styles.pressed]}
+              accessibilityRole="button"
+              accessibilityLabel={`Swap to ${exercise.name}`}
+            >
+              <View style={styles.altHeader}>
+                <Text style={[font.heading, styles.flex]}>{exercise.name}</Text>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{Math.round(score * 100)}%</Text>
+                </View>
+              </View>
+              {reasons.length > 0 ? <Text style={font.small}>{reasons.join(' · ')}</Text> : null}
+              <View style={styles.ratings}>
+                <View style={styles.flex}>
+                  <RatingDots label="Form" value={exercise.formDifficulty} kind="skill" />
+                </View>
+                <View style={styles.flex}>
+                  <RatingDots label="Risk" value={exercise.injuryRisk} kind="risk" />
+                </View>
+              </View>
+            </Pressable>
+          ))
+        )}
+
+        <Button variant="secondary" title="Not what you need? Browse all exercises" onPress={browse} />
+      </ScrollView>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  content: { padding: spacing.lg, gap: spacing.md, paddingBottom: spacing.xl * 2 },
+  card: {
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    gap: spacing.xs,
+  },
+  pressed: { opacity: 0.7 },
+  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: 44 },
+  altRow: { gap: spacing.sm },
+  altHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  badge: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+  },
+  badgeText: { fontSize: 13, fontWeight: '700', color: colors.primary },
+  ratings: { flexDirection: 'row', gap: spacing.lg },
+});
