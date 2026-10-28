@@ -1,6 +1,6 @@
 import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, SessionExercise, WorkoutSession } from '@/types';
-import { EQUIPMENT, MUSCLE_GROUPS } from '@/types';
+import { MUSCLE_GROUPS } from '@/types';
 
 import { emptyCoverage, type Coverage } from './coverage';
 import { LOAD_THRESHOLDS, loadHints, loadLevel, recentMuscleLoad } from './load';
@@ -116,19 +116,17 @@ describe('recentMuscleLoad', () => {
 });
 
 describe('loadHints', () => {
-  const ALL = [...EQUIPMENT];
-
   it('never includes good muscles', () => {
     const load = coverage(Object.fromEntries(MUSCLE_GROUPS.map((m) => [m, 10])));
-    expect(loadHints(load, ALL, DB)).toEqual([]);
-    const hints = loadHints(coverage({ chest: 10 }), ALL, DB);
+    expect(loadHints(load, DB)).toEqual([]);
+    const hints = loadHints(coverage({ chest: 10 }), DB);
     expect(hints.find((h) => h.muscle === 'chest')).toBeUndefined();
   });
 
   it('orders high (desc), then none, then low (asc)', () => {
     const base = Object.fromEntries(MUSCLE_GROUPS.map((m) => [m, 10]));
     const load = coverage({ ...base, chest: 22, quads: 30, biceps: 0, calves: 0, lats: 3, abs: 1 });
-    const hints = loadHints(load, ALL, DB);
+    const hints = loadHints(load, DB);
     expect(hints.map((h) => [h.muscle, h.level])).toEqual([
       ['quads', 'high'],
       ['chest', 'high'],
@@ -141,41 +139,25 @@ describe('loadHints', () => {
   });
 
   it('gives no suggestions for high muscles', () => {
-    const [hint] = loadHints(coverage({ chest: 25 }), ALL, DB);
+    const [hint] = loadHints(coverage({ chest: 25 }), DB);
     expect(hint).toMatchObject({ muscle: 'chest', level: 'high', suggestions: [] });
   });
 
   it('suggests up to two 1.0-primary exercises, easiest first', () => {
-    const chest = loadHints(coverage({ chest: 1 }), ALL, DB).find((h) => h.muscle === 'chest')!;
+    const chest = loadHints(coverage({ chest: 1 }), DB).find((h) => h.muscle === 'chest')!;
     expect(chest.level).toBe('low');
     // Ranked by difficulty then name; pec_deck (0.9) never qualifies.
     expect(chest.suggestions.map((e) => e.id)).toEqual(['db_press', 'pushup']);
   });
 
-  it('respects available equipment', () => {
-    const chest = loadHints(coverage(), ['bodyweight', 'barbell', 'bench', 'machine'], DB).find(
-      (h) => h.muscle === 'chest',
-    )!;
-    expect(chest.level).toBe('none');
-    expect(chest.suggestions.map((e) => e.id)).toEqual(['pushup', 'bench']);
-    const none = loadHints(coverage(), ['machine'], DB).find((h) => h.muscle === 'chest')!;
-    expect(none.suggestions).toEqual([]);
-  });
-
-  it('with the real database and all equipment, every muscle gets a suggestion', () => {
-    const hints = loadHints(emptyCoverage(), ALL);
+  it('with the real database, every muscle gets a suggestion', () => {
+    const hints = loadHints(emptyCoverage());
     expect(hints).toHaveLength(MUSCLE_GROUPS.length);
     for (const h of hints) {
       expect(h.level).toBe('none');
       expect(h.suggestions.length).toBeGreaterThanOrEqual(1);
       expect(h.suggestions.length).toBeLessThanOrEqual(2);
       for (const s of h.suggestions) expect(getExerciseMap()[s.id].muscles[h.muscle]).toBe(1);
-    }
-  });
-
-  it('with the real database, bodyweight-only suggestions need nothing else', () => {
-    for (const h of loadHints(emptyCoverage(), ['bodyweight'])) {
-      for (const s of h.suggestions) expect(s.equipment).toEqual(['bodyweight']);
     }
   });
 });

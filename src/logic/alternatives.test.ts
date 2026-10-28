@@ -1,8 +1,7 @@
 import { BUILT_IN_EXERCISES as EXERCISES } from '@/data/exercises';
 import type { Exercise } from '@/types';
-import { EQUIPMENT } from '@/types';
 
-import { type AlternativeOptions, muscleSimilarity, suggestAlternatives } from './alternatives';
+import { muscleSimilarity, suggestAlternatives } from './alternatives';
 
 function ex(partial: Partial<Exercise> & Pick<Exercise, 'id' | 'name' | 'muscles'>): Exercise {
   return {
@@ -93,7 +92,6 @@ const FIXTURES: Exercise[] = [
   }),
 ];
 const DB: Record<string, Exercise> = Object.fromEntries(FIXTURES.map((e) => [e.id, e]));
-const ALL = { availableEquipment: EQUIPMENT };
 
 function ids(list: { exercise: Exercise }[]): string[] {
   return list.map((a) => a.exercise.id);
@@ -124,38 +122,29 @@ describe('muscleSimilarity', () => {
 
 describe('suggestAlternatives', () => {
   it('returns [] for an unknown ID', () => {
-    expect(suggestAlternatives('nope', ALL, DB)).toEqual([]);
+    expect(suggestAlternatives('nope', {}, DB)).toEqual([]);
   });
 
   it('never returns the original', () => {
-    expect(ids(suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB))).not.toContain('barbell_bench');
+    expect(ids(suggestAlternatives('barbell_bench', { limit: 100 }, DB))).not.toContain('barbell_bench');
   });
 
   it('filters out unrelated exercises and ones missing the primary muscle', () => {
-    const result = ids(suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB));
+    const result = ids(suggestAlternatives('barbell_bench', { limit: 100 }, DB));
     expect(result).not.toContain('leg_press');
     expect(result).not.toContain('close_grip');
     expect(result.sort()).toEqual(['cable_fly', 'dumbbell_bench', 'guillotine_press', 'machine_press', 'push_up']);
   });
 
-  it('filters out exercises needing unavailable equipment', () => {
-    const result = ids(
-      suggestAlternatives('barbell_bench', { availableEquipment: ['dumbbell', 'bench', 'bodyweight'] }, DB),
-    );
-    expect(result.sort()).toEqual(['dumbbell_bench', 'push_up']);
-    // Needs dumbbell AND bench: one alone is not enough.
-    expect(ids(suggestAlternatives('barbell_bench', { availableEquipment: ['dumbbell'] }, DB))).toEqual([]);
-  });
-
   it('respects excludeIds', () => {
-    const result = ids(suggestAlternatives('barbell_bench', { ...ALL, excludeIds: ['dumbbell_bench', 'push_up'] }, DB));
+    const result = ids(suggestAlternatives('barbell_bench', { excludeIds: ['dumbbell_bench', 'push_up'] }, DB));
     expect(result).not.toContain('dumbbell_bench');
     expect(result).not.toContain('push_up');
     expect(result.length).toBeGreaterThan(0);
   });
 
   it('ranks a more demanding variant below an easier one', () => {
-    const result = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB);
+    const result = suggestAlternatives('barbell_bench', { limit: 100 }, DB);
     const score = (id: string) => result.find((a) => a.exercise.id === id)!.score;
     expect(score('dumbbell_bench')).toBe(1);
     expect(score('guillotine_press')).toBeLessThan(score('dumbbell_bench'));
@@ -165,7 +154,7 @@ describe('suggestAlternatives', () => {
   });
 
   it('sorts by score desc, then name asc, and keeps scores in [0, 1]', () => {
-    const result = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB);
+    const result = suggestAlternatives('barbell_bench', { limit: 100 }, DB);
     for (let i = 1; i < result.length; i++) {
       const prev = result[i - 1];
       const cur = result[i];
@@ -181,13 +170,13 @@ describe('suggestAlternatives', () => {
   });
 
   it('respects limit (default 5)', () => {
-    expect(suggestAlternatives('barbell_bench', ALL, DB)).toHaveLength(5);
-    expect(suggestAlternatives('barbell_bench', { ...ALL, limit: 2 }, DB)).toHaveLength(2);
-    expect(suggestAlternatives('barbell_bench', { ...ALL, limit: 0 }, DB)).toEqual([]);
+    expect(suggestAlternatives('barbell_bench', {}, DB)).toHaveLength(5);
+    expect(suggestAlternatives('barbell_bench', { limit: 2 }, DB)).toHaveLength(2);
+    expect(suggestAlternatives('barbell_bench', { limit: 0 }, DB)).toEqual([]);
   });
 
   it('explains each suggestion', () => {
-    const result = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, DB);
+    const result = suggestAlternatives('barbell_bench', { limit: 100 }, DB);
     const reasons = (id: string) => result.find((a) => a.exercise.id === id)!.reasons;
     expect(reasons('dumbbell_bench')).toEqual([
       'Same movement pattern',
@@ -207,7 +196,7 @@ describe('suggestAlternatives', () => {
 
   it('reports the same difficulty', () => {
     const db = { ...DB, twin: { ...DB.barbell_bench, id: 'twin', name: 'Twin' } };
-    const twin = suggestAlternatives('barbell_bench', { ...ALL, limit: 100 }, db).find((a) => a.exercise.id === 'twin')!;
+    const twin = suggestAlternatives('barbell_bench', { limit: 100 }, db).find((a) => a.exercise.id === 'twin')!;
     expect(twin.reasons).toContain('Same difficulty');
   });
 });
@@ -215,22 +204,15 @@ describe('suggestAlternatives', () => {
 describe('database invariants (real exercise DB)', () => {
   it.each(EXERCISES.map((e) => [e.id]))('%s: suggestions are well-formed', (id) => {
     const limit = 5;
-    const variants: AlternativeOptions[] = [
-      { availableEquipment: EQUIPMENT, limit },
-      { availableEquipment: ['bodyweight'], limit },
-    ];
-    for (const options of variants) {
-      const result = suggestAlternatives(id, options);
-      expect(result.length).toBeLessThanOrEqual(limit);
-      expect(ids(result)).not.toContain(id);
-      for (let i = 0; i < result.length; i++) {
-        const a = result[i];
-        expect(a.score).toBeGreaterThanOrEqual(0);
-        expect(a.score).toBeLessThanOrEqual(1);
-        if (i > 0) expect(result[i - 1].score).toBeGreaterThanOrEqual(a.score);
-        expect(a.exercise.equipment.every((e) => options.availableEquipment.includes(e))).toBe(true);
-        expect(a.reasons.length).toBeGreaterThan(0);
-      }
+    const result = suggestAlternatives(id, { limit });
+    expect(result.length).toBeLessThanOrEqual(limit);
+    expect(ids(result)).not.toContain(id);
+    for (let i = 0; i < result.length; i++) {
+      const a = result[i];
+      expect(a.score).toBeGreaterThanOrEqual(0);
+      expect(a.score).toBeLessThanOrEqual(1);
+      if (i > 0) expect(result[i - 1].score).toBeGreaterThanOrEqual(a.score);
+      expect(a.reasons.length).toBeGreaterThan(0);
     }
   });
 });

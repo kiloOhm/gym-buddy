@@ -166,6 +166,5 @@ export interface WorkoutSession {
 export type WeightUnit = 'kg' | 'lb';
 
 export interface Settings {
-  availableEquipment: Equipment[];
   weightUnit: WeightUnit;
 }

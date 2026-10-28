@@ -20,7 +20,6 @@ export default function PickExerciseScreen() {
     exclude?: string;
   }>();
   const library = useExerciseLibrary();
-  const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
   const addExerciseToPlan = useGymStore((s) => s.addExerciseToPlan);
   const addSessionExercise = useGymStore((s) => s.addSessionExercise);
   const swapExercise = useGymStore((s) => s.swapExercise);
@@ -48,7 +47,7 @@ export default function PickExerciseScreen() {
   return (
     <>
       <Stack.Screen options={{ title: 'Pick exercise', presentation: 'modal' }} />
-      <ExerciseList exercises={exercises} availableEquipment={availableEquipment} onPress={onPress} />
+      <ExerciseList exercises={exercises} onPress={onPress} />
     </>
   );
 }

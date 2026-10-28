@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { colors, radius, spacing } from '@/theme';
 import {
@@ -19,8 +19,6 @@ import { difficultyColor } from './RatingDots';
 interface Props {
   exercises: Exercise[];
   onPress: (exercise: Exercise) => void;
-  /** When given and not the full list, an "Only my equipment" toggle defaults ON. */
-  availableEquipment?: Equipment[];
 }
 
 export function formatPattern(pattern: string): string {
@@ -33,24 +31,20 @@ export function equipmentSummary(exercise: Exercise): string {
 }
 
 /** Searchable, filterable list of exercises. */
-export function ExerciseList({ exercises, onPress, availableEquipment }: Props) {
-  const restricted = !!availableEquipment && availableEquipment.length < EQUIPMENT.length;
+export function ExerciseList({ exercises, onPress }: Props) {
   const [query, setQuery] = useState('');
   const [muscle, setMuscle] = useState<MuscleGroup | null>(null);
   const [equipment, setEquipment] = useState<Equipment | null>(null);
-  const [onlyMine, setOnlyMine] = useState(restricted);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const mine = availableEquipment ? new Set<Equipment>(availableEquipment) : null;
     return exercises.filter((ex) => {
       if (q && !ex.name.toLowerCase().includes(q)) return false;
       if (muscle && (ex.muscles[muscle] ?? 0) < 0.5) return false;
       if (equipment && !ex.equipment.includes(equipment)) return false;
-      if (onlyMine && mine && !ex.equipment.every((e) => e === 'bodyweight' || mine.has(e))) return false;
       return true;
     });
-  }, [exercises, query, muscle, equipment, onlyMine, availableEquipment]);
+  }, [exercises, query, muscle, equipment]);
 
   const header = (
     <View style={styles.header}>
@@ -80,12 +74,6 @@ export function ExerciseList({ exercises, onPress, availableEquipment }: Props) 
           />
         ))}
       </ScrollView>
-      {availableEquipment ? (
-        <View style={styles.toggleRow}>
-          <Text style={styles.toggleLabel}>Only my equipment</Text>
-          <Switch value={onlyMine} onValueChange={setOnlyMine} />
-        </View>
-      ) : null}
       <Text style={styles.count}>
         {filtered.length} exercise{filtered.length === 1 ? '' : 's'}
       </Text>
@@ -195,8 +183,6 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipLabel: { fontSize: 13, color: colors.text },
   chipLabelActive: { color: '#FFFFFF', fontWeight: '600' },
-  toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44 },
-  toggleLabel: { fontSize: 15, color: colors.text },
   count: { fontSize: 13, color: colors.muted },
   row: {
     flexDirection: 'row',

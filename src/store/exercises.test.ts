@@ -61,20 +61,22 @@ describe('store: exercise library', () => {
 });
 
 describe('store: persisted state migration', () => {
-  it('adds the rack to the equipment of version 0 state', () => {
-    const migrated = migratePersistedState(
-      { settings: { availableEquipment: ['barbell', 'bench'], weightUnit: 'kg' }, plans: [] },
-      0,
-    ) as { settings: { availableEquipment: string[]; weightUnit: string }; plans: unknown[] };
-    expect(migrated.settings).toEqual({ availableEquipment: ['barbell', 'bench', 'rack'], weightUnit: 'kg' });
-    expect(migrated.plans).toEqual([]);
+  it('drops the removed equipment list from version 0 and 1 settings', () => {
+    for (const version of [0, 1]) {
+      const migrated = migratePersistedState(
+        { settings: { availableEquipment: ['barbell', 'bench'], weightUnit: 'lb' }, plans: [] },
+        version,
+      ) as { settings: Record<string, unknown>; plans: unknown[] };
+      expect(migrated.settings).toEqual({ weightUnit: 'lb' });
+      expect(migrated.plans).toEqual([]);
+    }
   });
 
-  it('does not add the rack twice or for current state', () => {
-    const withRack = { settings: { availableEquipment: ['rack'], weightUnit: 'lb' } };
-    expect(migratePersistedState(withRack, 0)).toEqual(withRack);
-    const current = { settings: { availableEquipment: ['barbell'], weightUnit: 'kg' } };
+  it('leaves current state and state without settings alone', () => {
+    const current = { settings: { weightUnit: 'kg' }, plans: [] };
     expect(migratePersistedState(current, PERSIST_VERSION)).toEqual(current);
+    expect(migratePersistedState({ settings: { weightUnit: 'kg' } }, 1)).toEqual({ settings: { weightUnit: 'kg' } });
+    expect(migratePersistedState({ plans: [] }, 1)).toEqual({ plans: [] });
   });
 
   it('derives difficulty for imported exercises saved with the old ratings', () => {

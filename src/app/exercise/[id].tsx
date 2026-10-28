@@ -32,8 +32,8 @@ export default function ExerciseDetailScreen() {
 
   const coverage = useMemo(() => computeCoverage([{ exerciseId: id, sets: 1 }], db), [id, db]);
   const alternatives = useMemo(
-    () => suggestAlternatives(id, { availableEquipment: settings.availableEquipment, limit: 5 }, db),
-    [id, settings.availableEquipment, db],
+    () => suggestAlternatives(id, { limit: 5 }, db),
+    [id, db],
   );
   const last = useMemo(() => lastPerformance(sessions, id), [sessions, id]);
 
@@ -104,9 +104,9 @@ export default function ExerciseDetailScreen() {
         ) : null}
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Substitutes with my equipment</Text>
+          <Text style={styles.cardTitle}>Substitutes</Text>
           {alternatives.length === 0 ? (
-            <Text style={styles.meta}>No substitutes found for your equipment.</Text>
+            <Text style={styles.meta}>No close substitutes found.</Text>
           ) : (
             alternatives.map((alt) => (
               <Pressable

@@ -1,6 +1,6 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
@@ -10,13 +10,11 @@ import { suggestAlternatives } from '@/logic/alternatives';
 import { swapTargetSnapshot } from '@/logic/swap';
 import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
-import { EQUIPMENT, EQUIPMENT_LABELS, type Exercise } from '@/types';
+import { EQUIPMENT_LABELS, type Exercise } from '@/types';
 
 export default function SwapScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
   const swapExercise = useGymStore((s) => s.swapExercise);
-  const [ignoreEquipment, setIgnoreEquipment] = useState(false);
   const db = useExerciseMap();
   // Render from a snapshot taken on mount, not the live session: swapping changes the session
   // while this screen is being dismissed, and re-rendering a different, re-ordered suggestion
@@ -29,11 +27,7 @@ export default function SwapScreen() {
   const chosen = useRef(false);
   // The React Compiler memoizes this; no manual useMemo needed.
   const alternatives = sessionExercise
-    ? suggestAlternatives(sessionExercise.exerciseId, {
-        availableEquipment: ignoreEquipment ? EQUIPMENT : availableEquipment,
-        excludeIds: sessionIds,
-        limit: 8,
-      }, db)
+    ? suggestAlternatives(sessionExercise.exerciseId, { excludeIds: sessionIds, limit: 8 }, db)
     : [];
 
   if (!sessionExercise) {
@@ -67,25 +61,11 @@ export default function SwapScreen() {
           ) : null}
         </View>
 
-        <View style={styles.toggleRow}>
-          <Text style={[font.body, styles.flex]}>Ignore my equipment list</Text>
-          <Switch
-            value={ignoreEquipment}
-            onValueChange={setIgnoreEquipment}
-            trackColor={{ true: colors.primary, false: colors.border }}
-            accessibilityLabel="Ignore my equipment list"
-          />
-        </View>
-
         <Text style={font.heading}>Suggestions</Text>
         {alternatives.length === 0 ? (
           <View style={styles.card}>
             <Text style={font.body}>No close substitutes found.</Text>
-            <Text style={font.small}>
-              {ignoreEquipment
-                ? 'Try browsing the full exercise list instead.'
-                : 'Try ignoring your equipment list, or browse all exercises.'}
-            </Text>
+            <Text style={font.small}>Try browsing the full exercise list instead.</Text>
           </View>
         ) : (
           alternatives.map(({ exercise, score, reasons }) => (
@@ -134,7 +114,6 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   pressed: { opacity: 0.7 },
-  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: 44 },
   altRow: { gap: spacing.sm },
   altHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   badge: {

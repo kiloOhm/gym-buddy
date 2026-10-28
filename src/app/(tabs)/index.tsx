@@ -16,11 +16,10 @@ export default function HomeScreen() {
   const activeSession = useGymStore((s) => s.activeSession);
   const sessions = useGymStore((s) => s.sessions);
   const unit = useGymStore((s) => s.settings.weightUnit);
-  const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
 
   const db = useExerciseMap();
   const load = recentMuscleLoad(sessions, undefined, db);
-  const hints = loadHints(load, availableEquipment, db);
+  const hints = loadHints(load, db);
   const last = sessions[0];
 
   return (

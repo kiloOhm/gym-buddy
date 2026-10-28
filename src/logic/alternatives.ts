@@ -11,8 +11,6 @@ export interface Alternative {
 }
 
 export interface AlternativeOptions {
-  /** Only exercises whose every equipment item is in this list are suggested. */
-  availableEquipment: readonly Equipment[];
   /** Exercise IDs to leave out (e.g. everything already in the session). */
   excludeIds?: readonly string[];
   /** Default 5. */
@@ -70,13 +68,12 @@ function round(value: number, decimals: number): number {
 /** Ranked substitutes for an exercise, best first. Empty if the ID is unknown. */
 export function suggestAlternatives(
   exerciseId: string,
-  options: AlternativeOptions,
+  options: AlternativeOptions = {},
   db: Record<string, Exercise> = getExerciseMap(),
 ): Alternative[] {
   const original = db[exerciseId];
   if (!original) return [];
 
-  const available = new Set<Equipment>(options.availableEquipment);
   const excluded = new Set(options.excludeIds ?? []);
   const primaries = primaryMuscles(original);
   const limit = options.limit ?? DEFAULT_LIMIT;
@@ -84,7 +81,6 @@ export function suggestAlternatives(
   const results: Alternative[] = [];
   for (const candidate of Object.values(db)) {
     if (candidate.id === original.id || excluded.has(candidate.id)) continue;
-    if (!candidate.equipment.every((e) => available.has(e))) continue;
 
     // Shared primary: the original's primary the candidate hits hardest.
     let sharedPrimary: MuscleGroup | undefined;

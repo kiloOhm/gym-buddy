@@ -8,7 +8,6 @@ import { lastPerformance } from '@/logic/history';
 import { newId, nowIso } from '@/logic/ids';
 import { difficultyFromLegacy, diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
 import { SEED_PLANS } from '@/data/seedPlans';
-import { EQUIPMENT } from '@/types';
 import type {
   Exercise,
   PlannedExercise,
@@ -20,7 +19,6 @@ import type {
 } from '@/types';
 
 export const DEFAULT_SETTINGS: Settings = {
-  availableEquipment: [...EQUIPMENT],
   weightUnit: 'kg',
 };
 
@@ -124,21 +122,20 @@ export function buildSeedPlans(): WorkoutPlan[] {
 }
 
 /** Version of the persisted state; bump together with a step in migratePersistedState. */
-export const PERSIST_VERSION = 1;
+export const PERSIST_VERSION = 2;
 
 /**
- * Upgrades persisted state from an older version. Version 0 → 1: the 'rack' equipment was added
- * (squats etc. now require it), so it is switched on for existing users; imported exercises from
- * before the single difficulty score get it derived from their old formDifficulty/injuryRisk.
+ * Upgrades persisted state from an older version.
+ * - Version 0 → 1: imported exercises from before the single difficulty score get it derived from
+ *   their old formDifficulty/injuryRisk. (This step also switched the new 'rack' equipment on in
+ *   the user's equipment list; that list is gone since version 2, so there is nothing left to do.)
+ * - Version 1 → 2: the "my equipment" setting was removed, so `settings.availableEquipment` is
+ *   dropped from the stored settings.
  */
 export function migratePersistedState(persisted: unknown, version: number): unknown {
   if (typeof persisted !== 'object' || persisted === null) return persisted;
   const state = { ...(persisted as Record<string, unknown>) };
   if (version < 1) {
-    const settings = state.settings as Partial<Settings> | undefined;
-    if (settings && Array.isArray(settings.availableEquipment) && !settings.availableEquipment.includes('rack')) {
-      state.settings = { ...settings, availableEquipment: [...settings.availableEquipment, 'rack'] };
-    }
     if (Array.isArray(state.customExercises)) {
       state.customExercises = state.customExercises.map((raw: Record<string, unknown>) => {
         if (typeof raw !== 'object' || raw === null || typeof raw.difficulty === 'number') return raw;
@@ -147,6 +144,13 @@ export function migratePersistedState(persisted: unknown, version: number): unkn
         const risk = typeof injuryRisk === 'number' ? injuryRisk : form;
         return { ...rest, difficulty: difficultyFromLegacy(form, risk) };
       });
+    }
+  }
+  if (version < 2) {
+    const settings = state.settings;
+    if (typeof settings === 'object' && settings !== null && 'availableEquipment' in settings) {
+      const { availableEquipment: _removed, ...rest } = settings as Record<string, unknown>;
+      state.settings = rest;
     }
   }
   return state;

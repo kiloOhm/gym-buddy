@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
@@ -11,7 +11,7 @@ import { dedupePlans, type ParsedImport, parsePlanExport } from '@/logic/planExp
 import { exportLibraryToFile, exportPlansToFile, pickAndReadJsonFile, pickAndReadPlanFile } from '@/logic/planFiles';
 import { useExerciseLibrary, useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
-import { EQUIPMENT, EQUIPMENT_LABELS, type Equipment, type WeightUnit } from '@/types';
+import type { WeightUnit } from '@/types';
 
 const UNITS: WeightUnit[] = ['kg', 'lb'];
 const MAX_LISTED_PLANS = 5;
@@ -28,14 +28,8 @@ export default function SettingsScreen() {
   const customCount = useGymStore((s) => s.customExercises.length);
   const importExercises = useGymStore((s) => s.importExercises);
   const resetExerciseLibrary = useGymStore((s) => s.resetExerciseLibrary);
-  const available = new Set<Equipment>(settings.availableEquipment);
   /** Plan ids ticked in the export chooser; undefined while the chooser is closed. */
   const [exportSelection, setExportSelection] = useState<Set<string> | undefined>(undefined);
-
-  const toggle = (item: Equipment, on: boolean) => {
-    const next = EQUIPMENT.filter((e) => e === 'bodyweight' || (e === item ? on : available.has(e)));
-    updateSettings({ availableEquipment: next });
-  };
 
   const toggleExportChooser = () =>
     setExportSelection((current) => (current ? undefined : new Set(plans.map((p) => p.id))));
@@ -148,24 +142,6 @@ export default function SettingsScreen() {
     <>
       <Stack.Screen options={{ title: 'Settings' }} />
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>My equipment</Text>
-          <Text style={styles.muted}>Used to filter exercises and suggest substitutes.</Text>
-          {EQUIPMENT.map((item) => {
-            const isBodyweight = item === 'bodyweight';
-            return (
-              <View key={item} style={styles.switchRow}>
-                <Text style={styles.body}>{EQUIPMENT_LABELS[item]}</Text>
-                <Switch
-                  value={isBodyweight || available.has(item)}
-                  disabled={isBodyweight}
-                  onValueChange={(on) => toggle(item, on)}
-                />
-              </View>
-            );
-          })}
-        </View>
-
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Weight unit</Text>
           <View style={styles.segment}>
@@ -284,7 +260,6 @@ const styles = StyleSheet.create({
   checkRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: 44 },
   checkText: { flex: 1 },
   chooserActions: { flexDirection: 'row', gap: spacing.sm },
-  switchRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44 },
   segment: {
     flexDirection: 'row',
     borderWidth: 1,
