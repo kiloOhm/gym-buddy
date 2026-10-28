@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Tabs } from 'expo-router';
 import { useState } from 'react';
-import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { useGymStore } from '@/store';
@@ -42,7 +43,7 @@ export default function PlansScreen() {
   };
 
   const confirmDelete = (plan: WorkoutPlan) =>
-    Alert.alert('Delete plan?', `"${plan.name}" will be removed. Past workouts stay in History.`, [
+    alert('Delete plan?', `"${plan.name}" will be removed. Past workouts stay in History.`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deletePlan(plan.id) },
     ]);

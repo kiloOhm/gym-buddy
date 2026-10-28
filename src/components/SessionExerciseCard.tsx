@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { memo, useMemo, useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { ExerciseFigure } from '@/components/ExerciseFigure';
 import { lastPerformance } from '@/logic/history';
@@ -37,7 +38,7 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
   );
 
   const confirmRemove = () =>
-    Alert.alert('Remove exercise?', `${name} and its logged sets will be removed from this workout.`, [
+    alert('Remove exercise?', `${name} and its logged sets will be removed from this workout.`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Remove', style: 'destructive', onPress: () => removeSessionExercise(ex.id) },
     ]);

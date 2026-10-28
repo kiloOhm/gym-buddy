@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
@@ -59,7 +60,7 @@ export default function PlanEditorScreen() {
 
   const confirmRemove = (pe: PlannedExercise) => {
     const exName = db[pe.exerciseId]?.name ?? 'this exercise';
-    Alert.alert('Remove exercise?', `Remove ${exName} from the plan?`, [
+    alert('Remove exercise?', `Remove ${exName} from the plan?`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Remove', style: 'destructive', onPress: () => removePlannedExercise(plan.id, pe.id) },
     ]);
@@ -69,7 +70,7 @@ export default function PlanEditorScreen() {
     try {
       await exportPlansToFile([plan]);
     } catch (e) {
-      Alert.alert('Export failed', e instanceof Error ? e.message : String(e));
+      alert('Export failed', e instanceof Error ? e.message : String(e));
     }
   };
 

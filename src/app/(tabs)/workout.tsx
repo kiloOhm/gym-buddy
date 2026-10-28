@@ -1,6 +1,7 @@
 import { router, Stack } from 'expo-router';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { ElapsedTimer } from '@/components/ElapsedTimer';
 import { EmptyState } from '@/components/EmptyState';
@@ -80,14 +81,14 @@ function ActiveWorkout({ session }: { session: WorkoutSession }) {
       done === 0
         ? 'No sets are marked as done yet. Finish anyway? The workout will be saved without any completed sets.'
         : `Save this workout with ${done} completed ${done === 1 ? 'set' : 'sets'} to your history?`;
-    Alert.alert('Finish workout?', message, [
+    alert('Finish workout?', message, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Finish', onPress: finish },
     ]);
   };
 
   const confirmDiscard = () =>
-    Alert.alert('Discard workout?', 'Everything logged in this workout will be lost.', [
+    alert('Discard workout?', 'Everything logged in this workout will be lost.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Discard', style: 'destructive', onPress: discard },
     ]);

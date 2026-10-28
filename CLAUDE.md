@@ -21,6 +21,8 @@ See AGENTS.md for Expo-specific rules (Expo Router, `npx expo install`, docs loo
 - `difficulty` (1–5) is the only exercise rating: an editorial score of how technically demanding and how unforgiving the exercise is, NOT a measured injury rate. Rate new entries against the anchors in the `src/data/exercises.ts` header. Alternatives prefer candidates that are not more demanding than the original; the plan summary shows average and hardest. Library files are version 2 (`difficulty`); version 1 files (`formDifficulty` + `injuryRisk`) still import via `difficultyFromLegacy` (ceil of the mean).
 - Equipment lists every required item. `rack` (power rack / squat stand) is required by lifts that start from the hooks (back/front squat, good morning, rack pull, inverted row). Adding an `EQUIPMENT` value needs a pictogram glyph (`ExercisePictogram.tsx`) and, so existing users keep it switched on, a persist `migrate` step in `src/store/index.ts` (bump `PERSIST_VERSION`).
 - Weights are stored as entered, in the unit from settings; no conversion on save.
+- Never import `Alert` from react-native directly; use `alert` from `@/components/alert` (same signature). `Alert.alert` is a no-op on web; the wrapper falls back to `window.alert`/`window.confirm` (OK/Cancel only: OK runs the last non-cancel button).
+- Web/PWA: `npm run build:web` = `expo export -p web` + `scripts/build-pwa.mjs` (injects manifest/theme/apple tags and the service-worker registration into `dist/index.html`, writes `404.html` + `.nojekyll` for GitHub Pages, generates `dist/sw.js` with a per-build cache). `public/` (manifest, icons) is copied verbatim into the export root. `WEB_BASE_URL` (e.g. `/gym-buddy`) sets `experiments.baseUrl` via `app.config.js` only when set; never hardcode it in app.json, the dev server reads it too. Native-only APIs (file system, sharing) need a `Platform.OS === 'web'` branch, see `src/logic/planFiles.ts`.
 
 ## Commands
 
@@ -29,4 +31,5 @@ npm test             # jest (jest-expo preset)
 npx tsc --noEmit     # typecheck
 npx expo lint        # lint
 npx expo start       # dev server (press a for Android emulator)
+npm run build:web    # PWA export to dist/ (WEB_BASE_URL=/gym-buddy for the Pages build)
 ```

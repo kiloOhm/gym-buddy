@@ -76,6 +76,29 @@ https://github.com/kiloOhm/gym-buddy/releases/tag/latest
 
 Open that page on your phone, download `gym-buddy.apk`, and allow installs from your browser when Android asks. The APK is signed with the standard debug keystore, which is fine for personal sideloading but not for the Play Store. The same file is also available as a workflow artifact on the Actions tab.
 
+## Web app
+
+The same app runs in the browser as an installable PWA, deployed to GitHub Pages on every push to the main branch (one-time setup: repository Settings → Pages → Source: "GitHub Actions"):
+https://kiloohm.github.io/gym-buddy/
+
+After the first visit it works fully offline (a service worker caches the app and the exercise photos). To install it:
+
+- **Android (Chrome):** menu ⋮ → "Install app" (or "Add to Home screen").
+- **iOS (Safari):** Share → "Add to Home Screen".
+- **Desktop (Chrome/Edge):** the install icon at the right of the address bar.
+
+Your data lives in that browser's storage on that device, separate from the Android app and from other browsers. To move plans or a custom exercise library between them, use export and import in Settings: on the web, export downloads the JSON file and import opens a file chooser. Clearing the site data in the browser deletes everything.
+
+Updates are downloaded in the background but only take effect once every window/tab of the app has been closed and the app is opened again.
+
+Build and serve it locally:
+
+```bash
+npm run build:web                          # expo export -p web + scripts/build-pwa.mjs → dist/
+npx expo serve                             # or any static file server on dist/
+WEB_BASE_URL=/gym-buddy npm run build:web  # reproduces the GitHub Pages build (served under /gym-buddy/)
+```
+
 ## Build an installable APK locally
 
 Expo generates the native project on demand; you don't edit `android/` by hand.

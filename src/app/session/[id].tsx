@@ -1,7 +1,8 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
@@ -43,7 +44,7 @@ export default function SessionDetailScreen() {
   const duration = sessionDurationMin(session);
 
   const confirmDelete = () =>
-    Alert.alert('Delete workout?', 'This removes it from your history. This cannot be undone.', [
+    alert('Delete workout?', 'This removes it from your history. This cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',

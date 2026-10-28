@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, Stack } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
+import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { BUILT_IN_EXERCISES } from '@/data/exercises';
 import { diffLibrary, type ParsedLibrary, parseLibraryExport } from '@/logic/library';
@@ -56,7 +57,7 @@ export default function SettingsScreen() {
       await exportPlansToFile(selectedPlans);
       setExportSelection(undefined);
     } catch (e) {
-      Alert.alert('Export failed', errorMessage(e));
+      alert('Export failed', errorMessage(e));
     }
   };
 
@@ -67,17 +68,17 @@ export default function SettingsScreen() {
       if (text === undefined) return;
       parsed = parsePlanExport(text);
     } catch (e) {
-      Alert.alert('Import failed', errorMessage(e));
+      alert('Import failed', errorMessage(e));
       return;
     }
     const { warnings } = parsed;
     if (parsed.plans.length === 0) {
-      Alert.alert('Import failed', 'The file does not contain any plans.');
+      alert('Import failed', 'The file does not contain any plans.');
       return;
     }
     const { plans: incoming, skipped } = dedupePlans(parsed.plans, plans);
     if (incoming.length === 0) {
-      Alert.alert('Nothing to import', skipped.join('\n'));
+      alert('Nothing to import', skipped.join('\n'));
       return;
     }
     const names = incoming.slice(0, MAX_LISTED_PLANS).map((p) => p.name).join(', ');
@@ -86,7 +87,7 @@ export default function SettingsScreen() {
     const details =
       (warnings.length ? `\n\n${warnings.join('\n')}` : '') +
       (skipped.length ? `\n\nSkipped as duplicates:\n${skipped.join('\n')}` : '');
-    Alert.alert('Import plans?', summary + details, [
+    alert('Import plans?', summary + details, [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Import',
@@ -102,7 +103,7 @@ export default function SettingsScreen() {
     try {
       await exportLibraryToFile(library);
     } catch (e) {
-      Alert.alert('Export failed', errorMessage(e));
+      alert('Export failed', errorMessage(e));
     }
   };
 
@@ -113,7 +114,7 @@ export default function SettingsScreen() {
       if (text === undefined) return;
       parsed = parseLibraryExport(text);
     } catch (e) {
-      Alert.alert('Import failed', errorMessage(e));
+      alert('Import failed', errorMessage(e));
       return;
     }
     const { warnings } = parsed;
@@ -123,18 +124,18 @@ export default function SettingsScreen() {
       warnings.length > MAX_LISTED_WARNINGS ? `\n…and ${warnings.length - MAX_LISTED_WARNINGS} more` : '';
     const details = warnings.length ? `\n\n${listed}${moreWarnings}` : '';
     if (added.length + updated.length === 0) {
-      Alert.alert('Nothing to import', `${unchanged.length} unchanged${details}`);
+      alert('Nothing to import', `${unchanged.length} unchanged${details}`);
       return;
     }
     const summary = `${added.length} new, ${updated.length} changed, ${unchanged.length} unchanged`;
-    Alert.alert('Import exercise library?', summary + details, [
+    alert('Import exercise library?', summary + details, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Import', onPress: () => importExercises(parsed.exercises) },
     ]);
   };
 
   const confirmResetLibrary = () =>
-    Alert.alert(
+    alert(
       'Reset exercise library?',
       `Removes ${customCount} custom or edited exercise${customCount === 1 ? '' : 's'} and restores the built-in versions.`,
       [
