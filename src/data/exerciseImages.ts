@@ -105,6 +105,7 @@ export const EXERCISE_IMAGES: Readonly<Record<string, readonly ImageSourcePropTy
   straight_arm_pulldown: [require('../../assets/exercises/straight_arm_pulldown/0.jpg'), require('../../assets/exercises/straight_arm_pulldown/1.jpg')],
   sumo_deadlift: [require('../../assets/exercises/sumo_deadlift/0.jpg'), require('../../assets/exercises/sumo_deadlift/1.jpg')],
   superman: [require('../../assets/exercises/superman/0.jpg'), require('../../assets/exercises/superman/1.jpg')],
+  t_bar_row: [require('../../assets/exercises/t_bar_row/0.jpg'), require('../../assets/exercises/t_bar_row/1.jpg')],
   triceps_dip: [require('../../assets/exercises/triceps_dip/0.jpg'), require('../../assets/exercises/triceps_dip/1.jpg')],
   walking_lunge: [require('../../assets/exercises/walking_lunge/0.jpg'), require('../../assets/exercises/walking_lunge/1.jpg')],
   weighted_pull_up: [require('../../assets/exercises/weighted_pull_up/0.jpg'), require('../../assets/exercises/weighted_pull_up/1.jpg')],

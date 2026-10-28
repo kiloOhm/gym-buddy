@@ -43,6 +43,7 @@ export const PHOTO_SOURCES = {
   pull_up: 'Pullups',
   lat_pulldown: 'Wide-Grip_Lat_Pulldown',
   barbell_row: 'Bent_Over_Barbell_Row',
+  t_bar_row: 'T-Bar_Row_with_Handle',
   dumbbell_row: 'One-Arm_Dumbbell_Row',
   seated_cable_row: 'Seated_Cable_Rows',
   chin_up: 'Chin-Up',

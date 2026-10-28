@@ -22,8 +22,8 @@ function byId(id: string): Exercise {
 }
 
 describe('exercise database: shape', () => {
-  it('has 122 exercises', () => {
-    expect(EXERCISES).toHaveLength(122);
+  it('has 123 exercises', () => {
+    expect(EXERCISES).toHaveLength(123);
   });
 
   it('has unique, slug-shaped IDs', () => {

@@ -1,5 +1,5 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -7,21 +7,27 @@ import { EmptyState } from '@/components/EmptyState';
 import { ExerciseFigure } from '@/components/ExerciseFigure';
 import { RatingDots } from '@/components/RatingDots';
 import { suggestAlternatives } from '@/logic/alternatives';
+import { swapTargetSnapshot } from '@/logic/swap';
 import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
 import { EQUIPMENT, EQUIPMENT_LABELS, type Exercise } from '@/types';
 
 export default function SwapScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const activeSession = useGymStore((s) => s.activeSession);
   const availableEquipment = useGymStore((s) => s.settings.availableEquipment);
   const swapExercise = useGymStore((s) => s.swapExercise);
   const [ignoreEquipment, setIgnoreEquipment] = useState(false);
   const db = useExerciseMap();
-
-  const sessionExercise = activeSession?.exercises.find((e) => e.id === id);
-  // The React Compiler memoizes these; no manual useMemo needed.
-  const sessionIds = (activeSession?.exercises ?? []).map((e) => e.exerciseId);
+  // Render from a snapshot taken on mount, not the live session: swapping changes the session
+  // while this screen is being dismissed, and re-rendering a different, re-ordered suggestion
+  // list then makes Fabric insert views into a screen that is being torn down (native crash,
+  // cf. react-native-screens#2803). Nothing rendered here may change after the swap.
+  const [{ sessionExercise, sessionIds }] = useState(() =>
+    swapTargetSnapshot(useGymStore.getState().activeSession, id),
+  );
+  // Ignore further taps once a suggestion was chosen (no double swap, no double back).
+  const chosen = useRef(false);
+  // The React Compiler memoizes this; no manual useMemo needed.
   const alternatives = sessionExercise
     ? suggestAlternatives(sessionExercise.exerciseId, {
         availableEquipment: ignoreEquipment ? EQUIPMENT : availableEquipment,
@@ -86,6 +92,8 @@ export default function SwapScreen() {
             <Pressable
               key={exercise.id}
               onPress={() => {
+                if (chosen.current) return;
+                chosen.current = true;
                 swapExercise(sessionExercise.id, exercise.id);
                 router.back();
               }}

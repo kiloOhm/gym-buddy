@@ -318,6 +318,16 @@ export const BUILT_IN_EXERCISES: readonly Exercise[] = [
     cues: ['Hinge to about 45 degrees, back flat', 'Pull the bar to your lower ribs', 'Keep the torso still, no heaving'],
   },
   {
+    id: 't_bar_row',
+    name: 'T-bar row',
+    equipment: ['barbell'],
+    pattern: 'horizontal_pull',
+    compound: true,
+    muscles: { upper_back: 1, lats: 0.7, rear_delts: 0.4, biceps: 0.5, lower_back: 0.4, forearms: 0.3, hamstrings: 0.2 },
+    difficulty: 3,
+    cues: ['Anchor one bar end in a landmine or corner (or use a T-bar station)', 'Straddle the bar, V-handle under the plates, back flat', 'Pull the handle to your upper abdomen, squeezing the shoulder blades', 'Keep the chest up and the torso still'],
+  },
+  {
     id: 'dumbbell_row',
     name: 'One-arm dumbbell row',
     equipment: ['dumbbell', 'bench'],
