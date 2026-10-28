@@ -87,7 +87,7 @@ After the first visit it works fully offline (a service worker caches the app an
 - **iOS (Safari):** Share → "Add to Home Screen".
 - **Desktop (Chrome/Edge):** the install icon at the right of the address bar.
 
-Your data lives in that browser's storage on that device, separate from the Android app and from other browsers. To move plans or a custom exercise library between them, use export and import in Settings: on the web, export downloads the JSON file and import opens a file chooser. Clearing the site data in the browser deletes everything.
+Your data is stored in that browser's IndexedDB on that device (migrated automatically from the earlier localStorage key), separate from the Android app and from other browsers. To move plans or a custom exercise library between them, use export and import in Settings: on the web, export downloads the JSON file and import opens a file chooser. Clearing the site data in the browser deletes everything.
 
 Updates are downloaded in the background but only take effect once every window/tab of the app has been closed and the app is opened again.
 

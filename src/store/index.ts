@@ -1,6 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { storage } from './storage';
 
 import { BUILT_IN_EXERCISES, setExerciseLibrary } from '@/data/exercises';
 import { lastPerformance } from '@/logic/history';
@@ -363,7 +364,7 @@ export const useGymStore = create<GymState>()(
       name: 'gym-buddy-v1',
       version: PERSIST_VERSION,
       migrate: (persisted, version) => migratePersistedState(persisted, version) as GymState,
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => storage),
       partialize: (s) => ({
         seeded: s.seeded,
         plans: s.plans,
