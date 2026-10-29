@@ -34,10 +34,10 @@ public sealed class RestAlarm : IRestAlarm
             if (alarms is null) return;
             var alarmPi = AlarmIntent(ctx);
             alarms.Cancel(alarmPi);
-            NotificationManagerCompat.From(ctx).Cancel(NotificationId);
+            NotificationManagerCompat.From(ctx)?.Cancel(NotificationId);
             if (endsAtMs <= DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) return;
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.S && !alarms.CanScheduleExactAlarms())
+            if (OperatingSystem.IsAndroidVersionAtLeast(31) && !alarms.CanScheduleExactAlarms())
             {
                 alarms.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, endsAtMs, alarmPi);
                 return;
@@ -59,7 +59,7 @@ public sealed class RestAlarm : IRestAlarm
             var ctx = Application.Context;
             var alarms = (AlarmManager?)ctx.GetSystemService(Context.AlarmService);
             alarms?.Cancel(AlarmIntent(ctx));
-            NotificationManagerCompat.From(ctx).Cancel(NotificationId);
+            NotificationManagerCompat.From(ctx)?.Cancel(NotificationId);
         }
         catch (Exception e)
         {
@@ -128,7 +128,7 @@ public sealed class RestAlarmReceiver : BroadcastReceiver
         {
             RestAlarm.EnsureChannel(context);
             var manager = NotificationManagerCompat.From(context);
-            if (!manager.AreNotificationsEnabled()) return;
+            if (manager is null || !manager.AreNotificationsEnabled()) return;
             var contentPi = PendingIntent.GetActivity(context, 2, RestAlarm.LaunchIntent(context), PendingIntentFlags.Immutable | PendingIntentFlags.UpdateCurrent);
             var notification = new NotificationCompat.Builder(context, RestAlarm.ChannelId)
                 .SetSmallIcon(Resource.Drawable.ic_rest_notification)!

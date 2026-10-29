@@ -19,7 +19,8 @@ public class MainActivity : MauiAppCompatActivity
 #pragma warning disable CA1422
                 window.SetStatusBarColor(Android.Graphics.Color.White);
 #pragma warning restore CA1422
-            AndroidX.Core.View.WindowCompat.GetInsetsController(window, window.DecorView).AppearanceLightStatusBars = true;
+            var insets = AndroidX.Core.View.WindowCompat.GetInsetsController(window, window.DecorView);
+            if (insets is not null) insets.AppearanceLightStatusBars = true;
         }
     }
 

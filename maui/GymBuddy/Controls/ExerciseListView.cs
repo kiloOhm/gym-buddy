@@ -46,16 +46,20 @@ public sealed class ExerciseListView : ContentView
             },
         };
 
+        // The search box and chips sit above the list, not in its Header: a header view is re-created when the
+        // ItemsSource changes, which takes the focus from the Entry after the first typed character.
         _list = new CollectionView
         {
-            Header = header,
             Footer = new BoxView { HeightRequest = 48, Color = Colors.Transparent },
             SelectionMode = SelectionMode.None,
             ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 8 },
             EmptyView = new Label { Text = "No exercises match these filters.", TextColor = Theme.Muted, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(16, 24) },
             ItemTemplate = new DataTemplate(BuildRow),
         };
-        Content = _list;
+        var layout = new Grid { RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
+        layout.Add(header, 0, 0);
+        layout.Add(_list, 0, 1);
+        Content = layout;
         BuildChips();
     }
 
