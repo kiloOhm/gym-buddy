@@ -111,7 +111,7 @@ This builds and installs a release build on the connected device/emulator. The A
 
 ## MAUI port
 
-`maui/` holds a native Android rebuild of the app with .NET MAUI (C#), on the `maui` branch. It does everything the Expo app does and reads and writes the same plan and exercise-library files, so plans and libraries move between the two apps. It installs side by side with the Expo app (package id `de.lukas.gymbuddy.maui`) and keeps its own data, in one JSON file in the app's private storage.
+`maui/` holds a native Android rebuild of the app with .NET MAUI (C#), on the `maui` branch. It does everything the Expo app does and reads and writes the same plan and exercise-library files, so plans and libraries move between the two apps. It installs side by side with the Expo app (package id `de.lukas.gymbuddy.maui`) and keeps its own data, in one JSON file in the app's private storage. One addition over the Expo app: the exercise search is fuzzy and ranked, so "bnch pres", "pulldwn", "rdl" or "db curl" find the exercise you mean.
 
 Requirements: the .NET 10 SDK with the `maui-android` workload (`dotnet workload install maui-android`), JDK 17 or 21 (Android Studio's bundled JDK works) and the Android SDK with platform 36.
 

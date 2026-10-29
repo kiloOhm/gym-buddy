@@ -1,4 +1,5 @@
 using GymBuddy.Core;
+using GymBuddy.Core.Logic;
 using GymBuddy.Services;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -188,10 +189,9 @@ public sealed class ExerciseListView : ContentView
 
     private void Apply()
     {
-        var q = (_search?.Text ?? "").Trim().ToLowerInvariant();
-        var filtered = _exercises.Where(ex =>
+        // Fuzzy, ranked search first (library order when the query is empty), then the chip filters.
+        var filtered = ExerciseSearch.Search(_exercises, _search?.Text ?? "").Where(ex =>
         {
-            if (q.Length > 0 && !ex.Name.ToLowerInvariant().Contains(q)) return false;
             if (_muscle is { } m && ex.Activation(m) < 0.5) return false;
             if (_equipment is { } e && !ex.Equipment.Contains(e)) return false;
             return true;
