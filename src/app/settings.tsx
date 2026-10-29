@@ -6,9 +6,16 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { BUILT_IN_EXERCISES } from '@/data/exercises';
+import { dedupeSessions, formatHistoryDate, type ParsedHistory, parseHistoryExport } from '@/logic/historyExport';
 import { diffLibrary, type ParsedLibrary, parseLibraryExport } from '@/logic/library';
 import { dedupePlans, type ParsedImport, parsePlanExport } from '@/logic/planExport';
-import { exportLibraryToFile, exportPlansToFile, pickAndReadJsonFile, pickAndReadPlanFile } from '@/logic/planFiles';
+import {
+  exportHistoryToFile,
+  exportLibraryToFile,
+  exportPlansToFile,
+  pickAndReadJsonFile,
+  pickAndReadPlanFile,
+} from '@/logic/planFiles';
 import { useExerciseLibrary, useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
 import type { WeightUnit } from '@/types';
@@ -28,6 +35,9 @@ export default function SettingsScreen() {
   const customCount = useGymStore((s) => s.customExercises.length);
   const importExercises = useGymStore((s) => s.importExercises);
   const resetExerciseLibrary = useGymStore((s) => s.resetExerciseLibrary);
+  const sessions = useGymStore((s) => s.sessions);
+  const importSessions = useGymStore((s) => s.importSessions);
+  const hasFinishedSessions = sessions.some((s) => s.finishedAt !== undefined);
   /** Plan ids ticked in the export chooser; undefined while the chooser is closed. */
   const [exportSelection, setExportSelection] = useState<Set<string> | undefined>(undefined);
 
@@ -125,6 +135,57 @@ export default function SettingsScreen() {
     alert('Import exercise library?', summary + details, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Import', onPress: () => importExercises(parsed.exercises) },
+    ]);
+  };
+
+  const exportHistory = async () => {
+    try {
+      await exportHistoryToFile(sessions, settings.weightUnit);
+    } catch (e) {
+      alert('Export failed', errorMessage(e));
+    }
+  };
+
+  const startHistoryImport = async () => {
+    let parsed: ParsedHistory;
+    try {
+      const text = await pickAndReadJsonFile();
+      if (text === undefined) return;
+      parsed = parseHistoryExport(text, settings.weightUnit);
+    } catch (e) {
+      alert('Import failed', errorMessage(e));
+      return;
+    }
+    const { warnings } = parsed;
+    if (parsed.sessions.length === 0) {
+      alert('Import failed', 'The file does not contain any workouts.');
+      return;
+    }
+    const { sessions: incoming, skipped } = dedupeSessions(parsed.sessions, sessions);
+    if (incoming.length === 0) {
+      alert('Nothing to import', skipped.join('\n'));
+      return;
+    }
+    const byFinish = [...incoming].sort((a, b) => Date.parse(a.finishedAt) - Date.parse(b.finishedAt));
+    const oldest = formatHistoryDate(byFinish[0].finishedAt);
+    const newest = formatHistoryDate(byFinish[byFinish.length - 1].finishedAt);
+    const count = `${incoming.length} workout${incoming.length === 1 ? '' : 's'}`;
+    const summary = incoming.length === 1 ? `${count}, ${oldest}` : `${count}, ${oldest} – ${newest}`;
+    const listed = warnings.slice(0, MAX_LISTED_WARNINGS).join('\n');
+    const moreWarnings =
+      warnings.length > MAX_LISTED_WARNINGS ? `\n…and ${warnings.length - MAX_LISTED_WARNINGS} more` : '';
+    const details =
+      (warnings.length ? `\n\n${listed}${moreWarnings}` : '') +
+      (skipped.length ? `\n\nSkipped:\n${skipped.join('\n')}` : '');
+    alert('Import history?', summary + details, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Import',
+        onPress: () => {
+          importSessions(incoming);
+          router.navigate('/(tabs)/history');
+        },
+      },
     ]);
   };
 
@@ -233,6 +294,21 @@ export default function SettingsScreen() {
           )}
           <Button title="Import plans" variant="secondary" onPress={startImport} />
           <Text style={styles.muted}>Exports are JSON files you can share, back up, or send to a friend.</Text>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>History</Text>
+          <Button
+            title="Export history"
+            variant="secondary"
+            onPress={exportHistory}
+            disabled={!hasFinishedSessions}
+          />
+          <Button title="Import history" variant="secondary" onPress={startHistoryImport} />
+          <Text style={styles.muted}>
+            Workout history moves between phones and between the Expo and MAUI apps with this file. Weights are
+            copied as entered.
+          </Text>
         </View>
 
         <Text style={styles.note}>

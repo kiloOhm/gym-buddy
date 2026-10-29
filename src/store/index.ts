@@ -74,6 +74,11 @@ export interface GymState {
       exercises: readonly { exerciseId: string; sets: number; reps: number; restSec: number }[];
     }[],
   ) => WorkoutPlan[];
+  /**
+   * Adds finished sessions from a history file as given (ids preserved), then re-sorts the history by
+   * finishedAt, newest first (stable). Returns the imported sessions. The active session is untouched.
+   */
+  importSessions: (sessions: readonly WorkoutSession[]) => WorkoutSession[];
 
   // Exercise library
   /**
@@ -339,6 +344,18 @@ export const useGymStore = create<GymState>()(
           }));
           set((s) => ({ plans: [...s.plans, ...created] }));
           return created;
+        },
+
+        importSessions: (incoming) => {
+          const imported = [...incoming];
+          set((s) => ({
+            sessions: [...s.sessions, ...imported].sort((a, b) => {
+              const fa = a.finishedAt ?? '';
+              const fb = b.finishedAt ?? '';
+              return fa < fb ? 1 : fa > fb ? -1 : 0;
+            }),
+          }));
+          return imported;
         },
 
         importExercises: (incoming) => {
