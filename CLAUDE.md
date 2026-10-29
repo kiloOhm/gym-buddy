@@ -47,6 +47,8 @@ A native Android rebuild with .NET MAUI (C#, .NET 10, `net10.0-android` only). T
 
 Rules: exchange files (`gym-buddy-plans` v1, `gym-buddy-exercises` v2/v1) must stay byte-compatible with the TypeScript app; slugs are the wire format; exercise ids never change; Core never references MAUI; logic takes the exercise `db` dictionary and `nowMs` explicitly (no globals). The package id is `de.lukas.gymbuddy.maui` so both apps install side by side.
 
+Emulator checks: drive the APK with `adb shell input` and read screens with `adb shell uiautomator dump` plus `adb exec-out screencap -p`. The dump fails ("could not get idle state") on the active Workout page because the elapsed clock changes a label every second, and a failed dump leaves the previous `/sdcard/ui.xml` in place, so delete it before each dump and rely on screenshots there. A fresh install resets `POST_NOTIFICATIONS`; grant it with `adb shell pm grant de.lukas.gymbuddy.maui android.permission.POST_NOTIFICATIONS` before testing the background rest alarm.
+
 ```bash
 export ANDROID_HOME="$HOME/Library/Android/sdk"; export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 dotnet test maui/GymBuddy.Tests/GymBuddy.Tests.csproj                                   # unit tests, no Android needed
