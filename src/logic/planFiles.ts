@@ -1,4 +1,4 @@
-// File side of plan and exercise-library export/import: the only module that touches Expo file/share/picker APIs.
+// File side of plan, exercise-library and history export/import: the only module that touches Expo file/share/picker APIs.
 // On web, export downloads the file and import reads the browser File the picker returns; expo-file-system
 // and expo-sharing are not used there (their web modules are stubs, importing them is harmless).
 import * as DocumentPicker from 'expo-document-picker';
@@ -9,8 +9,9 @@ import { readAsStringAsync } from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 
-import type { Exercise, WorkoutPlan } from '@/types';
+import type { Exercise, WeightUnit, WorkoutPlan, WorkoutSession } from '@/types';
 
+import { historyFileName, serializeHistory } from './historyExport';
 import { libraryFileName, serializeLibrary } from './library';
 import { serializePlans, suggestedFileName } from './planExport';
 
@@ -58,6 +59,11 @@ export function exportPlansToFile(plans: readonly WorkoutPlan[]): Promise<void> 
 /** Writes the whole exercise library to a JSON file and opens the share sheet. */
 export function exportLibraryToFile(exercises: readonly Exercise[]): Promise<void> {
   return shareJsonFile(libraryFileName(), serializeLibrary(exercises), 'Export exercise library');
+}
+
+/** Writes the finished workouts to a history JSON file and opens the share sheet. */
+export function exportHistoryToFile(sessions: readonly WorkoutSession[], unit: WeightUnit): Promise<void> {
+  return shareJsonFile(historyFileName(), serializeHistory(sessions, unit), 'Export history');
 }
 
 /** Lets the user pick a file and returns its text, or undefined when cancelled. */

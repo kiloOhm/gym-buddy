@@ -160,6 +160,8 @@ export interface WorkoutSession {
   planName: string;
   startedAt: string; // ISO
   finishedAt?: string; // ISO; undefined while in progress
+  /** Set when the workout was logged as a deload. */
+  deload?: boolean;
   exercises: SessionExercise[];
 }
 

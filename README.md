@@ -9,7 +9,7 @@ An offline workout planner and tracker for Android. No accounts, no network: eve
 - **Plans**: build workout templates (exercise, sets, reps, rest). The plan editor shows a front/back body map and a bar chart of effective sets per muscle group, plus a summary of total sets, average difficulty and the hardest exercise, so you can see what a workout actually targets before you run it. A push / pull / legs / arms split is created on first launch to start from.
 - **Workout**: start a plan, log weight and reps per set, tick sets off. Ticking a set starts a rest countdown for that exercise's rest time (with +30 s and Skip). When it ends the phone vibrates; if the app is in the background or the screen is off, a "Rest over" notification with sound and vibration fires on time instead (Android asks for notification permission on the first rest; the app also declares the exact-alarm permission so the alert isn't delayed, which puts an alarm icon in the status bar while a rest runs). The web app only vibrates while it is open. Each exercise shows your best, last and 30-day average weight for the target rep range (estimated via Epley from other rep counts when you have no sets in that range). If an exercise or its equipment isn't available, tap **Swap** to get ranked substitutes that hit the same muscles (each one lists the equipment it needs), preferring options that aren't more demanding than the original. Tap the ⓘ next to an exercise name to open its details (cues, muscles, substitutes).
 - **History**: finished sessions with volume, duration, per-exercise sets and the muscles worked.
-- **Settings**: kg/lb, plan **export/import**, and exercise library export/import. Export picks the plans you want and shares a JSON file; import reads such a file, validates it against the exercise database, and skips plans whose content already exists (content hash). `gym-buddy-seed-plans.json` in this repo is an export of the four seeded plans, and `gym-buddy-exercises.json` is an export of the built-in exercise library to start editing from.
+- **Settings**: kg/lb, plan **export/import**, and exercise library export/import. Export picks the plans you want and shares a JSON file; import reads such a file, validates it against the exercise database, and skips plans whose content already exists (content hash). `gym-buddy-seed-plans.json` in this repo is an export of the four seeded plans, and `gym-buddy-exercises.json` is an export of the built-in exercise library to start editing from. **History export/import** moves your finished workouts to another phone, the browser or the MAUI app as one JSON file; workouts already in your history are skipped.
   - **Exercise library export/import**: export the whole library as a JSON file, edit it (add exercises, tweak ratings, muscles or cues) and import it back. Imported entries override built-ins with the same id or are added as new exercises, are used everywhere (library, picker, coverage, suggestions, stats) and survive restarts; *Reset to built-in library* drops them again.
 
 ## Library file format
@@ -57,6 +57,50 @@ Exercise fields:
 Version 1 files, which had `formDifficulty` and `injuryRisk` (both 1–5) instead of `difficulty`, still import: each entry gets `difficulty` = the mean of the two rounded up, clamped to 1–5, and the import shows the warning "Converted form/injury ratings to the single difficulty score".
 
 The plan export (`gym-buddy-seed-plans.json` is an example) is `{ "format": "gym-buddy-plans", "version": 1, "exportedAt", "plans": [{ "name", "exercises": [{ "exerciseId", "sets", "reps", "restSec" }] }] }`. Exercise ids must exist in the library; unknown ones are skipped with a warning, and plans whose content matches an existing plan are not imported twice.
+
+## History file format
+
+The history export (`gym-buddy-history-YYYY-MM-DD.json`) is JSON, written in exactly this field order with 2-space indentation so the Expo and MAUI apps produce the same file:
+
+```json
+{
+  "format": "gym-buddy-history",
+  "version": 1,
+  "exportedAt": "2026-10-29T15:04:05.123Z",
+  "weightUnit": "kg",
+  "sessions": [
+    {
+      "id": "mh3k2x9abc123",
+      "planId": "mh3k2x8plan01",
+      "planName": "Push",
+      "startedAt": "2026-10-29T14:12:00.000Z",
+      "finishedAt": "2026-10-29T14:26:30.000Z",
+      "deload": true,
+      "exercises": [
+        {
+          "id": "mh3k2x9ex0001",
+          "exerciseId": "dumbbell_bench_press",
+          "substitutedFor": "barbell_bench_press",
+          "targetSets": 5,
+          "targetReps": 6,
+          "restSec": 150,
+          "sets": [
+            {
+              "reps": 6,
+              "weight": 80,
+              "completed": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+- Only finished workouts are exported, newest first; the workout in progress never is. `planId` and `substitutedFor` are left out when absent; `deload` (the workout was logged as a deload) is written only when it is `true` or `false`.
+- `weightUnit` is the exporting app's setting. Weights are copied as entered, never converted; importing into an app set to the other unit shows a warning.
+- Workouts are matched by `id`: one already in your history (or repeated in the file) is skipped. Workouts without an id, an unparseable `finishedAt`/`startedAt` or an exercise list are skipped with a warning; broken exercises and sets are dropped or fixed up (counts default to 0) with a warning. Exercise ids not in the library are kept, so the history survives a missing custom exercise.
 
 ## Run it
 
@@ -111,7 +155,7 @@ This builds and installs a release build on the connected device/emulator. The A
 
 ## MAUI port
 
-`maui/` holds a native Android rebuild of the app with .NET MAUI (C#), on the `maui` branch. It does everything the Expo app does and reads and writes the same plan and exercise-library files, so plans and libraries move between the two apps. It installs side by side with the Expo app (package id `de.lukas.gymbuddy.maui`) and keeps its own data, in one JSON file in the app's private storage. One addition over the Expo app: the exercise search is fuzzy and ranked, so "bnch pres", "pulldwn", "rdl" or "db curl" find the exercise you mean.
+`maui/` holds a native Android rebuild of the app with .NET MAUI (C#), on the `maui` branch. It does everything the Expo app does and reads and writes the same plan, exercise-library and history files, so plans, libraries and past workouts move between the two apps through Settings. It installs side by side with the Expo app (package id `de.lukas.gymbuddy.maui`) and keeps its own data, in one JSON file in the app's private storage. One addition over the Expo app: the exercise search is fuzzy and ranked, so "bnch pres", "pulldwn", "rdl" or "db curl" find the exercise you mean.
 
 Requirements: the .NET 10 SDK with the `maui-android` workload (`dotnet workload install maui-android`), JDK 17 or 21 (Android Studio's bundled JDK works) and the Android SDK with platform 36.
 
