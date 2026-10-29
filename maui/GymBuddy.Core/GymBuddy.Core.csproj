@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Platform-independent core: domain types, exercise database, pure logic, store.
+       No MAUI dependency, so it builds and tests with a plain .NET SDK. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>GymBuddy.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

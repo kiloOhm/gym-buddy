@@ -1,0 +1,2539 @@
+{
+  "format": "gym-buddy-exercises",
+  "version": 2,
+  "exportedAt": "2026-01-01T00:00:00.000Z",
+  "exercises": [
+    {
+      "id": "barbell_bench_press",
+      "name": "Barbell bench press",
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.6
+      },
+      "difficulty": 3,
+      "cues": [
+        "Pull shoulder blades back and down",
+        "Touch the bar to your lower chest",
+        "Drive feet into the floor"
+      ]
+    },
+    {
+      "id": "dumbbell_bench_press",
+      "name": "Dumbbell bench press",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 2,
+      "cues": [
+        "Shoulder blades pinned back",
+        "Elbows about 45 degrees from the torso"
+      ]
+    },
+    {
+      "id": "push_up",
+      "name": "Push-up",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.6,
+        "abs": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Body in one straight line, glutes squeezed",
+        "Hands just outside shoulder width",
+        "Chest to an inch off the floor"
+      ]
+    },
+    {
+      "id": "incline_push_up",
+      "name": "Incline push-up",
+      "equipment": [
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "triceps": 0.5,
+        "front_delts": 0.4,
+        "abs": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Hands on the bench edge, just outside shoulder width",
+        "Body in one straight line from heels to head",
+        "Lower your chest to the bench edge"
+      ]
+    },
+    {
+      "id": "incline_barbell_bench_press",
+      "name": "Incline barbell bench press",
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.7,
+        "triceps": 0.5
+      },
+      "difficulty": 3,
+      "cues": [
+        "Set the bench to 30 degrees",
+        "Lower the bar to just below the collarbone",
+        "Keep wrists stacked over elbows"
+      ]
+    },
+    {
+      "id": "incline_dumbbell_bench_press",
+      "name": "Incline dumbbell bench press",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.6,
+        "triceps": 0.4
+      },
+      "difficulty": 2,
+      "cues": [
+        "Set the bench to 30 degrees",
+        "Lower until dumbbells reach chest level",
+        "Press up and slightly inward"
+      ]
+    },
+    {
+      "id": "machine_chest_press",
+      "name": "Machine chest press",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 1,
+      "cues": [
+        "Set handles at mid-chest height",
+        "Keep shoulder blades on the pad",
+        "Stop just short of locking out"
+      ]
+    },
+    {
+      "id": "chest_dip",
+      "name": "Chest dip",
+      "equipment": [
+        "dip_station"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "triceps": 0.7,
+        "front_delts": 0.6
+      },
+      "difficulty": 3,
+      "cues": [
+        "Lean the torso forward about 30 degrees",
+        "Descend until upper arms are parallel",
+        "Do not let shoulders roll forward"
+      ]
+    },
+    {
+      "id": "cable_fly",
+      "name": "Cable fly",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Keep a soft, fixed bend in the elbows",
+        "Hug a big tree, hands meet at mid-chest",
+        "Control the stretch on the way back"
+      ]
+    },
+    {
+      "id": "pec_deck",
+      "name": "Pec deck",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Set handles level with your chest",
+        "Squeeze for a second when pads meet",
+        "Keep your back flat on the pad"
+      ]
+    },
+    {
+      "id": "dumbbell_fly",
+      "name": "Dumbbell fly",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Slight elbow bend, locked throughout",
+        "Lower until you feel a chest stretch",
+        "Stop before elbows drop below the bench"
+      ]
+    },
+    {
+      "id": "smith_machine_bench_press",
+      "name": "Smith machine bench press",
+      "equipment": [
+        "smith_machine",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 2,
+      "cues": [
+        "Position the bench so the bar hits lower chest",
+        "Test the safety stops with an empty bar before loading",
+        "Keep shoulder blades retracted"
+      ]
+    },
+    {
+      "id": "band_chest_press",
+      "name": "Band chest press",
+      "equipment": [
+        "band"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "chest": 1,
+        "front_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 1,
+      "cues": [
+        "Anchor the band at chest height behind you",
+        "Stagger your stance for balance",
+        "Press forward until arms are straight"
+      ]
+    },
+    {
+      "id": "overhead_press",
+      "name": "Overhead press",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "side_delts": 0.5,
+        "triceps": 0.6,
+        "upper_back": 0.2,
+        "abs": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Squeeze glutes so your lower back stays neutral",
+        "Move your head back, then through at the top",
+        "Press the bar in a straight vertical line"
+      ]
+    },
+    {
+      "id": "seated_dumbbell_shoulder_press",
+      "name": "Seated dumbbell shoulder press",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "side_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 2,
+      "cues": [
+        "Set the bench upright, back against it",
+        "Lower dumbbells to ear height",
+        "Do not clank the weights at the top"
+      ]
+    },
+    {
+      "id": "dumbbell_lateral_raise",
+      "name": "Dumbbell lateral raise",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "side_delts": 1,
+        "traps": 0.3,
+        "front_delts": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Lead with the elbows, not the hands",
+        "Raise to shoulder height, no higher",
+        "No swinging; lower for two seconds"
+      ]
+    },
+    {
+      "id": "cable_lateral_raise",
+      "name": "Cable lateral raise",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "side_delts": 1,
+        "traps": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Set the pulley at its lowest position",
+        "Pull the handle out and up in a wide arc",
+        "Stop at shoulder height"
+      ]
+    },
+    {
+      "id": "machine_lateral_raise",
+      "name": "Machine lateral raise",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "side_delts": 1,
+        "traps": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Line your shoulders up with the machine pivots",
+        "Lead with the elbows, arms out to the sides",
+        "Stop at shoulder height, lower under control"
+      ]
+    },
+    {
+      "id": "face_pull",
+      "name": "Face pull",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "rear_delts": 1,
+        "upper_back": 0.6,
+        "traps": 0.4,
+        "biceps": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Use a rope at upper-chest to face height",
+        "Pull toward your eyes, elbows high",
+        "Rotate hands back so knuckles face behind"
+      ]
+    },
+    {
+      "id": "machine_shoulder_press",
+      "name": "Machine shoulder press",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "side_delts": 0.5,
+        "triceps": 0.5
+      },
+      "difficulty": 1,
+      "cues": [
+        "Set the seat so handles start at shoulder level",
+        "Keep your back against the pad",
+        "Press smoothly; let your shoulder blades move with your arms"
+      ]
+    },
+    {
+      "id": "reverse_pec_deck",
+      "name": "Reverse pec deck",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "rear_delts": 1,
+        "upper_back": 0.5,
+        "traps": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Face the pad, handles at shoulder height",
+        "Sweep arms back with a soft elbow bend",
+        "Do not squeeze shoulder blades together hard"
+      ]
+    },
+    {
+      "id": "dumbbell_reverse_fly",
+      "name": "Bent-over dumbbell reverse fly",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "rear_delts": 1,
+        "upper_back": 0.5,
+        "lower_back": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hinge until your torso is near parallel",
+        "Sweep the upper arms out with a soft elbow bend, torso still",
+        "Keep your neck in line with your spine"
+      ]
+    },
+    {
+      "id": "band_pull_apart",
+      "name": "Band pull-apart",
+      "equipment": [
+        "band"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "rear_delts": 1,
+        "upper_back": 0.6,
+        "traps": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Hold the band at shoulder height, arms straight",
+        "Pull it apart until it touches your chest",
+        "Keep ribs down, do not arch"
+      ]
+    },
+    {
+      "id": "pike_push_up",
+      "name": "Pike push-up",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "triceps": 0.6,
+        "side_delts": 0.4,
+        "chest": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hips high, body in an upside-down V",
+        "Lower until your head nearly touches the floor between your hands; keep the load on your arms",
+        "Elbows track back, not flared out"
+      ]
+    },
+    {
+      "id": "barbell_upright_row",
+      "name": "Barbell upright row",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "side_delts": 1,
+        "traps": 0.7,
+        "front_delts": 0.4,
+        "biceps": 0.3
+      },
+      "difficulty": 4,
+      "cues": [
+        "Use a grip wider than shoulder width",
+        "Pull elbows up only to shoulder height",
+        "Stop if you feel a pinch in the shoulder"
+      ]
+    },
+    {
+      "id": "behind_the_neck_press",
+      "name": "Behind-the-neck press",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "side_delts": 0.6,
+        "triceps": 0.6,
+        "upper_back": 0.3
+      },
+      "difficulty": 5,
+      "cues": [
+        "Only with full, pain-free shoulder mobility",
+        "Lower the bar to ear level, not further",
+        "Use light loads and a slow descent"
+      ]
+    },
+    {
+      "id": "pull_up",
+      "name": "Pull-up",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "upper_back": 0.5,
+        "biceps": 0.6,
+        "rear_delts": 0.3,
+        "forearms": 0.3,
+        "abs": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Start from a hang with shoulders lightly engaged",
+        "Drive elbows down toward your hips",
+        "Chin over the bar without craning your neck"
+      ]
+    },
+    {
+      "id": "lat_pulldown",
+      "name": "Lat pulldown",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "upper_back": 0.5,
+        "biceps": 0.5,
+        "rear_delts": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Lock your thighs under the pad",
+        "Pull the bar to your upper chest",
+        "Lean back slightly, do not swing"
+      ]
+    },
+    {
+      "id": "barbell_row",
+      "name": "Barbell row",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.7,
+        "rear_delts": 0.5,
+        "biceps": 0.5,
+        "lower_back": 0.5,
+        "hamstrings": 0.3,
+        "forearms": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Hinge to about 45 degrees, back flat",
+        "Pull the bar to your lower ribs",
+        "Keep the torso still, no heaving"
+      ]
+    },
+    {
+      "id": "t_bar_row",
+      "name": "T-bar row",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.7,
+        "rear_delts": 0.4,
+        "biceps": 0.5,
+        "lower_back": 0.4,
+        "forearms": 0.3,
+        "hamstrings": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Anchor one bar end in a landmine or corner (or use a T-bar station)",
+        "Straddle the bar, V-handle under the plates, back flat",
+        "Pull the handle to your upper abdomen, squeezing the shoulder blades",
+        "Keep the chest up and the torso still"
+      ]
+    },
+    {
+      "id": "dumbbell_row",
+      "name": "One-arm dumbbell row",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "upper_back": 0.7,
+        "biceps": 0.5,
+        "rear_delts": 0.4,
+        "forearms": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Knee and hand on the bench, back flat",
+        "Pull the dumbbell toward your hip",
+        "Do not rotate your torso to lift it"
+      ]
+    },
+    {
+      "id": "chest_supported_row",
+      "name": "Chest-supported dumbbell row",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.7,
+        "rear_delts": 0.5,
+        "biceps": 0.5,
+        "forearms": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Chest glued to the incline bench",
+        "Row to the hips, elbows back",
+        "Pause and squeeze the shoulder blades"
+      ]
+    },
+    {
+      "id": "seated_cable_row",
+      "name": "Seated cable row",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.7,
+        "rear_delts": 0.4,
+        "biceps": 0.5,
+        "lower_back": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Sit tall with a slight knee bend",
+        "Pull the handle to your belly button",
+        "Squeeze shoulder blades, then reach forward"
+      ]
+    },
+    {
+      "id": "chin_up",
+      "name": "Chin-up",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "biceps": 0.8,
+        "upper_back": 0.4,
+        "forearms": 0.3,
+        "abs": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Palms facing you, shoulder-width grip",
+        "Pull your chest toward the bar",
+        "Lower all the way to straight arms"
+      ]
+    },
+    {
+      "id": "machine_row",
+      "name": "Machine row",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.6,
+        "rear_delts": 0.4,
+        "biceps": 0.4
+      },
+      "difficulty": 1,
+      "cues": [
+        "Set the chest pad so you can just reach",
+        "Pull elbows back past your torso",
+        "Keep your chest on the pad"
+      ]
+    },
+    {
+      "id": "weighted_pull_up",
+      "name": "Weighted pull-up",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "upper_back": 0.5,
+        "biceps": 0.6,
+        "rear_delts": 0.3,
+        "forearms": 0.4,
+        "abs": 0.3
+      },
+      "difficulty": 4,
+      "cues": [
+        "Add load with a dip belt, a weight vest or a dumbbell between your feet",
+        "Full range: dead hang to chin over bar",
+        "No kipping with added load"
+      ]
+    },
+    {
+      "id": "assisted_pull_up_machine",
+      "name": "Assisted pull-up machine",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "vertical_pull",
+      "compound": true,
+      "muscles": {
+        "lats": 1,
+        "upper_back": 0.5,
+        "biceps": 0.5,
+        "rear_delts": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "More counterweight makes it easier",
+        "Pull until your chin clears the handles",
+        "Lower slowly to full arm extension"
+      ]
+    },
+    {
+      "id": "inverted_row",
+      "name": "Inverted row",
+      "equipment": [
+        "barbell",
+        "rack"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.6,
+        "rear_delts": 0.5,
+        "biceps": 0.5,
+        "abs": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Set a bar in a rack at hip height",
+        "Body straight from heels to head",
+        "Pull your chest to the bar"
+      ]
+    },
+    {
+      "id": "straight_arm_pulldown",
+      "name": "Straight-arm pulldown",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "lats": 1,
+        "rear_delts": 0.3,
+        "triceps": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Hinge slightly with arms nearly straight",
+        "Sweep the bar down to your thighs",
+        "Keep elbows soft and fixed"
+      ]
+    },
+    {
+      "id": "band_row",
+      "name": "Band row",
+      "equipment": [
+        "band"
+      ],
+      "pattern": "horizontal_pull",
+      "compound": true,
+      "muscles": {
+        "upper_back": 1,
+        "lats": 0.6,
+        "biceps": 0.4,
+        "rear_delts": 0.4
+      },
+      "difficulty": 1,
+      "cues": [
+        "Anchor the band at chest height",
+        "Pull handles to your ribs, elbows close",
+        "Pause and squeeze before releasing"
+      ]
+    },
+    {
+      "id": "barbell_shrug",
+      "name": "Barbell shrug",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "traps": 1,
+        "forearms": 0.4,
+        "upper_back": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Lift shoulders straight up toward your ears",
+        "Pause at the top, no rolling",
+        "Keep arms straight, do not curl"
+      ]
+    },
+    {
+      "id": "dumbbell_shrug",
+      "name": "Dumbbell shrug",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "traps": 1,
+        "forearms": 0.4
+      },
+      "difficulty": 1,
+      "cues": [
+        "Dumbbells at your sides, palms in",
+        "Shrug straight up and hold one second",
+        "Lower to a full stretch"
+      ]
+    },
+    {
+      "id": "rack_pull",
+      "name": "Rack pull",
+      "equipment": [
+        "barbell",
+        "rack"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "traps": 1,
+        "upper_back": 0.8,
+        "lower_back": 0.8,
+        "glutes": 0.7,
+        "hamstrings": 0.5,
+        "forearms": 0.6
+      },
+      "difficulty": 4,
+      "cues": [
+        "Set the bar just below the knees",
+        "Brace hard and keep the back flat",
+        "Finish with hips through, not leaning back"
+      ]
+    },
+    {
+      "id": "back_extension",
+      "name": "45-degree back extension",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "hinge",
+      "compound": false,
+      "muscles": {
+        "lower_back": 1,
+        "glutes": 0.6,
+        "hamstrings": 0.6
+      },
+      "difficulty": 2,
+      "cues": [
+        "Pad just below your hip bones",
+        "Lower under control, rise to a straight line",
+        "Do not hyperextend at the top"
+      ]
+    },
+    {
+      "id": "superman",
+      "name": "Superman hold",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "lower_back": 1,
+        "glutes": 0.4,
+        "upper_back": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Lie face down, arms overhead",
+        "Lift arms, chest and legs a few inches",
+        "Look at the floor to keep your neck neutral"
+      ]
+    },
+    {
+      "id": "bird_dog",
+      "name": "Bird dog",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "lower_back": 1,
+        "glutes": 0.5,
+        "abs": 0.4,
+        "obliques": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Hands under shoulders, knees under hips",
+        "Reach opposite arm and leg out long",
+        "Keep your hips level, no rotation"
+      ]
+    },
+    {
+      "id": "snatch_grip_deadlift",
+      "name": "Snatch-grip deadlift",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "hamstrings": 1,
+        "glutes": 0.8,
+        "lower_back": 0.8,
+        "upper_back": 0.7,
+        "traps": 0.7,
+        "quads": 0.5,
+        "forearms": 0.5
+      },
+      "difficulty": 5,
+      "cues": [
+        "Grip wide enough that the bar sits at your hips",
+        "Hips lower than a normal deadlift",
+        "Push the floor away, bar close to shins"
+      ]
+    },
+    {
+      "id": "dumbbell_curl",
+      "name": "Dumbbell curl",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Elbows pinned to your sides",
+        "Turn palms up as you curl",
+        "Lower for a slow two count"
+      ]
+    },
+    {
+      "id": "barbell_curl",
+      "name": "Barbell curl",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.4
+      },
+      "difficulty": 2,
+      "cues": [
+        "Shoulder-width grip, elbows at your sides",
+        "Curl without swinging your hips",
+        "Straighten the arms fully at the bottom"
+      ]
+    },
+    {
+      "id": "hammer_curl",
+      "name": "Hammer curl",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.7
+      },
+      "difficulty": 2,
+      "cues": [
+        "Palms face each other the whole time",
+        "Curl the thumb toward your shoulder",
+        "Keep elbows still"
+      ]
+    },
+    {
+      "id": "ez_bar_curl",
+      "name": "EZ-bar curl",
+      "equipment": [
+        "ez_bar"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.4
+      },
+      "difficulty": 2,
+      "cues": [
+        "Grip the angled part of the bar",
+        "Keep elbows slightly in front of your body",
+        "Control the lowering phase"
+      ]
+    },
+    {
+      "id": "cable_curl",
+      "name": "Cable curl",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Stand close to the low pulley",
+        "Squeeze hard at the top",
+        "Do not let elbows drift forward"
+      ]
+    },
+    {
+      "id": "preacher_curl",
+      "name": "EZ-bar preacher curl",
+      "equipment": [
+        "ez_bar",
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "biceps": 1,
+        "forearms": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Armpits snug against the top of the pad",
+        "Stop just short of full lockout",
+        "Never drop into the bottom position"
+      ]
+    },
+    {
+      "id": "cable_triceps_pushdown",
+      "name": "Cable triceps pushdown",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "triceps": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Elbows tucked against your sides",
+        "Push down until arms are fully straight",
+        "Only the forearms move"
+      ]
+    },
+    {
+      "id": "close_grip_bench_press",
+      "name": "Close-grip bench press",
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "triceps": 1,
+        "chest": 0.7,
+        "front_delts": 0.4
+      },
+      "difficulty": 3,
+      "cues": [
+        "Hands about shoulder-width apart",
+        "Elbows tucked close to your ribs",
+        "Touch the bar to your lower chest"
+      ]
+    },
+    {
+      "id": "ez_bar_skullcrusher",
+      "name": "EZ-bar skullcrusher",
+      "equipment": [
+        "ez_bar",
+        "bench"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "triceps": 1
+      },
+      "difficulty": 3,
+      "cues": [
+        "Upper arms angled slightly back toward your head",
+        "Lower the bar just behind your forehead",
+        "Keep elbows from flaring out"
+      ]
+    },
+    {
+      "id": "dumbbell_overhead_triceps_extension",
+      "name": "Dumbbell overhead triceps extension",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "triceps": 1
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hold one dumbbell overhead with both hands",
+        "Lower behind your head, elbows pointing up",
+        "Keep ribs down, do not arch"
+      ]
+    },
+    {
+      "id": "cable_overhead_triceps_extension",
+      "name": "Cable overhead triceps extension",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "triceps": 1
+      },
+      "difficulty": 2,
+      "cues": [
+        "Face away from a low pulley, rope behind your head",
+        "Keep elbows pointing forward, upper arms still",
+        "Extend fully overhead, ribs down"
+      ]
+    },
+    {
+      "id": "triceps_dip",
+      "name": "Triceps dip",
+      "equipment": [
+        "dip_station"
+      ],
+      "pattern": "vertical_push",
+      "compound": true,
+      "muscles": {
+        "triceps": 1,
+        "chest": 0.5,
+        "front_delts": 0.5
+      },
+      "difficulty": 3,
+      "cues": [
+        "Keep your torso upright",
+        "Lower until elbows reach 90 degrees",
+        "Lock out fully at the top"
+      ]
+    },
+    {
+      "id": "diamond_push_up",
+      "name": "Diamond push-up",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "horizontal_push",
+      "compound": true,
+      "muscles": {
+        "triceps": 1,
+        "chest": 0.7,
+        "front_delts": 0.5,
+        "abs": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Thumbs and index fingers form a diamond",
+        "Hands under your lower chest",
+        "Elbows brush your ribs on the way down"
+      ]
+    },
+    {
+      "id": "barbell_wrist_curl",
+      "name": "Barbell wrist curl",
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "forearms": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Forearms on the bench, palms up",
+        "Let the bar roll to your fingertips",
+        "Curl the wrists up as high as possible"
+      ]
+    },
+    {
+      "id": "reverse_wrist_curl",
+      "name": "Dumbbell reverse wrist curl",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "forearms": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Forearm on the bench, palm facing down",
+        "Raise the back of the hand toward you",
+        "Use a light weight and full range"
+      ]
+    },
+    {
+      "id": "reverse_curl",
+      "name": "EZ-bar reverse curl",
+      "equipment": [
+        "ez_bar"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "forearms": 1,
+        "biceps": 0.7
+      },
+      "difficulty": 2,
+      "cues": [
+        "Overhand grip, shoulder-width apart",
+        "Keep wrists straight, not bent back",
+        "Elbows stay at your sides"
+      ]
+    },
+    {
+      "id": "dead_hang",
+      "name": "Dead hang",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "forearms": 1,
+        "lats": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Full grip around the bar, thumbs wrapped",
+        "Hang with shoulders lightly engaged, not fully slack",
+        "Hold for time, step down before grip fails"
+      ]
+    },
+    {
+      "id": "plank",
+      "name": "Plank",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "obliques": 0.5,
+        "glutes": 0.2,
+        "front_delts": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Elbows under shoulders",
+        "Squeeze glutes and tuck the pelvis slightly",
+        "Do not let your hips sag"
+      ]
+    },
+    {
+      "id": "hanging_leg_raise",
+      "name": "Hanging leg raise",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "hip_flexors": 1,
+        "abs": 0.8,
+        "obliques": 0.3,
+        "forearms": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Start from a still hang, no swinging",
+        "Raise straight legs to hip height or higher",
+        "Curl the pelvis up at the top"
+      ]
+    },
+    {
+      "id": "cable_crunch",
+      "name": "Cable crunch",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "obliques": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Kneel and hold the rope beside your head",
+        "Curl your ribs toward your hips",
+        "Hips stay still; do not sit back"
+      ]
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "obliques": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Feet flat, knees bent",
+        "Lift shoulder blades off the floor",
+        "Do not pull on your neck"
+      ]
+    },
+    {
+      "id": "reverse_crunch",
+      "name": "Reverse crunch",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "hip_flexors": 0.4,
+        "obliques": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Lie flat, knees bent at 90 degrees",
+        "Curl your hips off the floor toward your ribs",
+        "Lower slowly without swinging the legs"
+      ]
+    },
+    {
+      "id": "side_plank",
+      "name": "Side plank",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "obliques": 1,
+        "abs": 0.4,
+        "glutes": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Elbow directly under the shoulder",
+        "Stack feet and push hips up high",
+        "Keep a straight line from head to heels"
+      ]
+    },
+    {
+      "id": "pallof_press",
+      "name": "Pallof press",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "obliques": 1,
+        "abs": 0.6,
+        "glutes": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Stand side-on to the pulley at chest height",
+        "Press the handle straight out from your chest",
+        "Resist the rotation, hips stay square"
+      ]
+    },
+    {
+      "id": "hanging_knee_raise",
+      "name": "Hanging knee raise",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "hip_flexors": 1,
+        "abs": 0.7,
+        "forearms": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hang still with shoulders engaged",
+        "Bring knees up to your chest",
+        "Lower slowly without swinging"
+      ]
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead bug",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "obliques": 0.3,
+        "hip_flexors": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Press your lower back into the floor",
+        "Extend opposite arm and leg slowly",
+        "Exhale fully as you reach"
+      ]
+    },
+    {
+      "id": "cable_woodchop",
+      "name": "Cable woodchop",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "core",
+      "compound": true,
+      "muscles": {
+        "obliques": 1,
+        "abs": 0.5,
+        "front_delts": 0.2,
+        "glutes": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Set the pulley high, pull diagonally down",
+        "Rotate through hips and torso together",
+        "Arms stay long; the trunk does the work"
+      ]
+    },
+    {
+      "id": "lying_leg_raise",
+      "name": "Lying leg raise",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "hip_flexors": 1,
+        "abs": 0.6
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hands under your hips for support",
+        "Keep lower back pressed to the floor",
+        "Stop lowering before your back arches"
+      ]
+    },
+    {
+      "id": "captains_chair_knee_raise",
+      "name": "Captain's chair knee raise",
+      "equipment": [
+        "dip_station"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "hip_flexors": 1,
+        "abs": 0.7
+      },
+      "difficulty": 1,
+      "cues": [
+        "Back against the pad, forearms on the rests",
+        "Lift knees toward your chest",
+        "Tilt the pelvis up at the top"
+      ]
+    },
+    {
+      "id": "barbell_rollout",
+      "name": "Barbell rollout",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "abs": 1,
+        "lats": 0.4,
+        "obliques": 0.4,
+        "hip_flexors": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Use round plates so the bar rolls",
+        "Kneel and roll out only as far as you can hold",
+        "Keep hips tucked, never let the back sag"
+      ]
+    },
+    {
+      "id": "band_pallof_press",
+      "name": "Band Pallof press",
+      "equipment": [
+        "band"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "obliques": 1,
+        "abs": 0.6
+      },
+      "difficulty": 1,
+      "cues": [
+        "Anchor the band at chest height beside you",
+        "Press out and hold for two seconds",
+        "Stay tall and square to the front"
+      ]
+    },
+    {
+      "id": "barbell_back_squat",
+      "name": "Barbell back squat",
+      "equipment": [
+        "barbell",
+        "rack"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.7,
+        "adductors": 0.4,
+        "lower_back": 0.3,
+        "abs": 0.2
+      },
+      "difficulty": 4,
+      "cues": [
+        "Brace before you descend",
+        "Knees track over toes",
+        "Keep the bar over mid-foot"
+      ]
+    },
+    {
+      "id": "leg_press",
+      "name": "Leg press",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.5,
+        "adductors": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Do not let your lower back round off the pad",
+        "Full control on the way down"
+      ]
+    },
+    {
+      "id": "leg_extension",
+      "name": "Leg extension",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "quads": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Line your knee up with the machine pivot",
+        "Extend fully and squeeze the quads",
+        "Lower slowly, do not drop the stack"
+      ]
+    },
+    {
+      "id": "front_squat",
+      "name": "Front squat",
+      "equipment": [
+        "barbell",
+        "rack"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "upper_back": 0.5,
+        "abs": 0.4,
+        "adductors": 0.3
+      },
+      "difficulty": 4,
+      "cues": [
+        "Bar on your front delts, elbows high",
+        "Stay upright, sit straight down",
+        "Drive elbows up out of the bottom"
+      ]
+    },
+    {
+      "id": "goblet_squat",
+      "name": "Goblet squat",
+      "equipment": [
+        "kettlebell"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "adductors": 0.4,
+        "abs": 0.3,
+        "upper_back": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hold the bell by the horns against your chest",
+        "Sit between your knees, chest tall",
+        "Elbows brush the inside of your knees"
+      ]
+    },
+    {
+      "id": "dumbbell_goblet_squat",
+      "name": "Dumbbell goblet squat",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "adductors": 0.3,
+        "abs": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hold one dumbbell upright by the top head",
+        "Sit between your knees, chest tall",
+        "Keep the dumbbell close to your chest"
+      ]
+    },
+    {
+      "id": "hack_squat",
+      "name": "Hack squat",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.5,
+        "adductors": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Feet shoulder-width, mid-platform",
+        "Keep your back flat against the pad",
+        "Descend until thighs pass parallel"
+      ]
+    },
+    {
+      "id": "smith_machine_squat",
+      "name": "Smith machine squat",
+      "equipment": [
+        "smith_machine"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "adductors": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Feet slightly in front of the bar",
+        "Set safety stops just below your depth",
+        "Push through the whole foot"
+      ]
+    },
+    {
+      "id": "bodyweight_squat",
+      "name": "Bodyweight squat",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.6,
+        "adductors": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Arms forward for balance",
+        "Sit down between your heels",
+        "Keep heels flat on the floor"
+      ]
+    },
+    {
+      "id": "pistol_squat",
+      "name": "Pistol squat",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.7,
+        "adductors": 0.3,
+        "abs": 0.3,
+        "calves": 0.2
+      },
+      "difficulty": 4,
+      "cues": [
+        "Hold the free leg straight out in front",
+        "Sit back slowly, knee over toes",
+        "Use a doorframe for balance at first"
+      ]
+    },
+    {
+      "id": "walking_lunge",
+      "name": "Dumbbell walking lunge",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.7,
+        "adductors": 0.4,
+        "hamstrings": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Take a long stride, torso upright",
+        "Back knee lowers to just above the floor",
+        "Push through the front heel to step"
+      ]
+    },
+    {
+      "id": "bulgarian_split_squat",
+      "name": "Bulgarian split squat",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.8,
+        "adductors": 0.4,
+        "hamstrings": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Rear foot laces-down on the bench",
+        "Front foot far enough that the heel stays down",
+        "Drop the back knee straight down"
+      ]
+    },
+    {
+      "id": "reverse_lunge",
+      "name": "Reverse lunge",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.7,
+        "adductors": 0.3,
+        "hamstrings": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Step straight back, hips square",
+        "Lower until both knees hit 90 degrees",
+        "Drive up through the front foot"
+      ]
+    },
+    {
+      "id": "step_up",
+      "name": "Dumbbell step-up",
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "glutes": 0.7,
+        "hamstrings": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Whole foot on the bench",
+        "Drive through the top leg, not the bottom",
+        "Lower slowly back down"
+      ]
+    },
+    {
+      "id": "dumbbell_lateral_lunge",
+      "name": "Dumbbell lateral lunge",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "adductors": 1,
+        "quads": 0.7,
+        "glutes": 0.6
+      },
+      "difficulty": 2,
+      "cues": [
+        "Step wide to the side, toes forward",
+        "Sit back into the working hip",
+        "Keep the trailing leg straight"
+      ]
+    },
+    {
+      "id": "cossack_squat",
+      "name": "Cossack squat",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "lunge",
+      "compound": true,
+      "muscles": {
+        "adductors": 1,
+        "quads": 0.6,
+        "glutes": 0.5,
+        "hamstrings": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Very wide stance, shift to one side",
+        "Straight leg toes point up",
+        "Go only as deep as your hips allow"
+      ]
+    },
+    {
+      "id": "conventional_deadlift",
+      "name": "Conventional deadlift",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.8,
+        "lower_back": 0.8,
+        "quads": 0.5,
+        "traps": 0.5,
+        "upper_back": 0.5,
+        "forearms": 0.5,
+        "lats": 0.3
+      },
+      "difficulty": 5,
+      "cues": [
+        "Bar over mid-foot, shins touch the bar",
+        "Pull the slack out and brace before lifting",
+        "Push the floor away, bar drags up your legs"
+      ]
+    },
+    {
+      "id": "romanian_deadlift",
+      "name": "Romanian deadlift",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "hamstrings": 1,
+        "glutes": 0.8,
+        "lower_back": 0.5,
+        "forearms": 0.3
+      },
+      "difficulty": 4,
+      "cues": [
+        "Push your hips back, knees softly bent",
+        "Keep the bar against your thighs",
+        "Stop before your lower back rounds; don't force the bar to the floor"
+      ]
+    },
+    {
+      "id": "hip_thrust",
+      "name": "Barbell hip thrust",
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.4,
+        "quads": 0.3,
+        "adductors": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Upper back on the bench edge, bar in the hip crease",
+        "Tuck your chin and ribs down",
+        "Lock out with glutes, not your lower back"
+      ]
+    },
+    {
+      "id": "lying_leg_curl",
+      "name": "Lying leg curl",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "hamstrings": 1,
+        "calves": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Pad just above your heels",
+        "Keep hips pressed into the bench",
+        "Curl fully, lower slowly"
+      ]
+    },
+    {
+      "id": "seated_leg_curl",
+      "name": "Seated leg curl",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "hamstrings": 1,
+        "calves": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Lock the thigh pad down snugly",
+        "Line your knee up with the machine's pivot",
+        "Lean forward slightly for more stretch",
+        "Pull heels under the seat"
+      ]
+    },
+    {
+      "id": "dumbbell_romanian_deadlift",
+      "name": "Dumbbell Romanian deadlift",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "hamstrings": 1,
+        "glutes": 0.8,
+        "lower_back": 0.4,
+        "forearms": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Dumbbells slide down the front of your legs",
+        "Hips back, spine long and neutral",
+        "Stand up by squeezing the glutes"
+      ]
+    },
+    {
+      "id": "glute_bridge",
+      "name": "Glute bridge",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.4
+      },
+      "difficulty": 1,
+      "cues": [
+        "Feet flat, heels close to your glutes",
+        "Drive through heels and lift the hips",
+        "Squeeze the glutes for a second at the top"
+      ]
+    },
+    {
+      "id": "sumo_deadlift",
+      "name": "Sumo deadlift",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "adductors": 0.7,
+        "quads": 0.6,
+        "hamstrings": 0.6,
+        "lower_back": 0.6,
+        "forearms": 0.5,
+        "traps": 0.4
+      },
+      "difficulty": 4,
+      "cues": [
+        "Wide stance, toes out, shins vertical",
+        "Push your knees out over your toes",
+        "Spread the floor apart as you pull"
+      ]
+    },
+    {
+      "id": "good_morning",
+      "name": "Good morning",
+      "equipment": [
+        "barbell",
+        "rack"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "hamstrings": 1,
+        "lower_back": 0.9,
+        "glutes": 0.7,
+        "upper_back": 0.3
+      },
+      "difficulty": 5,
+      "cues": [
+        "Bar on the upper back as for a squat",
+        "Hinge at the hips with a soft knee bend",
+        "Use light loads; the lever is long"
+      ]
+    },
+    {
+      "id": "single_leg_romanian_deadlift",
+      "name": "Single-leg Romanian deadlift",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "hamstrings": 1,
+        "glutes": 0.8,
+        "lower_back": 0.3,
+        "adductors": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Hold the dumbbell in the opposite hand",
+        "Hips stay square to the floor",
+        "Back leg and torso move as one lever"
+      ]
+    },
+    {
+      "id": "cable_pull_through",
+      "name": "Cable pull-through",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.6,
+        "lower_back": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Face away from a low pulley, rope between legs",
+        "Push hips back until hamstrings stretch",
+        "Extend the hips smoothly and finish tall without leaning back"
+      ]
+    },
+    {
+      "id": "nordic_hamstring_curl",
+      "name": "Nordic hamstring curl",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "hamstrings": 1,
+        "glutes": 0.3,
+        "calves": 0.2
+      },
+      "difficulty": 3,
+      "cues": [
+        "Anchor your heels under a loaded bar or sturdy pad",
+        "Lower as slowly as you can, hips extended",
+        "Catch yourself with your hands, push back up"
+      ]
+    },
+    {
+      "id": "cable_glute_kickback",
+      "name": "Cable glute kickback",
+      "equipment": [
+        "cable"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.3
+      },
+      "difficulty": 1,
+      "cues": [
+        "Ankle strap on, hinge slightly forward",
+        "Kick back and up without arching",
+        "Squeeze at the top for a second"
+      ]
+    },
+    {
+      "id": "hip_abductor_machine",
+      "name": "Hip abductor machine",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "glutes": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Sit tall with pads on the outer knees",
+        "Push knees out as far as possible",
+        "Control the return"
+      ]
+    },
+    {
+      "id": "hip_adductor_machine",
+      "name": "Hip adductor machine",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "adductors": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Start at a comfortable stretch, not maximum",
+        "Squeeze knees together and pause",
+        "Open slowly under control"
+      ]
+    },
+    {
+      "id": "band_lateral_walk",
+      "name": "Band lateral walk",
+      "equipment": [
+        "band"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "glutes": 1,
+        "quads": 0.2
+      },
+      "difficulty": 1,
+      "cues": [
+        "Band around the knees or ankles",
+        "Half squat, toes forward",
+        "Step sideways without letting knees cave"
+      ]
+    },
+    {
+      "id": "copenhagen_plank",
+      "name": "Copenhagen plank",
+      "equipment": [
+        "bench"
+      ],
+      "pattern": "core",
+      "compound": false,
+      "muscles": {
+        "adductors": 1,
+        "obliques": 0.6,
+        "abs": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Top leg on the bench, bottom leg free",
+        "Lift hips into a straight line",
+        "Start with the knee on the bench to scale"
+      ]
+    },
+    {
+      "id": "standing_calf_raise",
+      "name": "Standing calf raise",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "calves": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Balls of the feet on the edge",
+        "Lower slowly into the stretch, pause",
+        "Rise as high as possible onto your toes"
+      ]
+    },
+    {
+      "id": "seated_calf_raise",
+      "name": "Seated calf raise",
+      "equipment": [
+        "machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "calves": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Pad snug on your lower thighs",
+        "Pause in the stretched position",
+        "No bouncing at the bottom"
+      ]
+    },
+    {
+      "id": "single_leg_calf_raise",
+      "name": "Single-leg calf raise",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "calves": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Stand on a step edge, hold a wall",
+        "Lower the heel below the step",
+        "Push up through the big toe"
+      ]
+    },
+    {
+      "id": "smith_machine_calf_raise",
+      "name": "Smith machine calf raise",
+      "equipment": [
+        "smith_machine"
+      ],
+      "pattern": "isolation",
+      "compound": false,
+      "muscles": {
+        "calves": 1
+      },
+      "difficulty": 1,
+      "cues": [
+        "Stand on a plate or step under the bar",
+        "Full stretch at the bottom, pause",
+        "Drive straight up onto your toes"
+      ]
+    },
+    {
+      "id": "kettlebell_swing",
+      "name": "Kettlebell swing",
+      "equipment": [
+        "kettlebell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "hamstrings": 0.7,
+        "lower_back": 0.4,
+        "abs": 0.3,
+        "forearms": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Hike the bell back high between your thighs",
+        "Snap hips forward; arms just guide it",
+        "Stand tall and brace at the top"
+      ]
+    },
+    {
+      "id": "farmers_carry",
+      "name": "Farmer's carry",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "carry",
+      "compound": true,
+      "muscles": {
+        "forearms": 1,
+        "traps": 0.8,
+        "abs": 0.4,
+        "obliques": 0.3,
+        "glutes": 0.2,
+        "quads": 0.2
+      },
+      "difficulty": 2,
+      "cues": [
+        "Pick up heavy dumbbells with a flat back",
+        "Walk tall, shoulders back and down",
+        "Short, quick steps"
+      ]
+    },
+    {
+      "id": "dumbbell_thruster",
+      "name": "Dumbbell thruster",
+      "equipment": [
+        "dumbbell"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "front_delts": 0.8,
+        "glutes": 0.6,
+        "triceps": 0.5,
+        "abs": 0.3
+      },
+      "difficulty": 3,
+      "cues": [
+        "Dumbbells on your shoulders, elbows forward",
+        "Squat, then use the drive to press overhead",
+        "Finish with biceps by your ears"
+      ]
+    },
+    {
+      "id": "burpee",
+      "name": "Burpee",
+      "equipment": [
+        "bodyweight"
+      ],
+      "pattern": "squat",
+      "compound": true,
+      "muscles": {
+        "quads": 1,
+        "chest": 0.6,
+        "glutes": 0.5,
+        "triceps": 0.4,
+        "front_delts": 0.4,
+        "abs": 0.3,
+        "hip_flexors": 0.3,
+        "calves": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Hands down, jump feet back to a plank",
+        "Chest to floor, then snap feet in",
+        "Jump and clap overhead to finish"
+      ]
+    },
+    {
+      "id": "kettlebell_suitcase_carry",
+      "name": "Kettlebell suitcase carry",
+      "equipment": [
+        "kettlebell"
+      ],
+      "pattern": "carry",
+      "compound": true,
+      "muscles": {
+        "obliques": 1,
+        "forearms": 0.7,
+        "traps": 0.5,
+        "abs": 0.4
+      },
+      "difficulty": 1,
+      "cues": [
+        "Bell in one hand only",
+        "Do not lean toward or away from it",
+        "Switch hands each length"
+      ]
+    },
+    {
+      "id": "kettlebell_overhead_carry",
+      "name": "Kettlebell overhead carry",
+      "equipment": [
+        "kettlebell"
+      ],
+      "pattern": "carry",
+      "compound": true,
+      "muscles": {
+        "front_delts": 1,
+        "traps": 0.7,
+        "abs": 0.6,
+        "obliques": 0.5,
+        "triceps": 0.3,
+        "side_delts": 0.3
+      },
+      "difficulty": 2,
+      "cues": [
+        "Lock the arm out, biceps by your ear",
+        "Wrist straight, knuckles to the ceiling",
+        "Ribs down, walk slowly"
+      ]
+    },
+    {
+      "id": "kettlebell_turkish_get_up",
+      "name": "Kettlebell Turkish get-up",
+      "equipment": [
+        "kettlebell"
+      ],
+      "pattern": "core",
+      "compound": true,
+      "muscles": {
+        "abs": 1,
+        "front_delts": 0.7,
+        "obliques": 0.7,
+        "glutes": 0.5,
+        "triceps": 0.3,
+        "quads": 0.3
+      },
+      "difficulty": 4,
+      "cues": [
+        "Eyes on the bell the whole time",
+        "Arm vertical and locked out",
+        "Move one step at a time, then reverse"
+      ]
+    },
+    {
+      "id": "power_clean",
+      "name": "Power clean",
+      "equipment": [
+        "barbell"
+      ],
+      "pattern": "hinge",
+      "compound": true,
+      "muscles": {
+        "glutes": 1,
+        "quads": 0.7,
+        "hamstrings": 0.7,
+        "traps": 0.8,
+        "upper_back": 0.5,
+        "lower_back": 0.5,
+        "calves": 0.3,
+        "forearms": 0.3
+      },
+      "difficulty": 5,
+      "cues": [
+        "Start like a deadlift, bar over mid-foot",
+        "Explode hips through once the bar passes knees",
+        "Pull under fast, catch with elbows high"
+      ]
+    }
+  ]
+}
