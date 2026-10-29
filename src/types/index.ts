@@ -160,7 +160,7 @@ export interface WorkoutSession {
   planName: string;
   startedAt: string; // ISO
   finishedAt?: string; // ISO; undefined while in progress
-  /** Set when the workout was logged as a deload. */
+  /** True for a deload session (startDeloadSession: about half the sets, lighter weights in mind). */
   deload?: boolean;
   exercises: SessionExercise[];
 }

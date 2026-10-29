@@ -1,9 +1,18 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { cancelDeloadAdvice, scheduleDeloadAdvice } from './deloadNotification';
 import { storage } from './storage';
 
 import { BUILT_IN_EXERCISES, setExerciseLibrary } from '@/data/exercises';
+import {
+  adviceKey,
+  deloadReasons,
+  describeReason,
+  nextAdviceTime,
+  SNOOZE_DAYS,
+  type DeloadReason,
+} from '@/logic/deload';
 import { lastPerformance } from '@/logic/history';
 import { newId, nowIso } from '@/logic/ids';
 import { difficultyFromLegacy, diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
@@ -22,6 +31,18 @@ export const DEFAULT_SETTINGS: Settings = {
   weightUnit: 'kg',
 };
 
+export interface DeloadAdviceState {
+  /** adviceKey(reasons). */
+  key: string;
+  reasons: DeloadReason[];
+  /** ISO; when this key first appeared. */
+  since: string;
+  /** Key a reminder was scheduled for, so it is scheduled once per reason set. */
+  notifiedFor?: string;
+  /** ISO; while in the future the card stays hidden and the reminder is scheduled for this time. */
+  snoozedUntil?: string;
+}
+
 export interface GymState {
   hydrated: boolean;
   /** True once the example plans have been created (so deleting them does not bring them back). */
@@ -33,6 +54,8 @@ export interface GymState {
   settings: Settings;
   /** Imported exercises: overrides of built-ins (same id) and additions. See mergeLibrary. */
   customExercises: Exercise[];
+  /** Current signs that a deload week is due, or null when there are none. */
+  deloadAdvice: DeloadAdviceState | null;
 
   // Plans
   createPlan: (name: string) => WorkoutPlan;
@@ -50,6 +73,8 @@ export interface GymState {
 
   // Active session
   startSession: (planId?: string) => WorkoutSession;
+  /** Like startSession, but every exercise gets max(1, ceil(sets / 2)) sets and the session is flagged `deload: true`. */
+  startDeloadSession: (planId: string) => WorkoutSession;
   logSet: (sessionExerciseId: string, setIndex: number, patch: Partial<SetLog>) => void;
   addSet: (sessionExerciseId: string) => void;
   removeSet: (sessionExerciseId: string, setIndex: number) => void;
@@ -62,6 +87,12 @@ export interface GymState {
 
   // History
   deleteSession: (sessionId: string) => void;
+
+  // Deload advice
+  /** Recomputes the advice from history; schedules/cancels the reminder as needed. */
+  refreshDeloadAdvice: (now?: number) => void;
+  /** Hides the card and moves the reminder to the morning after SNOOZE_DAYS. */
+  snoozeDeloadAdvice: (now?: number) => void;
 
   // Settings
   updateSettings: (patch: Partial<Settings>) => void;
@@ -161,6 +192,14 @@ export function migratePersistedState(persisted: unknown, version: number): unkn
   return state;
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Notification text: the first reason, plus how many more there are. */
+function adviceBody(reasons: readonly DeloadReason[], db: Record<string, Exercise>, unit: Settings['weightUnit']): string {
+  const more = reasons.length > 1 ? ` · ${reasons.length - 1} more` : '';
+  return describeReason(reasons[0], db, unit) + more;
+}
+
 const DEFAULT_SETS = 3;
 const DEFAULT_REPS = 10;
 const DEFAULT_REST = 90;
@@ -204,6 +243,29 @@ export const useGymStore = create<GymState>()(
           exercises: session.exercises.map((ex) => (ex.id === sessionExerciseId ? fn(ex) : ex)),
         }));
 
+      const buildSession = (planId: string | undefined, deload: boolean): WorkoutSession => {
+        const { plans, sessions } = get();
+        const plan = planId ? plans.find((p) => p.id === planId) : undefined;
+        return {
+          id: newId(),
+          planId: plan?.id,
+          planName: plan?.name ?? 'Free workout',
+          startedAt: nowIso(),
+          exercises: (plan?.exercises ?? []).map((pe) => {
+            const sets = deload ? Math.max(1, Math.ceil(pe.sets / 2)) : pe.sets;
+            return {
+              id: newId(),
+              exerciseId: pe.exerciseId,
+              targetSets: sets,
+              targetReps: pe.reps,
+              restSec: pe.restSec,
+              sets: makeSets(sessions, pe.exerciseId, sets, pe.reps),
+            };
+          }),
+          ...(deload ? { deload: true } : {}),
+        };
+      };
+
       return {
         hydrated: false,
         seeded: false,
@@ -212,6 +274,7 @@ export const useGymStore = create<GymState>()(
         activeSession: null,
         settings: DEFAULT_SETTINGS,
         customExercises: [],
+        deloadAdvice: null,
 
         createPlan: (name) => {
           const now = nowIso();
@@ -246,22 +309,12 @@ export const useGymStore = create<GymState>()(
           }),
 
         startSession: (planId) => {
-          const { plans, sessions } = get();
-          const plan = planId ? plans.find((p) => p.id === planId) : undefined;
-          const session: WorkoutSession = {
-            id: newId(),
-            planId: plan?.id,
-            planName: plan?.name ?? 'Free workout',
-            startedAt: nowIso(),
-            exercises: (plan?.exercises ?? []).map((pe) => ({
-              id: newId(),
-              exerciseId: pe.exerciseId,
-              targetSets: pe.sets,
-              targetReps: pe.reps,
-              restSec: pe.restSec,
-              sets: makeSets(sessions, pe.exerciseId, pe.sets, pe.reps),
-            })),
-          };
+          const session = buildSession(planId, false);
+          set({ activeSession: session });
+          return session;
+        },
+        startDeloadSession: (planId) => {
+          const session = buildSession(planId, true);
           set({ activeSession: session });
           return session;
         },
@@ -314,16 +367,73 @@ export const useGymStore = create<GymState>()(
             ...session,
             exercises: session.exercises.filter((ex) => ex.id !== sessionExerciseId),
           })),
-        finishSession: () =>
+        finishSession: () => {
           set((s) => {
             if (!s.activeSession) return {};
             const finished: WorkoutSession = { ...s.activeSession, finishedAt: nowIso() };
             return { activeSession: null, sessions: [finished, ...s.sessions] };
-          }),
+          });
+          get().refreshDeloadAdvice();
+        },
         discardSession: () => set({ activeSession: null }),
 
-        deleteSession: (sessionId) =>
-          set((s) => ({ sessions: s.sessions.filter((x) => x.id !== sessionId) })),
+        deleteSession: (sessionId) => {
+          set((s) => ({ sessions: s.sessions.filter((x) => x.id !== sessionId) }));
+          get().refreshDeloadAdvice();
+        },
+
+        refreshDeloadAdvice: (now = Date.now()) => {
+          const { sessions, customExercises, settings, deloadAdvice: prev } = get();
+          const db = cacheFor(customExercises).byId;
+          const reasons = deloadReasons(sessions, now, db);
+          if (reasons.length === 0) {
+            if (prev) {
+              set({ deloadAdvice: null });
+              void cancelDeloadAdvice();
+            }
+            return;
+          }
+          const key = adviceKey(reasons);
+          const sameKey = prev?.key === key;
+          const snoozedUntil =
+            prev?.snoozedUntil && Date.parse(prev.snoozedUntil) > now ? prev.snoozedUntil : undefined;
+          let notifiedFor = prev?.notifiedFor;
+          if (notifiedFor !== key) {
+            // A snoozed reminder keeps its time but gets the new reasons; otherwise next morning.
+            const fireAt = snoozedUntil ? Date.parse(snoozedUntil) : nextAdviceTime(now);
+            void scheduleDeloadAdvice(fireAt, adviceBody(reasons, db, settings.weightUnit));
+            notifiedFor = key;
+          }
+          const next: DeloadAdviceState = {
+            key,
+            reasons,
+            since: sameKey && prev ? prev.since : new Date(now).toISOString(),
+            ...(notifiedFor !== undefined ? { notifiedFor } : {}),
+            ...(snoozedUntil !== undefined ? { snoozedUntil } : {}),
+          };
+          const changed =
+            !prev ||
+            !sameKey ||
+            prev.since !== next.since ||
+            prev.notifiedFor !== next.notifiedFor ||
+            prev.snoozedUntil !== next.snoozedUntil ||
+            JSON.stringify(prev.reasons) !== JSON.stringify(reasons);
+          if (changed) set({ deloadAdvice: next });
+        },
+        snoozeDeloadAdvice: (now = Date.now()) => {
+          const { deloadAdvice, customExercises, settings } = get();
+          if (!deloadAdvice) return;
+          const fireAt = nextAdviceTime(now + SNOOZE_DAYS * DAY_MS);
+          set({
+            deloadAdvice: {
+              ...deloadAdvice,
+              notifiedFor: deloadAdvice.key,
+              snoozedUntil: new Date(fireAt).toISOString(),
+            },
+          });
+          const db = cacheFor(customExercises).byId;
+          void scheduleDeloadAdvice(fireAt, adviceBody(deloadAdvice.reasons, db, settings.weightUnit));
+        },
 
         updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
 
@@ -355,6 +465,7 @@ export const useGymStore = create<GymState>()(
               return fa < fb ? 1 : fa > fb ? -1 : 0;
             }),
           }));
+          get().refreshDeloadAdvice();
           return imported;
         },
 
@@ -393,6 +504,7 @@ export const useGymStore = create<GymState>()(
         activeSession: s.activeSession,
         settings: s.settings,
         customExercises: s.customExercises,
+        deloadAdvice: s.deloadAdvice,
       }),
       onRehydrateStorage: () => () => {
         const state = useGymStore.getState();
@@ -401,6 +513,7 @@ export const useGymStore = create<GymState>()(
         }
         syncExerciseRegistry(useGymStore.getState().customExercises ?? []);
         useGymStore.setState({ hydrated: true });
+        useGymStore.getState().refreshDeloadAdvice();
       },
     },
   ),

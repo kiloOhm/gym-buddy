@@ -106,13 +106,23 @@ function ActiveWorkout({ session }: { session: WorkoutSession }) {
         <RestTimer />
       </View>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        {session.deload ? (
+          <View style={styles.deloadBox}>
+            <Text style={styles.deloadTitle}>Deload workout</Text>
+            <Text style={font.small}>
+              Half the sets, about 90 % of your usual weights. Keep the movements, lose the grind.
+            </Text>
+          </View>
+        ) : null}
         {session.exercises.length === 0 ? (
           <View style={[styles.card, styles.emptyCard]}>
             <Text style={font.body}>No exercises yet.</Text>
             <Text style={font.small}>Add one below to start logging sets.</Text>
           </View>
         ) : (
-          session.exercises.map((ex) => <SessionExerciseCard key={ex.id} sessionExercise={ex} unit={unit} />)
+          session.exercises.map((ex) => (
+            <SessionExerciseCard key={ex.id} sessionExercise={ex} unit={unit} deload={session.deload} />
+          ))
         )}
 
         <Button
@@ -151,4 +161,13 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   timer: { fontSize: 20, fontWeight: '600', color: colors.primary },
   footer: { gap: spacing.sm, marginTop: spacing.md },
+  deloadBox: {
+    backgroundColor: colors.warningSoft,
+    borderWidth: 1,
+    borderColor: colors.warning,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    gap: spacing.xs,
+  },
+  deloadTitle: { fontSize: 15, fontWeight: '700', color: colors.text },
 });

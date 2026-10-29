@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useEffect } from 'react';
+import { ActivityIndicator, AppState, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useGymStore } from '@/store';
@@ -15,6 +16,16 @@ export default function RootLayout() {
   // navigation bar. The tab bar handles its own inset, hence the override for "(tabs)".
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+
+  // Deload advice depends on the date (cooldowns, streak weeks), so recompute it whenever the app comes back.
+  // Not before hydration: an empty history would clear the advice and cancel its reminder.
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      const store = useGymStore.getState();
+      if (state === 'active' && store.hydrated) store.refreshDeloadAdvice();
+    });
+    return () => sub.remove();
+  }, []);
 
   if (!hydrated) {
     return (

@@ -17,10 +17,16 @@ import type { Exercise, SessionExercise, SetLog, WeightUnit } from '@/types';
 interface Props {
   sessionExercise: SessionExercise;
   unit: WeightUnit;
+  /** Deload workout: adds a target weight of about 90 % of the last performance. */
+  deload?: boolean;
 }
 
+/** Share of the last heaviest weight suggested in a deload workout, rounded to DELOAD_STEP. */
+const DELOAD_FACTOR = 0.9;
+const DELOAD_STEP = 0.5;
+
 /** One exercise of the active workout: targets, last-time hint, editable set rows and actions. */
-export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionExercise, unit }: Props) {
+export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionExercise, unit, deload }: Props) {
   const ex = sessionExercise;
   const sessions = useGymStore((s) => s.sessions);
   const addSet = useGymStore((s) => s.addSet);
@@ -32,6 +38,11 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
   const name = exercise?.name ?? 'Unknown exercise';
   const original = ex.substitutedFor ? (db[ex.substitutedFor]?.name ?? 'Unknown exercise') : undefined;
   const last = useMemo(() => lastPerformance(sessions, ex.exerciseId), [sessions, ex.exerciseId]);
+  const deloadTarget = useMemo(() => {
+    if (!deload || !last) return undefined;
+    const heaviest = Math.max(0, ...last.sets.map((s) => s.weight));
+    return heaviest > 0 ? Math.round((heaviest * DELOAD_FACTOR) / DELOAD_STEP) * DELOAD_STEP : undefined;
+  }, [deload, last]);
   const stats = useMemo(
     () => exerciseStats(sessions, ex.exerciseId, ex.targetReps),
     [sessions, ex.exerciseId, ex.targetReps],
@@ -63,6 +74,11 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
       {original ? <Text style={styles.muted}>Swapped in for {original}</Text> : null}
       {stats ? <StatsStrip stats={stats} unit={unit} /> : null}
       {last ? <Text style={styles.hint}>Last: {formatSetList(last.sets, unit)}</Text> : null}
+      {deloadTarget !== undefined ? (
+        <Text style={styles.hint}>
+          Deload target: ≈ {formatWeight(deloadTarget)} {unit}
+        </Text>
+      ) : null}
 
       <View style={styles.headerRow}>
         <Text style={[styles.colIndex, styles.colHeader]}>Set</Text>

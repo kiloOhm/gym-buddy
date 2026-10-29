@@ -5,6 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View, type ViewStyle } from 'r
 
 import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
+import { DeloadAdviceCard } from '@/components/DeloadAdviceCard';
 import { LOAD_THRESHOLDS, LOAD_WINDOW_DAYS, loadHints, recentMuscleLoad, type LoadHint } from '@/logic/load';
 import { formatSessionDate, formatWeight, sessionDurationMin, sessionVolume } from '@/logic/sessionFormat';
 import { useExerciseMap, useGymStore } from '@/store';
@@ -30,6 +31,8 @@ export default function HomeScreen() {
           <Button title="Continue" onPress={() => router.navigate('/(tabs)/workout')} />
         </View>
       ) : null}
+
+      <DeloadAdviceCard />
 
       <View style={styles.card}>
         <View style={styles.cardHeader}>

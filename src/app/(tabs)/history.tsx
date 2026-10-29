@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { DeloadPill } from '@/components/DeloadPill';
 import { EmptyState } from '@/components/EmptyState';
 import { formatSessionDate, formatWeight, sessionDurationMin, sessionVolume } from '@/logic/sessionFormat';
 import { useGymStore } from '@/store';
@@ -37,7 +38,10 @@ export default function HistoryScreen() {
             <Text style={font.small}>
               {formatSessionDate(item.startedAt)}
             </Text>
-            <Text style={font.heading}>{item.planName}</Text>
+            <View style={styles.titleRow}>
+              <Text style={[font.heading, styles.flex]}>{item.planName}</Text>
+              {item.deload ? <DeloadPill /> : null}
+            </View>
             <View style={styles.meta}>
               <Text style={font.small}>{meta.join(' · ')}</Text>
             </View>
@@ -61,4 +65,6 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: 0.7 },
   meta: { flexDirection: 'row' },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  flex: { flex: 1 },
 });

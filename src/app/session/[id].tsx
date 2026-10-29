@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { alert } from '@/components/alert';
 import { BodyMap } from '@/components/BodyMap';
 import { Button } from '@/components/Button';
+import { DeloadPill } from '@/components/DeloadPill';
 import { EmptyState } from '@/components/EmptyState';
 import { MuscleCoverageBars } from '@/components/MuscleCoverageBars';
 import { computeCoverage } from '@/logic/coverage';
@@ -61,7 +62,10 @@ export default function SessionDetailScreen() {
       <Stack.Screen options={{ title: session.planName }} />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.headerBlock}>
-          <Text style={font.title}>{session.planName}</Text>
+          <View style={styles.titleRow}>
+            <Text style={[font.title, styles.flex]}>{session.planName}</Text>
+            {session.deload ? <DeloadPill /> : null}
+          </View>
           <Text style={font.small}>
             {started.toLocaleDateString(undefined, {
               weekday: 'long',
@@ -110,6 +114,8 @@ export default function SessionDetailScreen() {
 const styles = StyleSheet.create({
   content: { padding: spacing.lg, gap: spacing.md, paddingBottom: spacing.xl * 2 },
   headerBlock: { gap: spacing.xs },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  flex: { flex: 1 },
   card: {
     backgroundColor: colors.card,
     borderWidth: 1,

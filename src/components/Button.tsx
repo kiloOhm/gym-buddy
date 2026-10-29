@@ -11,14 +11,17 @@ interface Props {
   disabled?: boolean;
   small?: boolean;
   style?: ViewStyle;
+  /** Defaults to the title. */
+  accessibilityLabel?: string;
 }
 
-export function Button({ title, onPress, variant = 'primary', disabled, small, style }: Props) {
+export function Button({ title, onPress, variant = 'primary', disabled, small, style, accessibilityLabel }: Props) {
   const palette = PALETTE[variant];
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
+      accessibilityLabel={accessibilityLabel}
       style={({ pressed }) => [
         styles.base,
         small && styles.small,
