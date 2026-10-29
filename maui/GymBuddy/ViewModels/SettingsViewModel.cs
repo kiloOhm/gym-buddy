@@ -46,6 +46,10 @@ public sealed partial class SettingsViewModel : StoreViewModel
     [NotifyCanExecuteChangedFor(nameof(ToggleExportChooserCommand))]
     public partial bool HasPlans { get; set; }
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ExportHistoryCommand))]
+    public partial bool HasHistory { get; set; }
+
     [ObservableProperty] public partial bool ChooserOpen { get; set; }
     [ObservableProperty] public partial IReadOnlyList<ExportChoice> Choices { get; set; } = Array.Empty<ExportChoice>();
 
@@ -64,6 +68,7 @@ public sealed partial class SettingsViewModel : StoreViewModel
         LibraryLine = $"{BuiltInExercises.All.Count} built-in · {custom} custom or edited";
         HasCustom = custom > 0;
         HasPlans = Store.Plans.Count > 0;
+        HasHistory = Store.Sessions.Any(x => x.FinishedAt is not null);
         if (ChooserOpen)
         {
             // Keep ticks; drop plans deleted while the chooser was open, add new ones ticked.
@@ -174,6 +179,63 @@ public sealed partial class SettingsViewModel : StoreViewModel
         if (!await Dialogs.ConfirmAsync("Import plans?", summary + details, "Import")) return;
         Store.ImportPlans(incoming);
         await Nav.GoToTabAsync("plans");
+    }
+
+    [RelayCommand(CanExecute = nameof(HasHistory))]
+    private async Task ExportHistory()
+    {
+        try
+        {
+            var now = DateTimeOffset.Now;
+            await FileExchange.ShareJsonAsync(HistoryExport.HistoryFileName(now),
+                HistoryExport.SerializeHistory(Store.Sessions, Store.Settings.WeightUnit, now), "Export history");
+        }
+        catch (Exception e)
+        {
+            await Dialogs.AlertAsync("Export failed", e.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ImportHistory()
+    {
+        ParsedHistory parsed;
+        try
+        {
+            var text = await FileExchange.PickTextAsync("Import history");
+            if (text is null) return;
+            parsed = HistoryExport.ParseHistoryExport(text, Store.Settings.WeightUnit, Store.LibraryById);
+        }
+        catch (Exception e)
+        {
+            await Dialogs.AlertAsync("Import failed", e.Message);
+            return;
+        }
+        if (parsed.Sessions.Count == 0)
+        {
+            await Dialogs.AlertAsync("Import failed", "The file does not contain any workouts.");
+            return;
+        }
+        var dedupe = HistoryExport.DedupeSessions(parsed.Sessions, Store.Sessions);
+        var incoming = dedupe.Sessions;
+        if (incoming.Count == 0)
+        {
+            await Dialogs.AlertAsync("Nothing to import", string.Join("\n", dedupe.Skipped));
+            return;
+        }
+        var finished = incoming.Select(s => s.FinishedAt ?? "").OrderBy(f => Ids.ParseIsoMs(f) ?? 0).ToList();
+        var oldest = SessionFormat.FormatSessionDate(finished[0]);
+        var newest = SessionFormat.FormatSessionDate(finished[^1]);
+        var range = incoming.Count == 1 ? newest : $"{oldest} – {newest}";
+        var summary = $"{Format.Plural(incoming.Count, "workout")}, {range}";
+        var warnings = parsed.Warnings;
+        var listed = string.Join("\n", warnings.Take(MaxListedWarnings));
+        var moreWarnings = warnings.Count > MaxListedWarnings ? $"\n…and {warnings.Count - MaxListedWarnings} more" : "";
+        var details = (warnings.Count > 0 ? $"\n\n{listed}{moreWarnings}" : "")
+            + (dedupe.Skipped.Count > 0 ? $"\n\nSkipped:\n{string.Join("\n", dedupe.Skipped)}" : "");
+        if (!await Dialogs.ConfirmAsync("Import history?", summary + details, "Import")) return;
+        Store.ImportSessions(incoming);
+        await Nav.GoToTabAsync("history");
     }
 
     [RelayCommand]

@@ -468,6 +468,22 @@ public sealed class GymStore
     }
 
     /// <summary>
+    /// Appends finished sessions to the history, then sorts the whole history by finishedAt descending (ordinal
+    /// compare of the ISO text, stable for equal values). The active session is untouched. Returns the imported list.
+    /// </summary>
+    public IReadOnlyList<WorkoutSession> ImportSessions(IEnumerable<WorkoutSession> sessions)
+    {
+        var imported = sessions.ToList();
+        var merged = _state.Sessions.Concat(imported)
+            .OrderByDescending(s => s.FinishedAt ?? "", StringComparer.Ordinal)
+            .ToList();
+        _state.Sessions.Clear();
+        _state.Sessions.AddRange(merged);
+        Commit();
+        return imported;
+    }
+
+    /// <summary>
     /// Upserts the exercises into CustomExercises by id. An entry identical to the built-in with that id removes the
     /// custom override instead. Counts are relative to the library before the import.
     /// </summary>

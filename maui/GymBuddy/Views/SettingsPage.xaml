@@ -105,6 +105,15 @@
                 </VerticalStackLayout>
             </Border>
 
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Heading}" Text="History" />
+                    <Button Style="{StaticResource Secondary}" Text="Export history" Command="{Binding ExportHistoryCommand}" />
+                    <Button Style="{StaticResource Secondary}" Text="Import history" Command="{Binding ImportHistoryCommand}" />
+                    <Label Style="{StaticResource Small}" Text="Workout history moves between phones and between the Expo and MAUI apps with this file. Weights are copied as entered." />
+                </VerticalStackLayout>
+            </Border>
+
             <Label Style="{StaticResource Small}" HorizontalTextAlignment="Center" Padding="16,0"
                    Text="Gym Buddy works fully offline. All your plans, workouts and settings stay on this device." />
         </VerticalStackLayout>

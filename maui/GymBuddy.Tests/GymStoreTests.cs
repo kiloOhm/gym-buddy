@@ -335,6 +335,41 @@ public class GymStoreTests
         Assert.Equal(plan.CreatedAt, plan.UpdatedAt);
     }
 
+    [Fact]
+    public void importSessions_merges_newest_first_keeps_the_active_session_and_persists()
+    {
+        var storage = new MemoryStateStorage();
+        var store = NewStore(storage);
+        _now = DateTimeOffset.Parse("2026-10-20T18:00:00Z", System.Globalization.CultureInfo.InvariantCulture);
+        store.StartSession(null);
+        store.FinishSession();
+        _now = DateTimeOffset.Parse("2026-10-25T18:00:00Z", System.Globalization.CultureInfo.InvariantCulture);
+        store.StartSession(null);
+        store.FinishSession();
+        var active = store.StartSession(null);
+        var a = store.Sessions[0].Id; // 25 Oct
+        var b = store.Sessions[1].Id; // 20 Oct
+
+        static WorkoutSession S(string id, string finishedAt) =>
+            new() { Id = id, PlanName = "Imported", StartedAt = finishedAt, FinishedAt = finishedAt };
+        var changes = 0;
+        store.Changed += () => changes++;
+        var incoming = new[]
+        {
+            S("old", "2026-10-01T10:00:00.000Z"),
+            S("newest", "2026-10-28T10:00:00.000Z"),
+            S("tie", "2026-10-20T18:00:00.000Z"), // equal to b: existing stays first
+        };
+        var imported = store.ImportSessions(incoming);
+
+        Assert.Equal(incoming, imported);
+        Assert.Equal(["newest", a, b, "tie", "old"], store.Sessions.Select(s => s.Id));
+        Assert.Same(active, store.ActiveSession);
+        Assert.Equal(1, changes);
+        var reloaded = NewStore(storage);
+        Assert.Equal(["newest", a, b, "tie", "old"], reloaded.Sessions.Select(s => s.Id));
+    }
+
     // ── a full workout ──
 
     [Fact]

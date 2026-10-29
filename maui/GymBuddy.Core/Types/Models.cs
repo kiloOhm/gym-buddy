@@ -51,6 +51,8 @@ public sealed class WorkoutSession
     public string StartedAt { get; set; } = "";
     /// <summary>Null while the workout is in progress.</summary>
     public string? FinishedAt { get; set; }
+    /// <summary>Set when the workout was logged as a deload.</summary>
+    public bool? Deload { get; set; }
     public List<SessionExercise> Exercises { get; set; } = new();
 }
 
