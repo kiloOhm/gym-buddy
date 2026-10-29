@@ -109,6 +109,23 @@ JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" npx expo
 
 This builds and installs a release build on the connected device/emulator. The APK ends up under `android/app/build/outputs/apk/release/`. (Needs JDK 17 or 21; the one bundled with Android Studio works.)
 
+## MAUI port
+
+`maui/` holds a native Android rebuild of the app with .NET MAUI (C#), on the `maui` branch. It does everything the Expo app does and reads and writes the same plan and exercise-library files, so plans and libraries move between the two apps. It installs side by side with the Expo app (package id `de.lukas.gymbuddy.maui`) and keeps its own data, in one JSON file in the app's private storage.
+
+Requirements: the .NET 10 SDK with the `maui-android` workload (`dotnet workload install maui-android`), JDK 17 or 21 (Android Studio's bundled JDK works) and the Android SDK with platform 36.
+
+```bash
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+dotnet test maui/GymBuddy.Tests/GymBuddy.Tests.csproj     # unit tests (plain .NET, no Android needed)
+dotnet build maui/GymBuddy.sln -c Release                 # everything, including the Android app
+dotnet publish maui/GymBuddy/GymBuddy.csproj -f net10.0-android -c Release -o out
+adb install -r out/de.lukas.gymbuddy.maui-Signed.apk      # debug-keystore signed, sideload only
+```
+
+The exercise database is generated from the TypeScript source: after editing `src/data/exercises.ts`, run `node maui/scripts/generate-exercises.mjs` and commit the output (CI fails if it is stale). Every push to the `maui` branch builds the APK on GitHub Actions ("MAUI APK" workflow) and keeps it as the `gym-buddy-maui-apk` artifact; it does not touch the `latest` release of the Expo app.
+
 ## Develop
 
 ```bash
