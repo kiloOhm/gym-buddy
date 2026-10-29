@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="GymBuddy.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Gym Buddy">
+
+    <TabBar>
+        <ShellContent Title="Home" Route="home" ContentTemplate="{DataTemplate views:HomePage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf382;" Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Plans" Route="plans" ContentTemplate="{DataTemplate views:PlansPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf3bb;" Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Workout" Route="workout" ContentTemplate="{DataTemplate views:WorkoutPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf172;" Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Exercises" Route="exercises" ContentTemplate="{DataTemplate views:ExercisesPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf19f;" Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="History" Route="history" ContentTemplate="{DataTemplate views:HistoryPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf1cf;" Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+
+</Shell>

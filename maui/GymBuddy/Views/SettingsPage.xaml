@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PageBase
+    x:Class="GymBuddy.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+    x:DataType="vm:SettingsViewModel"
+    Shell.TabBarIsVisible="False"
+    Title="Settings">
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="12">
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Heading}" Text="Weight unit" />
+                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="0">
+                        <Grid ColumnDefinitions="*,*" HeightRequest="44">
+                            <Grid BackgroundColor="{StaticResource CardColor}">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid" Binding="{Binding IsKg}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SetKgCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Label Text="kg" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsKg}" Value="True">
+                                            <Setter Property="TextColor" Value="{StaticResource White}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                            <Grid Grid.Column="1" BackgroundColor="{StaticResource PrimaryColor}">
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid" Binding="{Binding IsKg}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{StaticResource CardColor}" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SetLbCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Label Text="lb" FontAttributes="Bold" TextColor="{StaticResource White}" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsKg}" Value="True">
+                                            <Setter Property="TextColor" Value="{StaticResource Text}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <Label Style="{StaticResource Small}" Text="Weights are stored as entered; changing the unit does not convert past logs." />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Heading}" Text="Exercise library" />
+                    <Label Style="{StaticResource Small}" Text="{Binding LibraryLine}" />
+                    <Button Style="{StaticResource Secondary}" Text="Export library" Command="{Binding ExportLibraryCommand}" />
+                    <Button Style="{StaticResource Secondary}" Text="Import library" Command="{Binding ImportLibraryCommand}" />
+                    <Button Style="{StaticResource Danger}" Text="Reset to built-in library" Command="{Binding ResetLibraryCommand}" IsVisible="{Binding HasCustom}" />
+                    <Label Style="{StaticResource Small}" Text="Edit the exported JSON to add exercises or change ratings, then import it back. Existing plans and history keep working because exercises are matched by id." />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Heading}" Text="Plans" />
+                    <Button Style="{StaticResource Secondary}" Text="Export plans…" Command="{Binding ToggleExportChooserCommand}" />
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding ChooserOpen}">
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Choices}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ExportChoice">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" MinimumHeightRequest="44">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ToggleCommand}" CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+                                        <Label FontFamily="Ionicons" FontSize="22" Text="{Binding Glyph}" TextColor="{StaticResource Muted}" VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Checked}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Name}" />
+                                            <Label Style="{StaticResource Small}" Text="{Binding Meta}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
+                            <Button Style="{StaticResource GhostSmall}" Text="All" Command="{Binding SelectAllCommand}" />
+                            <Button Style="{StaticResource GhostSmall}" Text="None" Command="{Binding SelectNoneCommand}" />
+                        </HorizontalStackLayout>
+                        <Button Text="{Binding ExportSelectedText}" Command="{Binding ExportSelectedCommand}" />
+                        <Button Style="{StaticResource Ghost}" Text="Cancel" Command="{Binding CancelChooserCommand}" />
+                    </VerticalStackLayout>
+                    <Button Style="{StaticResource Secondary}" Text="Import plans" Command="{Binding ImportPlansCommand}" />
+                    <Label Style="{StaticResource Small}" Text="Exports are JSON files you can share, back up, or send to a friend." />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Style="{StaticResource Small}" HorizontalTextAlignment="Center" Padding="16,0"
+                   Text="Gym Buddy works fully offline. All your plans, workouts and settings stay on this device." />
+        </VerticalStackLayout>
+    </ScrollView>
+</views:PageBase>

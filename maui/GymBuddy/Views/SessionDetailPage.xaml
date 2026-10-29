@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PageBase
+    x:Class="GymBuddy.Views.SessionDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+    xmlns:c="clr-namespace:GymBuddy.Controls"
+    x:DataType="vm:SessionDetailViewModel"
+    Shell.TabBarIsVisible="False"
+    Title="{Binding Title}">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding Found, Converter={StaticResource Not}}" VerticalOptions="Center" Padding="24" Spacing="12">
+            <Label Text="Workout not found" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            <Label Text="It may have been deleted." FontSize="14" TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+        <ScrollView IsVisible="{Binding Found}">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource Title}" Text="{Binding Title}" />
+                    <Label Style="{StaticResource Small}" Text="{Binding When}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Blocks}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SessionExerciseBlock">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Style="{StaticResource Heading}" Text="{Binding Name}" />
+                                    <Label Style="{StaticResource Small}" Text="{Binding SwappedFor}" IsVisible="{Binding HasSwappedFor}" />
+                                    <VerticalStackLayout Spacing="2" Margin="0,4,0,0" BindableLayout.ItemsSource="{Binding Sets}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:SessionSetLine">
+                                                <Label Text="{Binding Text}">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Completed}" Value="False">
+                                                            <Setter Property="TextColor" Value="{StaticResource Muted}" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Heading}" Text="Muscles worked" Margin="0,0,0,4" />
+                        <c:BodyMapView Values="{Binding CoverageValues}" />
+                        <c:MuscleCoverageBarsView Values="{Binding CoverageValues}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Style="{StaticResource Danger}" Text="Delete session" Command="{Binding DeleteCommand}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</views:PageBase>

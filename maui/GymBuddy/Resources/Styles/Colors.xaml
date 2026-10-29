@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Colours from src/theme.ts. Light theme only. -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="Background">#F4F5F7</Color>
+    <Color x:Key="CardColor">#FFFFFF</Color>
+    <Color x:Key="Border">#E3E5E8</Color>
+    <Color x:Key="Text">#15181C</Color>
+    <Color x:Key="Muted">#6B7280</Color>
+    <Color x:Key="PrimaryColor">#2563EB</Color>
+    <Color x:Key="PrimarySoft">#DBEAFE</Color>
+    <Color x:Key="Success">#16A34A</Color>
+    <Color x:Key="SuccessSoft">#DCFCE7</Color>
+    <Color x:Key="Warning">#D97706</Color>
+    <Color x:Key="WarningSoft">#FEF3C7</Color>
+    <Color x:Key="DangerColor">#DC2626</Color>
+    <Color x:Key="DangerSoft">#FEE2E2</Color>
+    <Color x:Key="CoverageNone">#E3E5E8</Color>
+    <Color x:Key="CoverageLight">#93C5FD</Color>
+    <Color x:Key="CoverageModerate">#3B82F6</Color>
+    <Color x:Key="CoverageHigh">#1D4ED8</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F4F5F7" />
+    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#E3E5E8" />
+</ResourceDictionary>

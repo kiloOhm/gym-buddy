@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PageBase
+    x:Class="GymBuddy.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+    x:DataType="vm:HistoryViewModel"
+    Title="History">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding IsEmpty}" VerticalOptions="Center" Padding="24" Spacing="12">
+            <Label Text="No workouts yet" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            <Label Text="Finished workouts show up here." FontSize="14" TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding Rows}" SelectionMode="None" IsVisible="{Binding IsEmpty, Converter={StaticResource Not}}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.Header>
+                <BoxView HeightRequest="4" Color="Transparent" />
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <BoxView HeightRequest="16" Color="Transparent" />
+            </CollectionView.Footer>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:HistoryRow">
+                    <Border Style="{StaticResource Card}" Margin="16,0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenCommand}" CommandParameter="{Binding Id}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Style="{StaticResource Small}" Text="{Binding Date}" />
+                            <Label Style="{StaticResource Heading}" Text="{Binding Name}" />
+                            <Label Style="{StaticResource Small}" Text="{Binding Meta}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</views:PageBase>

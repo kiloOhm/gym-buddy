@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PageBase
+    x:Class="GymBuddy.Views.PlansPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+   
+    x:DataType="vm:PlansViewModel"
+    Title="Plans">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Settings" Command="{Binding OpenSettingsCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="Ionicons" Glyph="&#xf56c;" Color="{StaticResource Text}" Size="22" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="8">
+            <Button Text="New plan" Command="{Binding StartCreatingCommand}" IsVisible="{Binding Creating, Converter={StaticResource Not}}" Margin="0,0,0,8" />
+
+            <Border Style="{StaticResource Card}" IsVisible="{Binding Creating}" Margin="0,0,0,8">
+                <VerticalStackLayout Spacing="12">
+                    <Label Style="{StaticResource Heading}" Text="New plan" />
+                    <Border Style="{StaticResource InputBox}">
+                        <Entry x:Name="NameEntry" Text="{Binding NewName}" Placeholder="e.g. Push day" ReturnType="Done"
+                               ReturnCommand="{Binding CreateCommand}" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Style="{StaticResource Secondary}" Text="Cancel" Command="{Binding CancelCreatingCommand}" />
+                        <Button Grid.Column="1" Text="Create" Command="{Binding CreateCommand}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout IsVisible="{Binding IsEmpty}" Padding="24,48" Spacing="12">
+                <Label Text="No plans yet" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                <Label Text="Create a plan, add exercises, and start a workout from it." FontSize="14"
+                       TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Plans}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PlanRow">
+                        <Border Style="{StaticResource Card}">
+                            <Grid ColumnDefinitions="*,44">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <VerticalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenCommand}" CommandParameter="{Binding .}" />
+                                    </VerticalStackLayout.GestureRecognizers>
+                                    <Label Text="{Binding Name}" FontSize="17" FontAttributes="Bold" MaxLines="1" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Meta}" Style="{StaticResource Small}" Margin="0,2,0,0" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Style="{StaticResource IconButton}" Text="&#xf5f6;" TextColor="{StaticResource Muted}"
+                                        WidthRequest="44" SemanticProperties.Description="{Binding Name, StringFormat='Delete {0}'}"
+                                        Command="{Binding DeleteCommand}" CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</views:PageBase>

@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net10.0-android</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>GymBuddy</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!-- CommunityToolkit.Mvvm 8.4 generates [ObservableProperty] partial properties only with LangVersion preview. -->
+		<LangVersion>preview</LangVersion>
+
+		<!-- Generate C# from XAML at compile time. -->
+		<MauiXamlInflator>SourceGen</MauiXamlInflator>
+
+		<ApplicationTitle>Gym Buddy</ApplicationTitle>
+		<!-- Distinct from the Expo app (de.lukas.gymbuddy) so both can be installed side by side. -->
+		<ApplicationId>de.lukas.gymbuddy.maui</ApplicationId>
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
+
+		<!-- Sideloaded app: ship a plain APK (no AAB). Release is signed with the default debug keystore. -->
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidUseAapt2>true</AndroidUseAapt2>
+		<!-- Self-contained debug APK too (no Fast Deployment), so a plain `adb install` of the built APK runs. -->
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<AndroidKeyStore>false</AndroidKeyStore>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App icon: the Expo app's adaptive icon layers. -->
+		<MauiIcon Include="Resources\AppIcon\appicon.png" ForegroundFile="Resources\AppIcon\appiconfg.png" Color="#E6F4FE" ForegroundScale="1.0" />
+
+		<!-- Splash screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.png" Color="#E6F4FE" BaseSize="200,200" />
+
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Exercise photos (free-exercise-db, public domain), shared with the Expo app: assets/exercises/<id>/{0,1}.jpg
+		     are bundled as raw assets named "exercises/<id>/<n>.jpg" (see ExerciseImages.AssetPaths). -->
+		<MauiAsset Include="..\..\assets\exercises\**\*.jpg" LogicalName="exercises/%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GymBuddy.Core\GymBuddy.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	</ItemGroup>
+
+</Project>

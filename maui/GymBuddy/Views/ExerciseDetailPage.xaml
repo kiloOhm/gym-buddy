@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PageBase
+    x:Class="GymBuddy.Views.ExerciseDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:GymBuddy.Views"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+    xmlns:c="clr-namespace:GymBuddy.Controls"
+    x:DataType="vm:ExerciseDetailViewModel"
+    Shell.TabBarIsVisible="False"
+    Title="{Binding Title}">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding Found, Converter={StaticResource Not}}" VerticalOptions="Center" Padding="24" Spacing="12">
+            <Label Text="Exercise not found" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            <Button Style="{StaticResource Secondary}" Text="Go back" Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+
+        <ScrollView IsVisible="{Binding Found}">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="12">
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Title}" Text="{Binding Title}" />
+                        <Label Style="{StaticResource Small}" Text="{Binding Meta}" />
+                        <Label Style="{StaticResource Small}" Text="{Binding EquipmentLine}" />
+                        <Label Text="{Binding LastLine}" IsVisible="{Binding LastLine, Converter={StaticResource NotNull}}"
+                               FontSize="14" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                        <VerticalStackLayout Spacing="8" Margin="0,8,0,0">
+                            <c:RatingDotsView Label="Difficulty" Value="{Binding Difficulty}" />
+                            <Label Style="{StaticResource Caption}" LineHeight="1.1"
+                                   Text="Difficulty is an editorial 1–5 rating of technique demand and how unforgiving the lift is, not a measured injury risk. Muscle weights are editorial involvement estimates (1 = primary target)." />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <c:ExerciseFigureView Exercise="{Binding Exercise}" Variant="Hero" />
+                        <Label Text="Photos: free-exercise-db (public domain)" FontSize="11" TextColor="{StaticResource Muted}"
+                               MaxLines="1" IsVisible="{Binding HasPhotos}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Heading}" Text="Muscles worked" Margin="0,0,0,4" />
+                        <c:BodyMapView MapScale="Relative" Values="{Binding Activation}" />
+                        <c:MuscleCoverageBarsView Values="{Binding CoverageValues}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasCues}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Heading}" Text="Cues" Margin="0,0,0,4" />
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Cues}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                        <Label Text="•" TextColor="{StaticResource Muted}" />
+                                        <Label Grid.Column="1" Text="{Binding .}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Heading}" Text="Substitutes" Margin="0,0,0,4" />
+                        <Label Style="{StaticResource Small}" Text="No close substitutes found." IsVisible="{Binding HasNoSubstitutes}" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Substitutes}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SubstituteRow">
+                                    <VerticalStackLayout>
+                                        <BoxView HeightRequest="1" Color="{StaticResource Border}" />
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" MinimumHeightRequest="48" Padding="0,8">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding OpenCommand}" CommandParameter="{Binding Id}" />
+                                            </Grid.GestureRecognizers>
+                                            <VerticalStackLayout VerticalOptions="Center">
+                                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                <Label Style="{StaticResource Small}" Text="{Binding Reasons}" IsVisible="{Binding HasReasons}" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding Score}" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" VerticalOptions="Center" />
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</views:PageBase>

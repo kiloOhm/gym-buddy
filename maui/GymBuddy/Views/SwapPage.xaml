@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GymBuddy.Views.SwapPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:GymBuddy.ViewModels"
+    xmlns:c="clr-namespace:GymBuddy.Controls"
+    x:DataType="vm:SwapViewModel"
+    Shell.TabBarIsVisible="False"
+    Title="Swap exercise">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding Found, Converter={StaticResource Not}}" VerticalOptions="Center" Padding="24" Spacing="12">
+            <Label Text="Exercise not found" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            <Label Text="It is no longer part of the active workout." FontSize="14" TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+            <Button Style="{StaticResource Secondary}" Text="Go back" Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+        <ScrollView IsVisible="{Binding Found}">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="12">
+                <Label Style="{StaticResource Title}" Text="Not available? Swap it" />
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource Small}" Text="Replacing" />
+                        <Label Style="{StaticResource Heading}" Text="{Binding OriginalName}" />
+                        <Label Style="{StaticResource Small}" Text="{Binding OriginalEquipment}" IsVisible="{Binding OriginalEquipment, Converter={StaticResource NotNull}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Style="{StaticResource Heading}" Text="Suggestions" />
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNoSuggestions}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="No close substitutes found." />
+                        <Label Style="{StaticResource Small}" Text="Try browsing the full exercise list instead." />
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Suggestions}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SuggestionRow">
+                            <Border Style="{StaticResource Card}" SemanticProperties.Description="{Binding Exercise.Name, StringFormat='Swap to {0}'}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ChooseCommand}" CommandParameter="{Binding Exercise}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                        <c:ExerciseFigureView Exercise="{Binding Exercise}" Variant="Thumb" Size="44" />
+                                        <Label Grid.Column="1" Style="{StaticResource Heading}" Text="{Binding Exercise.Name}" VerticalOptions="Center" />
+                                        <Border Grid.Column="2" BackgroundColor="{StaticResource PrimarySoft}" StrokeShape="RoundRectangle 6" Padding="8,2" VerticalOptions="Center">
+                                            <Label Text="{Binding Score}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                        </Border>
+                                    </Grid>
+                                    <Label Style="{StaticResource Small}" Text="{Binding Reasons}" IsVisible="{Binding HasReasons}" />
+                                    <c:RatingDotsView Label="Difficulty" Value="{Binding Exercise.Difficulty}" HorizontalOptions="Start" WidthRequest="200" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Button Style="{StaticResource Secondary}" Text="Not what you need? Browse all exercises" Command="{Binding BrowseCommand}" LineBreakMode="WordWrap" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
