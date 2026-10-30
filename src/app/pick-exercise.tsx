@@ -1,4 +1,4 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useRef } from 'react';
 
 import { ExerciseList } from '@/components/ExerciseList';
@@ -13,6 +13,7 @@ import type { Exercise } from '@/types';
  * - exclude: comma-separated exercise ids to hide
  */
 export default function PickExerciseScreen() {
+  const router = useRouter();
   const params = useLocalSearchParams<{
     planId?: string;
     sessionAdd?: string;

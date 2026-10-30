@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router, Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -11,6 +11,7 @@ import { colors, radius, spacing } from '@/theme';
 import type { WorkoutPlan } from '@/types';
 
 function SettingsButton() {
+  const router = useRouter();
   return (
     <Pressable
       onPress={() => router.push('/settings')}
@@ -25,6 +26,7 @@ function SettingsButton() {
 }
 
 export default function PlansScreen() {
+  const router = useRouter();
   const plans = useGymStore((s) => s.plans);
   const createPlan = useGymStore((s) => s.createPlan);
   const deletePlan = useGymStore((s) => s.deletePlan);

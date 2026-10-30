@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { memo, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -27,6 +27,7 @@ const DELOAD_STEP = 0.5;
 
 /** One exercise of the active workout: targets, last-time hint, editable set rows and actions. */
 export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionExercise, unit, deload }: Props) {
+  const router = useRouter();
   const ex = sessionExercise;
   const sessions = useGymStore((s) => s.sessions);
   const addSet = useGymStore((s) => s.addSet);

@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router, Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -27,6 +27,7 @@ const MAX_LISTED_WARNINGS = 8;
 const errorMessage = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const settings = useGymStore((s) => s.settings);
   const updateSettings = useGymStore((s) => s.updateSettings);
   const plans = useGymStore((s) => s.plans);

@@ -1,4 +1,4 @@
-import { router, Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { alert } from '@/components/alert';
@@ -60,6 +60,7 @@ function StartWorkout() {
 }
 
 function ActiveWorkout({ session }: { session: WorkoutSession }) {
+  const router = useRouter();
   const unit = useGymStore((s) => s.settings.weightUnit);
   const finishSession = useGymStore((s) => s.finishSession);
   const discardSession = useGymStore((s) => s.discardSession);

@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -11,6 +11,7 @@ import { colors, font, radius, spacing } from '@/theme';
 
 /** Home card shown while the history shows signs that a deload week is due and the advice isn't snoozed. */
 export function DeloadAdviceCard() {
+  const router = useRouter();
   const advice = useGymStore((s) => s.deloadAdvice);
   const plans = useGymStore((s) => s.plans);
   const hasActive = useGymStore((s) => s.activeSession !== null);

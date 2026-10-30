@@ -1,4 +1,4 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -13,6 +13,7 @@ import { colors, font, radius, spacing } from '@/theme';
 import { EQUIPMENT_LABELS, type Exercise } from '@/types';
 
 export default function SwapScreen() {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const swapExercise = useGymStore((s) => s.swapExercise);
   const db = useExerciseMap();

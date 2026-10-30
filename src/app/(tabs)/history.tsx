@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { DeloadPill } from '@/components/DeloadPill';
@@ -8,6 +8,7 @@ import { useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
 
 export default function HistoryScreen() {
+  const router = useRouter();
   const sessions = useGymStore((s) => s.sessions);
   const unit = useGymStore((s) => s.settings.weightUnit);
 

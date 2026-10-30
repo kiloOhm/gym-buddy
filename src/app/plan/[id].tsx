@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -17,6 +17,7 @@ import { colors, radius, spacing } from '@/theme';
 import { MUSCLE_LABELS, type MuscleGroup, type PlannedExercise } from '@/types';
 
 export default function PlanEditorScreen() {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const plan = useGymStore((s) => s.plans.find((p) => p.id === id));
   const activeSession = useGymStore((s) => s.activeSession);

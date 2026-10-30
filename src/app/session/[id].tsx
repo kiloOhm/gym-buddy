@@ -1,4 +1,4 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -14,6 +14,7 @@ import { useExerciseMap, useGymStore } from '@/store';
 import { colors, font, radius, spacing } from '@/theme';
 
 export default function SessionDetailScreen() {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const session = useGymStore((s) => s.sessions.find((x) => x.id === id));
   const unit = useGymStore((s) => s.settings.weightUnit);

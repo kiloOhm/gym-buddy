@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Fragment, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 
@@ -14,6 +14,7 @@ import { MUSCLE_LABELS, type WeightUnit, type WorkoutSession } from '@/types';
 
 
 export default function HomeScreen() {
+  const router = useRouter();
   const activeSession = useGymStore((s) => s.activeSession);
   const sessions = useGymStore((s) => s.sessions);
   const unit = useGymStore((s) => s.settings.weightUnit);
@@ -65,6 +66,7 @@ export default function HomeScreen() {
 }
 
 function RecentRow({ session, unit }: { session: WorkoutSession; unit: WeightUnit }) {
+  const router = useRouter();
   const duration = sessionDurationMin(session);
   const volume = sessionVolume(session);
   const meta = [
@@ -166,6 +168,7 @@ function HintBox({ title, count, style, defaultOpen = false, children }: HintBox
 }
 
 function Suggestions({ hint }: { hint: LoadHint }) {
+  const router = useRouter();
   if (hint.suggestions.length === 0) return null;
   return (
     <Text style={font.small}>
