@@ -82,7 +82,9 @@ export default function PlansScreen() {
 
   return (
     <View style={styles.flex}>
-      <Tabs.Screen options={{ headerRight: SettingsButton }} />
+      {/* An element, not the component: the navigator calls headerRight() inside its own Header render, so a
+          component passed bare would run its hooks (useRouter) as Header's and change Header's hook count. */}
+      <Tabs.Screen options={{ headerRight: () => <SettingsButton /> }} />
       <FlatList
         data={plans}
         keyExtractor={(p) => p.id}
