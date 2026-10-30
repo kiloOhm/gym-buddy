@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import type { ComponentProps } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { SettingsButton } from '@/components/SettingsButton';
 import { colors, spacing } from '@/theme';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
@@ -27,6 +28,8 @@ export default function TabsLayout() {
         headerTintColor: colors.text,
         headerStyle: { backgroundColor: colors.card },
         sceneStyle: { backgroundColor: colors.background },
+        // An element, not the component: the navigator calls headerRight() inside its own Header render.
+        headerRight: () => <SettingsButton />,
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: tabIcon('home') }} />

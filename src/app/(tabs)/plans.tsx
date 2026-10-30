@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -9,21 +9,6 @@ import { EmptyState } from '@/components/EmptyState';
 import { useGymStore } from '@/store';
 import { colors, radius, spacing } from '@/theme';
 import type { WorkoutPlan } from '@/types';
-
-function SettingsButton() {
-  const router = useRouter();
-  return (
-    <Pressable
-      onPress={() => router.push('/settings')}
-      hitSlop={8}
-      style={styles.headerButton}
-      accessibilityRole="button"
-      accessibilityLabel="Settings"
-    >
-      <Ionicons name="settings-outline" size={22} color={colors.text} />
-    </Pressable>
-  );
-}
 
 export default function PlansScreen() {
   const router = useRouter();
@@ -82,9 +67,6 @@ export default function PlansScreen() {
 
   return (
     <View style={styles.flex}>
-      {/* An element, not the component: the navigator calls headerRight() inside its own Header render, so a
-          component passed bare would run its hooks (useRouter) as Header's and change Header's hook count. */}
-      <Tabs.Screen options={{ headerRight: () => <SettingsButton /> }} />
       <FlatList
         data={plans}
         keyExtractor={(p) => p.id}
@@ -141,7 +123,6 @@ const styles = StyleSheet.create({
   flexGrow: { flexGrow: 1 },
   content: { padding: spacing.lg },
   header: { marginBottom: spacing.lg },
-  headerButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: spacing.xs },
   card: {
     backgroundColor: colors.card,
     borderWidth: 1,
