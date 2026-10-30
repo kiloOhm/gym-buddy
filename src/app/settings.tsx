@@ -307,8 +307,7 @@ export default function SettingsScreen() {
           />
           <Button title="Import history" variant="secondary" onPress={startHistoryImport} />
           <Text style={styles.muted}>
-            Workout history moves between phones and between the Expo and MAUI apps with this file. Weights are
-            copied as entered.
+            Workout history moves between phones and the browser with this file. Weights are copied as entered.
           </Text>
         </View>
 

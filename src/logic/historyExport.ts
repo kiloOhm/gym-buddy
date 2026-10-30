@@ -1,6 +1,6 @@
 // Workout-history export/import file format ("gym-buddy-history", version 1). Pure functions, no Expo
-// imports (the file/share/picker side lives in planFiles.ts). The MAUI port reads and writes the same
-// file byte-for-byte, so field order, rounding and messages must stay in step with it.
+// imports (the file/share/picker side lives in planFiles.ts). Field order and rounding are part of the format
+// (see README.md); keep them stable so files written by older versions still import.
 import { getExerciseMap } from '@/data/exercises';
 import type { Exercise, SessionExercise, SetLog, WeightUnit, WorkoutSession } from '@/types';
 
