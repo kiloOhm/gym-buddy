@@ -75,6 +75,7 @@ export const PHOTO_SOURCES = {
   plank: 'Plank',
   hanging_leg_raise: 'Hanging_Leg_Raise',
   cable_crunch: 'Cable_Crunch',
+  ab_crunch_machine: 'Ab_Crunch_Machine',
   crunch: 'Crunches',
   side_plank: 'Side_Bridge',
   pallof_press: 'Pallof_Press',

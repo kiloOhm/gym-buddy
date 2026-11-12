@@ -5,6 +5,7 @@
 import type { ImageSourcePropType } from 'react-native';
 
 export const EXERCISE_IMAGES: Readonly<Record<string, readonly ImageSourcePropType[]>> = {
+  ab_crunch_machine: [require('../../assets/exercises/ab_crunch_machine/0.jpg'), require('../../assets/exercises/ab_crunch_machine/1.jpg')],
   back_extension: [require('../../assets/exercises/back_extension/0.jpg'), require('../../assets/exercises/back_extension/1.jpg')],
   band_lateral_walk: [require('../../assets/exercises/band_lateral_walk/0.jpg'), require('../../assets/exercises/band_lateral_walk/1.jpg')],
   band_pull_apart: [require('../../assets/exercises/band_pull_apart/0.jpg'), require('../../assets/exercises/band_pull_apart/1.jpg')],
