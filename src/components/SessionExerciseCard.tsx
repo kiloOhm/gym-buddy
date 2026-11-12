@@ -6,9 +6,10 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
 import { ExerciseFigure } from '@/components/ExerciseFigure';
+import { ExerciseStatsStrip } from '@/components/ExerciseStatsStrip';
 import { lastPerformance } from '@/logic/history';
 import { formatSetList, formatWeight, parseNumberInput } from '@/logic/sessionFormat';
-import { exerciseStats, type ExerciseStats } from '@/logic/stats';
+import { exerciseStats } from '@/logic/stats';
 import { useExerciseMap, useGymStore } from '@/store';
 import { useRestStore } from '@/store/rest';
 import { colors, radius, spacing } from '@/theme';
@@ -73,7 +74,7 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
         {ex.targetSets} × {ex.targetReps} · rest {ex.restSec} s
       </Text>
       {original ? <Text style={styles.muted}>Swapped in for {original}</Text> : null}
-      {stats ? <StatsStrip stats={stats} unit={unit} /> : null}
+      {stats ? <ExerciseStatsStrip stats={stats} unit={unit} /> : null}
       {last ? <Text style={styles.hint}>Last: {formatSetList(last.sets, unit)}</Text> : null}
       {deloadTarget !== undefined ? (
         <Text style={styles.hint}>
@@ -109,35 +110,6 @@ export const SessionExerciseCard = memo(function SessionExerciseCard({ sessionEx
     </View>
   );
 });
-
-/** Best / last / 30-day average for the target rep range; "~" marks values estimated from other rep counts. */
-function StatsStrip({ stats, unit }: { stats: ExerciseStats; unit: WeightUnit }) {
-  const prefix = stats.approximate ? '~' : '';
-  const value = (w: number | undefined) => (w === undefined ? '–' : `${prefix}${formatWeight(w)} ${unit}`);
-  const reps = `${stats.range.min}–${stats.range.max}`;
-  const columns: [string, number | undefined][] = [
-    ['Best', stats.best],
-    ['Last', stats.last],
-    ['30d avg', stats.avg30d],
-  ];
-  return (
-    <View style={styles.stats}>
-      <View style={styles.statsRow}>
-        {columns.map(([label, w]) => (
-          <View key={label} style={styles.statsCol}>
-            <Text style={styles.statsLabel}>{label}</Text>
-            <Text style={styles.statsValue}>{value(w)}</Text>
-          </View>
-        ))}
-      </View>
-      <Text style={styles.statsLabel}>
-        {stats.approximate
-          ? `~ estimated from other rep counts (no sets logged at ${reps} reps)`
-          : `for ${reps} reps`}
-      </Text>
-    </View>
-  );
-}
 
 interface SetRowProps {
   sessionExerciseId: string;
@@ -222,17 +194,6 @@ const styles = StyleSheet.create({
   name: { fontSize: 17, fontWeight: '600', color: colors.text },
   muted: { fontSize: 13, color: colors.muted },
   hint: { fontSize: 13, color: colors.primary, marginTop: spacing.xs },
-  stats: {
-    backgroundColor: colors.background,
-    borderRadius: radius.sm,
-    padding: spacing.sm,
-    marginTop: spacing.xs,
-    gap: spacing.xs,
-  },
-  statsRow: { flexDirection: 'row', gap: spacing.sm },
-  statsCol: { flex: 1 },
-  statsLabel: { fontSize: 12, color: colors.muted },
-  statsValue: { fontSize: 13, fontWeight: '600', color: colors.text },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
   colHeader: { fontSize: 12, color: colors.muted, textAlign: 'center' },
   colIndex: { width: 32 },

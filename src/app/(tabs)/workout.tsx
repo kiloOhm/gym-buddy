@@ -1,5 +1,6 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { alert } from '@/components/alert';
 import { Button } from '@/components/Button';
@@ -24,6 +25,7 @@ export default function WorkoutScreen() {
 }
 
 function StartWorkout() {
+  const router = useRouter();
   const plans = useGymStore((s) => s.plans);
   const startSession = useGymStore((s) => s.startSession);
   const start = (planId?: string) => {
@@ -43,15 +45,22 @@ function StartWorkout() {
         </View>
       ) : (
         plans.map((plan) => (
-          <View key={plan.id} style={[styles.card, styles.planRow]}>
+          <Pressable
+            key={plan.id}
+            onPress={() => router.push({ pathname: '/plan-overview/[id]', params: { id: plan.id } })}
+            style={({ pressed }) => [styles.card, styles.planRow, pressed && { opacity: 0.6 }]}
+            accessibilityRole="button"
+            accessibilityLabel={`${plan.name}, show plan overview`}
+          >
             <View style={styles.flex}>
               <Text style={font.heading}>{plan.name}</Text>
               <Text style={font.small}>
                 {plan.exercises.length} {plan.exercises.length === 1 ? 'exercise' : 'exercises'}
               </Text>
             </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.muted} />
             <Button title="Start" onPress={() => start(plan.id)} />
-          </View>
+          </Pressable>
         ))
       )}
       <Button variant="secondary" title="Start empty workout" onPress={() => start()} />
