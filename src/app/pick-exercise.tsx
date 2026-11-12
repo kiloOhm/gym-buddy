@@ -2,7 +2,9 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useRef } from 'react';
 
 import { ExerciseList } from '@/components/ExerciseList';
+import { appendExercise } from '@/logic/sessionEdit';
 import { useExerciseLibrary, useGymStore } from '@/store';
+import { useSessionDraft } from '@/store/sessionDraft';
 import type { Exercise } from '@/types';
 
 /**
@@ -10,6 +12,7 @@ import type { Exercise } from '@/types';
  * - planId: add the picked exercise to that plan
  * - sessionAdd: '1' adds it to the active session
  * - sessionSwap: a session-exercise id to swap for the picked exercise
+ * - draftAdd: '1' adds it to the history workout being edited (useSessionDraft)
  * - exclude: comma-separated exercise ids to hide
  */
 export default function PickExerciseScreen() {
@@ -18,6 +21,7 @@ export default function PickExerciseScreen() {
     planId?: string;
     sessionAdd?: string;
     sessionSwap?: string;
+    draftAdd?: string;
     exclude?: string;
   }>();
   const library = useExerciseLibrary();
@@ -39,6 +43,10 @@ export default function PickExerciseScreen() {
     if (params.planId) addExerciseToPlan(params.planId, exercise.id);
     else if (params.sessionSwap) swapExercise(params.sessionSwap, exercise.id);
     else if (params.sessionAdd === '1') addSessionExercise(exercise.id);
+    else if (params.draftAdd === '1') {
+      const history = useGymStore.getState().sessions;
+      useSessionDraft.getState().edit((draft) => appendExercise(draft, exercise.id, history));
+    }
     // A swap came through the swap screen, which renders from a snapshot and would show the old
     // exercise if we only closed the picker, so drop both screens and land on the workout.
     if (params.sessionSwap && router.canDismiss()) router.dismiss(2);

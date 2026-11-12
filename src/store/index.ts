@@ -16,6 +16,7 @@ import {
 import { lastPerformance } from '@/logic/history';
 import { newId, nowIso } from '@/logic/ids';
 import { difficultyFromLegacy, diffLibrary, exercisesEqual, mergeLibrary } from '@/logic/library';
+import { sortNewestFirst } from '@/logic/sessionEdit';
 import { SEED_PLANS } from '@/data/seedPlans';
 import type {
   Exercise,
@@ -87,6 +88,8 @@ export interface GymState {
 
   // History
   deleteSession: (sessionId: string) => void;
+  /** Replaces the finished session with the same id (an edit from history), re-sorts the history by finishedAt. */
+  updateSession: (session: WorkoutSession) => void;
 
   // Deload advice
   /** Recomputes the advice from history; schedules/cancels the reminder as needed. */
@@ -381,6 +384,11 @@ export const useGymStore = create<GymState>()(
           set((s) => ({ sessions: s.sessions.filter((x) => x.id !== sessionId) }));
           get().refreshDeloadAdvice();
         },
+        updateSession: (session) => {
+          if (!get().sessions.some((x) => x.id === session.id)) return;
+          set((s) => ({ sessions: sortNewestFirst(s.sessions.map((x) => (x.id === session.id ? session : x))) }));
+          get().refreshDeloadAdvice();
+        },
 
         refreshDeloadAdvice: (now = Date.now()) => {
           const { sessions, customExercises, settings, deloadAdvice: prev } = get();
@@ -459,11 +467,7 @@ export const useGymStore = create<GymState>()(
         importSessions: (incoming) => {
           const imported = [...incoming];
           set((s) => ({
-            sessions: [...s.sessions, ...imported].sort((a, b) => {
-              const fa = a.finishedAt ?? '';
-              const fb = b.finishedAt ?? '';
-              return fa < fb ? 1 : fa > fb ? -1 : 0;
-            }),
+            sessions: sortNewestFirst([...s.sessions, ...imported]),
           }));
           get().refreshDeloadAdvice();
           return imported;

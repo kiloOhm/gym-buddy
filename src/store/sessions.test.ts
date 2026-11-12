@@ -31,3 +31,23 @@ describe('store: importSessions', () => {
     expect(useGymStore.getState().activeSession).toBe(active);
   });
 });
+
+describe('store: updateSession', () => {
+  it('replaces the session by id and re-sorts the history by finish time', () => {
+    useGymStore.setState({
+      sessions: [session('a', '2026-10-29T10:00:00.000Z'), session('b', '2026-10-28T10:00:00.000Z')],
+    });
+    const moved = { ...session('b', '2026-10-30T10:00:00.000Z'), planName: 'Edited' };
+    useGymStore.getState().updateSession(moved);
+    const { sessions } = useGymStore.getState();
+    expect(sessions.map((s) => s.id)).toEqual(['b', 'a']);
+    expect(sessions[0]).toBe(moved);
+  });
+
+  it('ignores a session that is not in the history', () => {
+    const before = [session('a', '2026-10-29T10:00:00.000Z')];
+    useGymStore.setState({ sessions: before });
+    useGymStore.getState().updateSession(session('zzz', '2026-10-30T10:00:00.000Z'));
+    expect(useGymStore.getState().sessions).toBe(before);
+  });
+});
