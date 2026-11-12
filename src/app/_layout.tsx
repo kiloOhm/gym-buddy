@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, AppState, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { WebAlertHost } from '@/components/WebAlertHost';
 import { useGymStore } from '@/store';
 import { colors } from '@/theme';
 
@@ -67,6 +68,8 @@ export default function RootLayout() {
       <View style={styles.page}>
         <SafeAreaProvider style={[styles.column, width > WEB_MAX_WIDTH && styles.framed]}>{navigator}</SafeAreaProvider>
       </View>
+      {/* alert() renders here: the browser's own dialogs can be suppressed (see components/alert.ts). */}
+      <WebAlertHost />
     </>
   );
 }

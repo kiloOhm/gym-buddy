@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-import { alert, webDialogFor } from './alert';
+import { alert, dismissButton, setWebAlertHost, webDialogFor, type WebAlert } from './alert';
 
 describe('webDialogFor', () => {
   it('uses a plain alert for no buttons or a single button', () => {
@@ -20,6 +20,17 @@ describe('webDialogFor', () => {
   });
 });
 
+describe('dismissButton', () => {
+  it('prefers the cancel button, else the only button, else nothing', () => {
+    const cancel = { text: 'Cancel', style: 'cancel' as const };
+    const del = { text: 'Delete', style: 'destructive' as const };
+    const ok = { text: 'OK' };
+    expect(dismissButton([del, cancel])).toBe(cancel);
+    expect(dismissButton([ok])).toBe(ok);
+    expect(dismissButton([ok, del])).toBeUndefined();
+  });
+});
+
 describe('alert on web', () => {
   const originalOS = Platform.OS;
   const originalWindow = globalThis.window;
@@ -34,6 +45,7 @@ describe('alert on web', () => {
   });
 
   afterEach(() => {
+    setWebAlertHost(null);
     Object.defineProperty(Platform, 'OS', { value: originalOS, configurable: true });
     (globalThis as { window: unknown }).window = originalWindow;
   });
@@ -74,5 +86,22 @@ describe('alert on web', () => {
     ]);
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(onDelete).not.toHaveBeenCalled();
+  });
+
+  it('hands the dialog to the in-app host instead of the browser dialogs', () => {
+    const shown: WebAlert[] = [];
+    setWebAlertHost((d) => shown.push(d));
+    const buttons = [
+      { text: 'Cancel', style: 'cancel' as const },
+      { text: 'Discard', style: 'destructive' as const },
+    ];
+    alert('Discard workout?', 'Everything will be lost.', buttons);
+    alert('Saved');
+    expect(shown).toEqual([
+      { title: 'Discard workout?', message: 'Everything will be lost.', buttons },
+      { title: 'Saved', message: undefined, buttons: [{ text: 'OK' }] },
+    ]);
+    expect(browserConfirm).not.toHaveBeenCalled();
+    expect(browserAlert).not.toHaveBeenCalled();
   });
 });
